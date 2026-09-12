@@ -1,237 +1,420 @@
-const SUPPORT_CONTACT_ID = "1019a3fd516d4ce1b67df99e3133c46a";
+const SUPPORT_ID = "1019a3fd516d4ce1b67df99e3133c46a";
+const SESSION_COOKIE = "__Host-scoffe2_session";
 
-let supportCommandBusy = false;
-let supportAttempt = null;
-
-function updateSupportAccess() {
-  const allowed = account?.isSupport === true;
-  const button = $("support-panel-button");
-
-  if (button) {
-    button.style.display = allowed ? "flex" : "none";
+const PLAN_QUOTAS = {
+  flash: {
+    text: 50,
+    image: 1,
+    video: 1,
+    rerank: 10
+  },
+  home: {
+    text: 150,
+    image: 2,
+    video: 1,
+    rerank: 30
   }
+};
 
-  if (!allowed && $("modal-support")) {
-    closeModal("modal-support");
+class ApiError extends Error {
+  constructor(status, message) {
+    super(message);
+    this.status = status;
   }
 }
 
-function contactSupport() {
-  // Используем существующую систему личных сообщений.
-  $("msg-recipient").value = SUPPORT_CONTACT_ID;
-  openModal("modal-message");
-  $("msg-text").focus();
-}
-
-function openSupportPanel() {
-  return run(async () => {
-    await refreshAccount();
-
-    if (account?.isSupport !== true) {
-      throw new Error(
-        "Панель доступна только аккаунту поддержки."
-      );
+function json(data, status = 200) {
+  return new Response(JSON.stringify(data), {
+    status,
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, no-store",
+      "X-Content-Type-Options": "nosniff",
+      "X-Frame-Options": "DENY",
+      "Referrer-Policy": "no-referrer",
+      "X-Scoffe2-Handler": "support-v1"
     }
-
-    openModal("modal-support");
-    $("support-command").focus();
-
-    await loadSupportHistory();
   });
 }
 
-function openSupportMessages() {
-  closeModal("modal-support");
-  return switchView("messages");
+async function sha256(value) {
+  const digest = await crypto.subtle.digest(
+    "SHA-256",
+    new TextEncoder().encode(value)
+  );
+
+  return Array.from(
+    new Uint8Array(digest),
+    byte => byte.toString(16).padStart(2, "0")
+  ).join("");
 }
 
-async function loadSupportHistory() {
-  const data = await api("support");
-  const container = $("support-history");
+function readSessionToken(request) {
+  const cookies = request.headers.get("Cookie") || "";
 
-  container.replaceChildren();
+  for (const part of cookies.split(";")) {
+    const item = part.trim();
+    const prefix = SESSION_COOKIE + "=";
 
-  if (!data.grants.length) {
-    container.append(
-      el("p", "Выдач пока нет.", "small-muted")
-    );
-    return;
+    if (!item.startsWith(prefix)) continue;
+
+    const token = item.slice(prefix.length);
+
+    if (/^[0-9a-f]{64}$/.test(token)) {
+      return token;
+    }
   }
 
-  for (const grant of data.grants) {
-    const row = el("div", null, "section-panel");
-
-    const planName =
-      serverPlans[grant.plan]?.name || grant.plan;
-
-    row.append(
-      el(
-        "strong",
-        grant.username + ": " + planName
-      ),
-
-      el(
-        "p",
-        "ID пользователя: " + grant.user_id
-      ),
-
-      el(
-        "p",
-        "Добавлено месяцев: " + grant.months +
-        ". Срок выбранного тарифа после выдачи: " +
-        formatTimestamp(grant.ends_at)
-      ),
-
-      el(
-        "p",
-        "Добавленные квоты: текст " + grant.text_quota +
-        ", изображения " + grant.image_quota +
-        ", видео " + grant.video_quota +
-        ", ранжирование " + grant.rerank_quota
-      ),
-
-      el(
-        "p",
-        "Выдано: " + formatTimestamp(grant.created_at),
-        "small-muted"
-      ),
-
-      el(
-        "p",
-        "Операция: " + grant.request_id,
-        "small-muted"
-      )
-    );
-
-    container.append(row);
-  }
+  return null;
 }
 
-async function submitSupportCommand() {
-  if (supportCommandBusy) return;
+async function authenticateSupport(db, request) {
+  const token = readSessionToken(request);
 
-  const input = $("support-command");
-  const button = $("support-command-button");
-  const output = $("support-command-result");
-
-  if (account?.isSupport !== true) {
-    output.textContent = "Нет доступа к панели поддержки.";
-    return;
+  if (!token) {
+    throw new ApiError(401, "Нужно войти в аккаунт.");
   }
 
-  const command = input.value.trim();
+  const tokenHash = await sha256(token);
+  const now = Math.floor(Date.now() / 1000);
 
-  if (!command) {
-    output.textContent = "Введи команду.";
-    return;
-  }
+  const user = await db.prepare(`
+    SELECT u.id
+    FROM users u
+    JOIN sessions s ON s.user_id = u.id
+    WHERE s.token_hash = ?
+      AND s.expires_at > ?
+  `).bind(tokenHash, now).first();
 
-  // После неоднозначного сетевого сбоя повторяем
-  // только ту же операцию с тем же requestId.
-  if (
-    supportAttempt &&
-    supportAttempt.command !== command
-  ) {
-    input.value = supportAttempt.command;
-    input.readOnly = true;
-
-    output.textContent =
-      "Сначала уточни результат предыдущей операции. " +
-      "Нажми «Выполнить» ещё раз: будет отправлен тот же " +
-      "ID операции, без повторного начисления.";
-
-    return;
-  }
-
-  if (!supportAttempt) {
-    const accepted = window.confirm(
-      "Выполнить бесплатную выдачу тарифа?\n\n" +
-      command +
-      "\n\nТариф будет продлён, квоты будут добавлены."
+  if (!user) {
+    throw new ApiError(
+      401,
+      "Сессия истекла. Войди в аккаунт снова."
     );
-
-    if (!accepted) return;
-
-    supportAttempt = {
-      requestId: crypto.randomUUID().replaceAll("-", ""),
-      command
-    };
   }
 
-  const attempt = { ...supportAttempt };
+  // Права определяются по серверной сессии.
+  // ID, присланный браузером, не используется для авторизации.
+  if (user.id !== SUPPORT_ID) {
+    throw new ApiError(
+      403,
+      "Панель доступна только аккаунту поддержки."
+    );
+  }
 
-  supportCommandBusy = true;
-  button.disabled = true;
-  input.readOnly = true;
+  return user;
+}
 
-  output.textContent =
-    "Выполняется операция " + attempt.requestId + "…";
+async function readJSON(request) {
+  const contentType = (
+    request.headers.get("Content-Type") || ""
+  ).split(";")[0].trim().toLowerCase();
+
+  if (contentType !== "application/json") {
+    throw new ApiError(
+      415,
+      "Ожидается запрос application/json."
+    );
+  }
+
+  if (!request.body) {
+    throw new ApiError(400, "Пустой запрос.");
+  }
+
+  const reader = request.body.getReader();
+  const chunks = [];
+  let size = 0;
 
   try {
-    const result = await api("support", attempt);
-    const grant = result.grant;
+    while (true) {
+      const { done, value } = await reader.read();
 
-    // Убираем идентификатор только после подтверждения.
-    supportAttempt = null;
-    input.value = "";
+      if (done) break;
 
-    const planName =
-      serverPlans[grant.plan]?.name || grant.plan;
+      size += value.byteLength;
 
-    output.textContent =
-      (
-        result.duplicate
-          ? "Эта операция уже выполнена. Повторного начисления нет."
-          : "Тариф выдан."
-      ) +
-      "\nПользователь: " + grant.user_id +
-      "\nТариф: " + planName +
-      "\nДобавлено месяцев: " + grant.months +
-      "\nСрок выбранного тарифа после выдачи: " +
-      formatTimestamp(grant.ends_at) +
-      "\nДобавлено текстовых запросов: " + grant.text_quota +
-      "\nИзображений: " + grant.image_quota +
-      "\nВидео: " + grant.video_quota +
-      "\nРанжирований: " + grant.rerank_quota +
-      "\nID операции: " + grant.request_id;
+      if (size > 2048) {
+        await reader.cancel().catch(() => {});
 
-    // Ошибка обновления интерфейса не должна превращать
-    // подтверждённую выдачу в «неизвестный результат».
-    if (grant.user_id === account.id) {
-      await refreshAccount().catch(() => {
-        showToast(
-          "Тариф выдан. Для обновления счётчиков нажми «Обновить тариф».",
-          "info"
+        throw new ApiError(
+          413,
+          "Слишком большой запрос."
         );
+      }
+
+      chunks.push(value);
+    }
+  } finally {
+    reader.releaseLock();
+  }
+
+  const bytes = new Uint8Array(size);
+  let offset = 0;
+
+  for (const chunk of chunks) {
+    bytes.set(chunk, offset);
+    offset += chunk.byteLength;
+  }
+
+  try {
+    const text = new TextDecoder(
+      "utf-8",
+      { fatal: true }
+    ).decode(bytes);
+
+    const body = JSON.parse(text);
+
+    if (
+      !body ||
+      typeof body !== "object" ||
+      Array.isArray(body)
+    ) {
+      throw new Error();
+    }
+
+    return body;
+  } catch {
+    throw new ApiError(400, "Некорректный JSON.");
+  }
+}
+
+async function checkRateLimit(db, supportId) {
+  const now = Math.floor(Date.now() / 1000);
+  const bucket = Math.floor(now / 60);
+  const key = `support-give:${supportId}:${bucket}`;
+
+  const result = await db.prepare(`
+    INSERT INTO rate_limits (key, count, expires_at)
+    VALUES (?, 1, ?)
+    ON CONFLICT(key) DO UPDATE
+    SET count = count + 1
+    WHERE count < 10
+    RETURNING count
+  `).bind(
+    key,
+    (bucket + 1) * 60
+  ).first();
+
+  if (!result) {
+    throw new ApiError(
+      429,
+      "Слишком много команд. Подожди минуту и повтори."
+    );
+  }
+}
+
+function parseCommand(body) {
+  if (
+    typeof body.requestId !== "string" ||
+    !/^[0-9a-f]{32}$/.test(body.requestId)
+  ) {
+    throw new ApiError(
+      400,
+      "Некорректный идентификатор операции."
+    );
+  }
+
+  if (
+    typeof body.command !== "string" ||
+    body.command.length > 200
+  ) {
+    throw new ApiError(400, "Некорректная команда.");
+  }
+
+  const command = body.command.trim().normalize("NFKC");
+
+  const match = command.match(
+    /^\.\$give\s+([0-9a-f]{32})\s+(flash|home|флэш|домашний)\s+([1-9]|1[0-2])$/iu
+  );
+
+  if (!match) {
+    throw new ApiError(
+      400,
+      "Формат: .$give ID_ПОЛЬЗОВАТЕЛЯ flash|home 1–12"
+    );
+  }
+
+  const label = match[2].toLowerCase();
+
+  return {
+    requestId: body.requestId,
+    userId: match[1].toLowerCase(),
+    plan: label === "flash" || label === "флэш"
+      ? "flash"
+      : "home",
+    months: Number(match[3])
+  };
+}
+
+async function givePlan(db, support, request) {
+  await checkRateLimit(db, support.id);
+
+  const body = await readJSON(request);
+  const command = parseCommand(body);
+
+  const target = await db.prepare(`
+    SELECT id
+    FROM users
+    WHERE id = ?
+  `).bind(command.userId).first();
+
+  if (!target) {
+    throw new ApiError(
+      404,
+      "Пользователь с таким ID не найден."
+    );
+  }
+
+  const quota = PLAN_QUOTAS[command.plan];
+  const now = Math.floor(Date.now() / 1000);
+
+  /*
+    Начисление выполняет SQL-триггер apply_support_grant.
+
+    Повторный request_id не создаёт новую запись.
+    Значит, повтор той же операции не начисляет тариф ещё раз.
+  */
+  const inserted = await db.prepare(`
+    INSERT INTO support_grants (
+      request_id,
+      support_id,
+      user_id,
+      plan,
+      months,
+      text_quota,
+      image_quota,
+      video_quota,
+      rerank_quota,
+      created_at
+    )
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ON CONFLICT(request_id) DO NOTHING
+  `).bind(
+    command.requestId,
+    support.id,
+    target.id,
+    command.plan,
+    command.months,
+    quota.text * command.months,
+    quota.image * command.months,
+    quota.video * command.months,
+    quota.rerank * command.months,
+    now
+  ).run();
+
+  const grant = await db.prepare(`
+    SELECT g.*, u.username
+    FROM support_grants g
+    JOIN users u ON u.id = g.user_id
+    WHERE g.request_id = ?
+  `).bind(command.requestId).first();
+
+  if (!grant) {
+    throw new ApiError(
+      500,
+      "Не удалось подтвердить выдачу. Повтори ту же операцию."
+    );
+  }
+
+  if (
+    grant.support_id !== support.id ||
+    grant.user_id !== command.userId ||
+    grant.plan !== command.plan ||
+    Number(grant.months) !== command.months
+  ) {
+    throw new ApiError(
+      409,
+      "Этот идентификатор уже использован для другой команды."
+    );
+  }
+
+  // Не сообщаем об успехе, если триггер не заполнил срок.
+  if (!(Number(grant.ends_at) > 0)) {
+    throw new ApiError(
+      500,
+      "Начисление не подтверждено. Проверь триггер " +
+      "apply_support_grant в D1. Не отправляй новую операцию."
+    );
+  }
+
+  return json({
+    ok: true,
+    duplicate: Number(inserted.meta?.changes || 0) === 0,
+    grant
+  });
+}
+
+export async function onRequest({ request, env }) {
+  try {
+    if (!["GET", "POST"].includes(request.method)) {
+      return new Response(
+        JSON.stringify({ error: "Метод не поддерживается." }),
+        {
+          status: 405,
+          headers: {
+            "Content-Type": "application/json; charset=utf-8",
+            "Cache-Control": "no-store",
+            "Allow": "GET, POST",
+            "X-Scoffe2-Handler": "support-v1"
+          }
+        }
+      );
+    }
+
+    // Защита команд от отправки с постороннего сайта.
+    if (
+      request.method === "POST" &&
+      request.headers.get("Origin") !==
+        new URL(request.url).origin
+    ) {
+      throw new ApiError(
+        403,
+        "Запрос разрешён только со своего сайта."
+      );
+    }
+
+    if (!env.DB) {
+      throw new ApiError(
+        503,
+        "В Cloudflare Pages не подключена база D1 с именем DB."
+      );
+    }
+
+    const db = typeof env.DB.withSession === "function"
+      ? env.DB.withSession("first-primary")
+      : env.DB;
+
+    const support = await authenticateSupport(db, request);
+
+    if (request.method === "GET") {
+      const result = await db.prepare(`
+        SELECT g.*, u.username
+        FROM support_grants g
+        JOIN users u ON u.id = g.user_id
+        ORDER BY g.created_at DESC, g.request_id DESC
+        LIMIT 50
+      `).all();
+
+      return json({
+        ok: true,
+        grants: result.results || []
       });
     }
 
-    await loadSupportHistory().catch(() => {
-      showToast(
-        "Тариф выдан, но журнал не обновился. Нажми «Обновить журнал».",
-        "info"
-      );
-    });
+    return await givePlan(db, support, request);
   } catch (error) {
-    const message = error.status
-      ? error.message
-      : "Не удалось получить подтверждение от сервера.";
-
-    // Эти ответы позволяют исправить саму команду.
-    if ([400, 404, 409].includes(error.status)) {
-      supportAttempt = null;
-      output.textContent = message;
-    } else {
-      output.textContent =
-        message +
-        "\nID операции: " + attempt.requestId +
-        "\nНажми «Выполнить» для повтора той же операции. " +
-        "Повторное начисление с этим ID исключено." +
-        "\nЕсли перезагрузишь страницу, сначала проверь журнал.";
+    if (error instanceof ApiError) {
+      return json(
+        { error: error.message },
+        error.status
+      );
     }
-  } finally {
-    supportCommandBusy = false;
-    button.disabled = false;
-    input.readOnly = supportAttempt !== null;
+
+    // Не раскрываем SQL, содержимое сессий или секреты.
+    return json({
+      error:
+        "Ошибка сервера поддержки. Проверь таблицу support_grants, " +
+        "триггер apply_support_grant и привязку DB."
+    }, 500);
   }
 }
