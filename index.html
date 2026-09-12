@@ -2,41 +2,43 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  >
+  <meta name="theme-color" content="#765440">
   <title>Scoffe2</title>
 
   <style>
     :root {
-      --c-dark: #3E2723;
-      --c-med: #6D4C41;
-      --c-light: #8D6E63;
-      --c-cream: #D7CCC8;
-      --c-beige: #EFEBE9;
-      --c-milk: #FAF7F5;
-      --c-accent: #D4A574;
-      --c-caramel: #A1887F;
-      --c-red: #C62828;
-      --c-green: #2E7D32;
-      --c-flash: #FF8F00;
-      --c-home: #7B1FA2;
+      color-scheme: light;
+      --bg: #f4efe9;
+      --surface: #fffdf9;
+      --text: #342b25;
+      --muted: #786e65;
+      --accent: #765440;
+      --accent-hover: #5e4030;
+      --line: #e3d8cc;
+      --soft: #eee5da;
+      --danger: #a13636;
+      --success: #386443;
+      --radius: 16px;
     }
 
     * {
       box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: "Segoe UI", sans-serif;
     }
 
     body {
-      background: linear-gradient(
-        135deg,
-        var(--c-beige),
-        var(--c-cream)
-      );
-      color: var(--c-dark);
-      min-height: 100vh;
-      display: flex;
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.5;
+    }
+
+    [hidden] {
+      display: none !important;
     }
 
     button,
@@ -47,4134 +49,2300 @@
     }
 
     button {
+      border: 1px solid transparent;
+      border-radius: 10px;
+      padding: 10px 16px;
+      background: var(--accent);
+      color: white;
       cursor: pointer;
+      transition: background .15s;
+    }
+
+    button:hover {
+      background: var(--accent-hover);
     }
 
     button:disabled {
-      cursor: not-allowed;
-      opacity: 0.65;
-    }
-
-    #toast-container {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      z-index: 9999;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      max-width: calc(100vw - 40px);
-    }
-
-    .toast {
-      padding: 14px 20px;
-      border-radius: 8px;
-      color: white;
-      font-size: 14px;
-      font-weight: 500;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      animation: slideIn 0.3s ease;
-      max-width: 380px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      overflow-wrap: anywhere;
-      transition: opacity 0.3s, transform 0.3s;
-    }
-
-    .toast.success {
-      background: var(--c-green);
-    }
-
-    .toast.error {
-      background: var(--c-red);
-    }
-
-    .toast.info {
-      background: var(--c-med);
-    }
-
-    .toast.loading {
-      background: var(--c-med);
+      opacity: .55;
       cursor: wait;
     }
 
-    @keyframes slideIn {
-      from {
-        transform: translateX(100%);
-        opacity: 0;
-      }
-
-      to {
-        transform: translateX(0);
-        opacity: 1;
-      }
+    button.secondary {
+      color: var(--text);
+      background: var(--soft);
+      border-color: var(--line);
     }
 
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    button.secondary:hover {
+      background: #e1d5c6;
     }
 
-    #auth-screen {
-      position: fixed;
-      inset: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-      background: linear-gradient(
-        135deg,
-        var(--c-dark),
-        var(--c-med)
-      );
-      z-index: 100;
+    button.danger {
+      color: var(--danger);
+      background: #f8e8e4;
     }
 
-    .auth-box {
-      background: white;
-      padding: 40px;
-      border-radius: 16px;
-      width: 380px;
-      max-width: 100%;
-      box-shadow: 0 12px 40px rgba(62, 39, 35, 0.4);
-      border: 3px solid var(--c-accent);
+    button:focus-visible,
+    input:focus-visible,
+    textarea:focus-visible,
+    select:focus-visible,
+    a:focus-visible {
+      outline: 3px solid #b68c65;
+      outline-offset: 3px;
     }
 
-    .auth-box h2 {
-      margin-bottom: 20px;
-      color: var(--c-dark);
-      font-size: 28px;
-      text-align: center;
-    }
-
-    .auth-box input {
+    input,
+    textarea,
+    select {
       width: 100%;
-      padding: 12px;
-      margin: 8px 0;
-      border: 2px solid var(--c-cream);
-      border-radius: 8px;
-      font-size: 14px;
-      background: var(--c-milk);
-    }
-
-    .auth-box input:focus {
-      outline: none;
-      border-color: var(--c-accent);
-    }
-
-    .auth-box button {
-      width: 100%;
-      padding: 12px;
-      background: linear-gradient(
-        135deg,
-        var(--c-accent),
-        var(--c-caramel)
-      );
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      margin-top: 10px;
-      font-weight: bold;
-      transition: all 0.3s;
-    }
-
-    .auth-box button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba(212, 165, 116, 0.4);
-    }
-
-    .auth-box button.secondary {
-      background: linear-gradient(
-        135deg,
-        var(--c-light),
-        var(--c-med)
-      );
-    }
-
-    .auth-msg {
-      font-size: 13px;
-      margin-top: 8px;
-      min-height: 18px;
-      overflow-wrap: anywhere;
-    }
-
-    .auth-msg.error {
-      color: var(--c-red);
-    }
-
-    .auth-msg.success {
-      color: var(--c-green);
-    }
-
-    .auth-note {
-      margin-top: 16px;
-      font-size: 12px;
-      line-height: 1.5;
-      color: var(--c-light);
-    }
-
-    #app-screen {
-      display: none;
-      width: 100%;
-      height: 100vh;
-    }
-
-    .sidebar {
-      width: 260px;
-      flex-shrink: 0;
-      background: linear-gradient(
-        180deg,
-        var(--c-dark),
-        var(--c-med)
-      );
-      padding: 20px 0;
-      display: flex;
-      flex-direction: column;
-      box-shadow: 4px 0 12px rgba(0, 0, 0, 0.15);
-      overflow-y: auto;
-    }
-
-    .logo-area {
-      text-align: center;
-      padding: 0 20px 20px;
-      border-bottom: 2px solid var(--c-accent);
-      margin-bottom: 15px;
-    }
-
-    .logo-area img {
-      width: 64px;
-      height: 64px;
-      object-fit: contain;
-      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
-    }
-
-    .logo-area span {
-      display: block;
-      margin-top: 8px;
-      font-weight: bold;
-      font-size: 22px;
-      color: var(--c-cream);
-    }
-
-    .user-info {
-      text-align: center;
-      padding: 10px 20px;
-      color: var(--c-cream);
-      font-size: 12px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      overflow-wrap: anywhere;
-    }
-
-    .user-info .uname {
-      font-weight: bold;
-      color: white;
-      font-size: 14px;
-      display: block;
-      margin-bottom: 4px;
-    }
-
-    .tariff-badge {
-      display: inline-block;
-      padding: 3px 10px;
+      border: 1px solid var(--line);
       border-radius: 10px;
-      font-size: 12px;
-      font-weight: bold;
-      margin-top: 4px;
-      background: var(--c-light);
-      color: white;
+      padding: 11px 12px;
+      background: white;
+      color: var(--text);
     }
 
-    .tariff-flash {
-      background: var(--c-flash);
+    textarea {
+      resize: vertical;
+      min-height: 130px;
+      line-height: 1.6;
     }
 
-    .tariff-home {
-      background: var(--c-home);
+    label {
+      display: block;
+      margin-bottom: 14px;
     }
 
-    .nav-btn {
+    label > span {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      font-size: 30px;
+      letter-spacing: -.8px;
+    }
+
+    h2 {
+      font-size: 24px;
+      letter-spacing: -.5px;
+    }
+
+    h3 {
+      font-size: 18px;
+    }
+
+    a {
+      color: var(--accent);
+    }
+
+    .muted,
+    small {
+      color: var(--muted);
+    }
+
+    .row {
       display: flex;
       align-items: center;
-      padding: 14px 20px;
-      border: none;
-      background: none;
-      width: 100%;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .row.spread {
+      justify-content: space-between;
+    }
+
+    .stack {
+      display: grid;
+      gap: 14px;
+    }
+
+    .panel {
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 26px;
+      color: var(--accent);
+      font-size: 25px;
+      font-weight: 750;
+    }
+
+    .brand svg {
+      width: 38px;
+      height: 38px;
+      flex: 0 0 auto;
+    }
+
+    #notice {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 12px 20px;
+      background: #e4efe3;
+      color: var(--success);
+      border-bottom: 1px solid #c3d7bd;
+      overflow-wrap: anywhere;
+    }
+
+    #notice.error {
+      background: #f9e6e2;
+      color: var(--danger);
+      border-color: #e8c4bc;
+    }
+
+    #auth {
+      max-width: 440px;
+      margin: 9vh auto;
+      padding: 30px;
+    }
+
+    #layout {
+      display: grid;
+      grid-template-columns: 245px minmax(0, 1fr);
+      min-height: 100vh;
+    }
+
+    aside {
+      padding: 26px 20px;
+      background: var(--surface);
+      border-right: 1px solid var(--line);
+    }
+
+    .sidebar-inner {
+      position: sticky;
+      top: 28px;
+    }
+
+    nav {
+      display: grid;
+      gap: 8px;
+      margin: 24px 0;
+    }
+
+    nav button {
       text-align: left;
-      font-size: 15px;
-      color: var(--c-cream);
-      border-left: 4px solid transparent;
-      transition: all 0.2s;
+      background: transparent;
+      color: var(--muted);
     }
 
-    .nav-btn:hover {
-      background: rgba(255, 255, 255, 0.1);
-      border-left-color: var(--c-accent);
+    nav button:hover,
+    nav button.active {
+      background: var(--soft);
+      color: var(--text);
     }
 
-    .nav-btn.active {
-      background: rgba(212, 165, 116, 0.25);
-      border-left-color: var(--c-accent);
-      color: white;
+    .badge {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 8px;
+      background: var(--soft);
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 650;
     }
 
-    .nav-btn img {
+    #account-id {
+      overflow-wrap: anywhere;
+      font-size: 11px;
+      margin-top: 8px;
+    }
+
+    #quota {
+      font-size: 13px;
+      line-height: 1.8;
+      margin: 14px 0;
+      white-space: pre-line;
+    }
+
+    main {
+      width: 100%;
+      max-width: 1180px;
+      padding: 36px;
+    }
+
+    .section-head {
+      margin-bottom: 22px;
+    }
+
+    .note-layout {
+      display: grid;
+      grid-template-columns: 230px minmax(0, 1fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    #note-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    #note-list button {
+      text-align: left;
+      overflow-wrap: anywhere;
+    }
+
+    #note-text {
+      min-height: 330px;
+    }
+
+    #checklist {
+      display: grid;
+      gap: 8px;
+      margin: 14px 0;
+    }
+
+    .check-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .check-row input[type="checkbox"] {
       width: 18px;
       height: 18px;
-      margin-right: 12px;
-      object-fit: contain;
+      flex: 0 0 auto;
     }
 
-    .main {
-      flex: 1;
-      min-width: 0;
-      padding: 30px;
-      padding-bottom: 80px;
-      overflow-y: auto;
-    }
-
-    .view {
-      display: none;
-    }
-
-    .view.active {
-      display: block;
-      animation: fadeIn 0.3s;
-    }
-
-    .top-actions {
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-    }
-
-    .action-btn {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 18px;
-      background: linear-gradient(
-        135deg,
-        var(--c-accent),
-        var(--c-caramel)
-      );
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: bold;
-      transition: all 0.3s;
-      box-shadow: 0 2px 8px rgba(212, 165, 116, 0.3);
-    }
-
-    .action-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(212, 165, 116, 0.4);
-    }
-
-    .action-btn img {
-      width: 16px;
-      height: 16px;
-      object-fit: contain;
-    }
-
-    .notepad-list {
-      display: grid;
-      grid-template-columns: repeat(
-        auto-fill,
-        minmax(220px, 1fr)
-      );
-      gap: 15px;
-    }
-
-    .notepad-card {
-      background: white;
-      padding: 18px;
-      border-radius: 10px;
-      border: 2px solid var(--c-cream);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      transition: all 0.3s;
-      box-shadow: 0 2px 8px rgba(62, 39, 35, 0.08);
-      position: relative;
+    .check-row input[type="text"] {
       min-width: 0;
     }
 
-    .notepad-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 6px 16px rgba(62, 39, 35, 0.15);
-      border-color: var(--c-accent);
+    .check-row button {
+      padding: 8px 12px;
     }
 
-    .notepad-card img {
-      width: 20px;
-      height: 20px;
-      object-fit: contain;
-      flex-shrink: 0;
-    }
-
-    .notepad-card .rename-btn {
-      position: absolute;
-      top: 5px;
-      right: 5px;
-      width: 24px;
-      height: 24px;
-      border: none;
-      background: var(--c-beige);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-
-    .notepad-card:hover .rename-btn,
-    .notepad-card:focus-within .rename-btn {
-      opacity: 1;
-    }
-
-    .notepad-card .rename-btn img {
-      width: 14px;
-      height: 14px;
-    }
-
-    .notepad-title,
-    .notepad-preview {
-      overflow-wrap: anywhere;
-    }
-
-    .notepad-title {
-      font-weight: bold;
-      padding-right: 12px;
-    }
-
-    .notepad-preview {
-      margin-top: 4px;
-      font-size: 12px;
-      color: var(--c-light);
-    }
-
-    .empty-state {
-      padding: 24px;
-      border: 2px dashed var(--c-caramel);
-      border-radius: 10px;
-      color: var(--c-med);
-      line-height: 1.6;
-    }
-
-    .notepad-editor,
-    .ai-chat-container {
-      background: white;
-      border-radius: 12px;
-      padding: 25px;
-      height: calc(100vh - 110px);
-      min-height: 440px;
-      display: flex;
-      flex-direction: column;
-      box-shadow: 0 4px 16px rgba(62, 39, 35, 0.1);
-      border: 2px solid var(--c-cream);
-    }
-
-    .editor-toolbar,
-    .calendar-toolbar {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 20px;
-      padding-bottom: 15px;
-      border-bottom: 2px solid var(--c-cream);
-      flex-wrap: wrap;
-    }
-
-    .editor-toolbar img,
-    .calendar-toolbar img {
-      width: 36px;
-      height: 36px;
-      cursor: pointer;
-      padding: 6px;
-      border-radius: 8px;
-      transition: all 0.3s;
-      background: var(--c-beige);
-      object-fit: contain;
-    }
-
-    .editor-toolbar img:hover:not(.premium-disabled),
-    .calendar-toolbar img:hover:not(.premium-disabled) {
-      background: var(--c-accent);
-      transform: scale(1.1);
-    }
-
-    .premium-disabled {
-      opacity: 0.4;
-      cursor: not-allowed !important;
-    }
-
-    .editor-content {
-      flex: 1;
-      min-height: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      overflow-y: auto;
-    }
-
-    .editor-content textarea {
-      flex: 1;
-      min-height: 180px;
-      width: 100%;
-      padding: 14px;
-      border: 2px solid var(--c-cream);
-      border-radius: 8px;
-      resize: none;
-      font-size: 16px;
-      background: var(--c-milk);
-      font-family: Georgia, serif;
-    }
-
-    .editor-content textarea:focus {
-      outline: none;
-      border-color: var(--c-accent);
-      background: white;
-    }
-
-    .checklist-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px;
-      margin-bottom: 8px;
-      background: var(--c-beige);
-      border-radius: 6px;
-      border: 1px solid var(--c-cream);
-    }
-
-    .checklist-item input {
-      border: none;
-      background: transparent;
-      flex: 1;
-      min-width: 0;
-      padding: 4px;
-    }
-
-    .square-placeholder {
-      width: 24px;
-      height: 24px;
-      flex-shrink: 0;
-      border: 2px solid var(--c-light);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 4px;
-      background: white;
-    }
-
-    .ai-chat-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 20px;
-      padding-bottom: 15px;
-      border-bottom: 2px solid var(--c-cream);
-    }
-
-    .ai-chat-messages {
-      flex: 1;
-      min-height: 0;
-      overflow-y: auto;
-      padding: 15px;
-      background: var(--c-beige);
-      border-radius: 8px;
-      margin-bottom: 15px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .ai-message {
-      padding: 12px 16px;
-      border-radius: 12px;
-      max-width: 85%;
-      overflow-wrap: anywhere;
-      white-space: pre-wrap;
-    }
-
-    .ai-message.user {
-      background: var(--c-accent);
-      color: white;
-      align-self: flex-end;
-      border-bottom-right-radius: 4px;
-    }
-
-    .ai-message.ai {
-      background: white;
-      border: 1px solid var(--c-cream);
-      align-self: flex-start;
-      border-bottom-left-radius: 4px;
-    }
-
-    .ai-message img,
-    .ai-message video {
-      display: block;
-      max-width: 100%;
-      border-radius: 8px;
-      margin-top: 8px;
-    }
-
-    .ai-media-caption {
-      margin-top: 8px;
-      font-size: 12px;
-      color: var(--c-light);
-    }
-
-    .ai-chat-input-area {
-      display: flex;
-      gap: 10px;
-      flex-direction: column;
-    }
-
-    .ai-chat-input-area textarea {
-      width: 100%;
-      padding: 12px;
-      border: 2px solid var(--c-cream);
-      border-radius: 8px;
-      resize: vertical;
-      font-size: 14px;
-      background: var(--c-milk);
-      min-height: 60px;
-      max-height: 180px;
-    }
-
-    .ai-chat-input-area textarea:focus {
-      outline: none;
-      border-color: var(--c-accent);
-    }
-
-    .ai-chat-controls {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
-    .ai-chat-controls select {
-      padding: 10px;
-      border: 2px solid var(--c-cream);
-      border-radius: 8px;
-      background: var(--c-milk);
-      font-size: 14px;
-      flex: 1;
-      min-width: 160px;
-    }
-
-    .ai-chat-controls button {
-      padding: 12px 20px;
-      background: var(--c-accent);
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-weight: bold;
-    }
-
-    .ai-chat-controls button:hover {
-      background: var(--c-caramel);
-    }
-
-    .ai-chat-tools {
-      display: flex;
-      gap: 8px;
-      margin-top: 10px;
-      padding-top: 10px;
-      border-top: 1px solid var(--c-cream);
-    }
-
-    .ai-chat-tools img {
-      width: 36px;
-      height: 36px;
-      cursor: pointer;
-      padding: 6px;
-      border-radius: 8px;
-      background: var(--c-beige);
-      transition: all 0.3s;
-      object-fit: contain;
-    }
-
-    .ai-chat-tools img:hover:not(.premium-disabled) {
-      background: var(--c-accent);
-      transform: scale(1.1);
-    }
-
-    .ai-chat-tools img.active-tool {
-      background: var(--c-accent);
-      box-shadow: 0 0 0 2px var(--c-dark);
-    }
-
-    .calendar-container {
-      background: white;
-      border-radius: 12px;
-      padding: 25px;
-      border: 2px solid var(--c-cream);
-      box-shadow: 0 4px 16px rgba(62, 39, 35, 0.1);
-      margin-bottom: 20px;
-    }
-
-    .calendar-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-
-    .calendar-header h3 {
-      color: var(--c-dark);
-      font-size: 22px;
-      text-align: center;
-    }
-
-    .calendar-arrow {
-      padding: 8px 16px;
-      background: var(--c-accent);
-      color: white;
-      border: none;
-      border-radius: 6px;
-    }
-
-    .calendar-grid {
+    #calendar-grid {
       display: grid;
       grid-template-columns: repeat(7, minmax(0, 1fr));
-      gap: 6px;
+      gap: 5px;
+      margin: 16px 0;
     }
 
-    .calendar-day-header {
+    .weekday {
       text-align: center;
-      font-weight: bold;
-      padding: 12px 4px;
-      background: linear-gradient(
-        135deg,
-        var(--c-med),
-        var(--c-light)
-      );
+      font-size: 12px;
+      color: var(--muted);
+      padding: 5px;
+    }
+
+    .day {
+      min-height: 54px;
+      padding: 6px;
+      background: var(--soft);
+      color: var(--text);
+      position: relative;
+    }
+
+    .day.selected {
+      background: var(--accent);
       color: white;
-      border-radius: 6px;
-      font-size: 13px;
     }
 
-    .calendar-day {
-      aspect-ratio: 1;
-      min-width: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      border: 2px solid var(--c-cream);
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.3s;
-      background: var(--c-milk);
-      font-weight: 500;
-      color: var(--c-dark);
-    }
-
-    .calendar-day:hover {
-      background: var(--c-cream);
-      transform: scale(1.03);
-    }
-
-    .calendar-day.has-note {
-      background: linear-gradient(
-        135deg,
-        var(--c-accent),
-        var(--c-caramel)
-      );
-      color: white;
-      border-color: var(--c-accent);
-    }
-
-    .calendar-day.today {
-      border: 3px solid var(--c-dark);
-      font-weight: bold;
-    }
-
-    .calendar-day .note-indicator {
-      width: 6px;
-      height: 6px;
-      background: var(--c-dark);
+    .day.has-note::after {
+      content: "";
+      display: block;
+      width: 5px;
+      height: 5px;
       border-radius: 50%;
-      margin-top: 4px;
+      background: currentColor;
+      margin: 4px auto 0;
     }
 
-    .calendar-day.has-note .note-indicator {
-      background: white;
+    .calendar-layout {
+      display: grid;
+      grid-template-columns: minmax(270px, 1fr) minmax(0, 1fr);
+      gap: 20px;
     }
 
-    .calendar-day.empty {
-      cursor: default;
-      background: transparent;
-      border: none;
-    }
-
-    .day-detail-panel {
-      background: white;
-      border-radius: 10px;
-      padding: 20px;
-      border: 2px solid var(--c-cream);
-    }
-
-    .day-detail-panel h4 {
-      color: var(--c-dark);
+    .chat-controls {
+      display: grid;
+      grid-template-columns: 150px minmax(0, 1fr);
+      gap: 10px;
       margin-bottom: 12px;
     }
 
-    .day-detail-panel textarea {
-      width: 100%;
-      padding: 12px;
-      border: 2px solid var(--c-cream);
-      border-radius: 6px;
-      resize: vertical;
-      min-height: 100px;
-      margin-bottom: 15px;
-      background: var(--c-milk);
-    }
-
-    .pricing-cards {
-      display: flex;
-      gap: 20px;
-      justify-content: center;
-      margin-top: 30px;
-      flex-wrap: wrap;
-    }
-
-    .pricing-card {
-      background: white;
-      padding: 30px;
-      border-radius: 12px;
-      border: 2px solid var(--c-cream);
-      width: 300px;
-      max-width: 100%;
-      text-align: center;
-      transition: transform 0.3s;
-    }
-
-    .pricing-card:hover {
-      transform: translateY(-5px);
-      border-color: var(--c-accent);
-    }
-
-    .pricing-card h3 {
-      margin-bottom: 15px;
-      font-size: 24px;
-      color: var(--c-dark);
-    }
-
-    .pricing-card .price {
-      font-size: 36px;
-      font-weight: bold;
+    #chat {
+      display: grid;
+      gap: 14px;
+      min-height: 180px;
+      max-height: 580px;
+      overflow-y: auto;
       margin-bottom: 20px;
+      padding: 3px;
     }
 
-    .pricing-card .price span {
-      font-size: 16px;
-      color: var(--c-light);
-      font-weight: normal;
-    }
-
-    .pricing-card.free .price {
-      color: var(--c-light);
-    }
-
-    .pricing-card.flash .price {
-      color: var(--c-flash);
-    }
-
-    .pricing-card.home .price {
-      color: var(--c-home);
-    }
-
-    .pricing-card ul {
-      list-style: none;
-      margin: 20px 0;
-      text-align: left;
-    }
-
-    .pricing-card ul li {
-      padding: 8px 0;
-      border-bottom: 1px solid var(--c-beige);
-      line-height: 1.5;
-    }
-
-    .pricing-card ul li::before {
-      content: "✓";
-      margin-right: 8px;
-      color: var(--c-green);
-      font-weight: bold;
-    }
-
-    .sber-btn {
-      background: linear-gradient(
-        135deg,
-        var(--c-accent),
-        var(--c-caramel)
-      );
-      color: white;
-      padding: 12px 20px;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      width: 100%;
-      margin-top: 15px;
-      font-weight: bold;
-      transition: all 0.3s;
-    }
-
-    .sber-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(212, 165, 116, 0.4);
-    }
-
-    .section-note {
-      max-width: 760px;
-      margin: 12px auto;
-      font-size: 13px;
-      line-height: 1.6;
-      color: var(--c-med);
-      text-align: center;
-    }
-
-    .message-list {
-      background: white;
-      border-radius: 10px;
-      border: 2px solid var(--c-cream);
-      overflow: hidden;
-    }
-
-    .message-item {
+    .bubble {
       padding: 15px;
-      border-bottom: 1px solid var(--c-beige);
-      display: flex;
-      justify-content: space-between;
-      gap: 16px;
+      border-radius: 12px;
+      background: var(--soft);
+      white-space: pre-wrap;
       overflow-wrap: anywhere;
     }
 
-    .message-item p {
+    .bubble.user {
+      margin-left: 30px;
+      background: #e7ddd0;
+    }
+
+    .bubble.assistant {
+      margin-right: 30px;
+      background: white;
+      border: 1px solid var(--line);
+    }
+
+    .bubble small {
+      display: block;
+      font-weight: 650;
+      margin-bottom: 7px;
+    }
+
+    .bubble img,
+    .bubble video {
+      display: block;
+      width: auto;
+      max-width: 100%;
+      max-height: 520px;
+      border-radius: 9px;
+      margin-top: 10px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    .price {
+      font-size: 30px;
+      font-weight: 750;
+      margin: 12px 0;
+    }
+
+    .card ul {
+      padding-left: 20px;
+      min-height: 140px;
+      color: var(--muted);
       font-size: 14px;
-      color: var(--c-light);
-      margin-top: 6px;
+      line-height: 1.9;
+    }
+
+    .card button {
+      width: 100%;
+    }
+
+    .record {
+      padding: 14px 0;
+      border-bottom: 1px solid var(--line);
+      overflow-wrap: anywhere;
+    }
+
+    .record:last-child {
+      border-bottom: none;
+    }
+
+    .record p {
+      margin: 7px 0 0;
       white-space: pre-wrap;
     }
 
-    .message-time {
+    #ai-result {
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      max-height: 500px;
+      overflow: auto;
+    }
+
+    dialog {
+      width: min(760px, calc(100% - 28px));
+      max-height: 85vh;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 24px;
+      color: var(--text);
+      background: var(--surface);
+    }
+
+    dialog::backdrop {
+      background: rgb(30 20 15 / 45%);
+    }
+
+    .footer-note {
+      margin-top: 16px;
       font-size: 12px;
-      color: var(--c-light);
-      white-space: nowrap;
+      color: var(--muted);
     }
 
-    .compose-btn {
-      position: fixed;
-      bottom: 70px;
-      right: 30px;
-      width: 60px;
-      height: 60px;
-      border: none;
-      background: linear-gradient(
-        135deg,
-        var(--c-accent),
-        var(--c-caramel)
-      );
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 4px 12px rgba(212, 165, 116, 0.4);
-    }
-
-    .compose-btn img {
-      width: 32px;
-      height: 32px;
-      object-fit: contain;
-    }
-
-    .modal {
-      display: none;
-      position: fixed;
-      inset: 0;
-      padding: 20px;
-      background: rgba(62, 39, 35, 0.7);
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-      backdrop-filter: blur(4px);
-    }
-
-    .modal-content {
-      background: white;
-      padding: 30px;
-      border-radius: 12px;
-      width: 450px;
-      max-width: 100%;
-      max-height: 90vh;
-      overflow-y: auto;
-      border: 3px solid var(--c-accent);
-      box-shadow: 0 12px 40px rgba(62, 39, 35, 0.3);
-    }
-
-    .modal-content h3 {
-      margin-bottom: 15px;
-      color: var(--c-dark);
-    }
-
-    .modal-content input,
-    .modal-content textarea {
-      width: 100%;
-      padding: 12px;
-      margin-bottom: 12px;
-      border: 2px solid var(--c-cream);
-      border-radius: 8px;
-      font-size: 14px;
-      background: var(--c-milk);
-    }
-
-    .modal-content input:focus,
-    .modal-content textarea:focus {
-      outline: none;
-      border-color: var(--c-accent);
-    }
-
-    .modal-actions {
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-      margin-top: 15px;
-      flex-wrap: wrap;
-    }
-
-    .modal-actions button,
-    .btn-cancel,
-    .btn-confirm {
-      padding: 10px 20px;
-      border: none;
-      border-radius: 8px;
-      font-weight: bold;
-    }
-
-    .btn-cancel {
-      background: var(--c-light);
-      color: white;
-    }
-
-    .btn-confirm {
-      background: var(--c-accent);
-      color: white;
-    }
-
-    .premium-lock-modal {
-      text-align: center;
-      padding: 20px 0;
-    }
-
-    .premium-lock-modal p {
-      line-height: 1.6;
-    }
-
-    .payment-summary {
-      background: var(--c-beige);
-      padding: 15px;
-      border-radius: 8px;
-      margin-bottom: 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      border: 1px solid var(--c-cream);
-    }
-
-    .payment-summary .amount {
-      font-size: 28px;
-      font-weight: bold;
-      color: var(--c-accent);
-      white-space: nowrap;
-    }
-
-    .payment-warning {
-      font-size: 13px;
-      line-height: 1.6;
-      color: var(--c-red);
-      margin-bottom: 15px;
-    }
-
-    .site-footer {
-      position: fixed;
-      bottom: 15px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(62, 39, 35, 0.85);
-      backdrop-filter: blur(6px);
-      padding: 8px 16px;
-      border-radius: 20px;
-      z-index: 900;
-      border: 1px solid var(--c-accent);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    }
-
-    .neocities-link {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      text-decoration: none;
-      color: var(--c-cream);
-      font-size: 13px;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-    }
-
-    .neocities-link:hover {
-      color: var(--c-accent);
-    }
-
-    .neocities-link img {
-      width: 20px;
-      height: 20px;
-      object-fit: contain;
-    }
-
-    @media (max-width: 760px) {
-      #app-screen {
-        flex-direction: column;
-        height: auto;
-        min-height: 100vh;
+    @media (max-width: 980px) {
+      main {
+        padding: 24px;
       }
 
-      .sidebar {
-        width: 100%;
-        padding: 12px 0;
-        overflow: visible;
+      .note-layout,
+      .calendar-layout {
+        grid-template-columns: 1fr;
       }
 
-      .logo-area {
-        padding: 0 16px 12px;
-        margin-bottom: 4px;
+      .cards {
+        grid-template-columns: 1fr;
       }
 
-      .logo-area img {
-        width: 40px;
-        height: 40px;
+      .card ul {
+        min-height: auto;
       }
 
-      .logo-area span {
-        display: inline-block;
-        margin: 0 0 0 8px;
-        vertical-align: middle;
-      }
-
-      .user-info {
-        padding: 10px 16px;
-      }
-
-      .nav-btn {
-        padding: 10px 16px;
-      }
-
-      .main {
-        padding: 16px;
-        padding-bottom: 90px;
-        overflow: visible;
-      }
-
-      .notepad-editor,
-      .ai-chat-container {
-        height: 75vh;
-        min-height: 480px;
-        padding: 16px;
-      }
-
-      .calendar-container {
-        padding: 12px;
-      }
-
-      .calendar-header h3 {
-        font-size: 18px;
-      }
-
-      .calendar-grid {
-        gap: 4px;
-      }
-
-      .calendar-day {
-        font-size: 13px;
-        border-radius: 5px;
-      }
-
-      .calendar-day-header {
-        font-size: 12px;
-        padding: 8px 2px;
-      }
-
-      .auth-box {
-        padding: 28px;
-      }
-
-      .pricing-card {
-        width: 100%;
-      }
-
-      .ai-message {
-        max-width: 95%;
-      }
-
-      .notepad-card .rename-btn {
-        opacity: 1;
-      }
-
-      .compose-btn {
-        right: 18px;
-      }
-
-      .modal-content {
-        padding: 22px;
+      #note-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
     }
 
-    @media (prefers-reduced-motion: reduce) {
-      *,
-      *::before,
-      *::after {
-        animation-duration: 0.01ms !important;
-        transition-duration: 0.01ms !important;
+    @media (max-width: 700px) {
+      #layout {
+        grid-template-columns: 1fr;
+      }
+
+      aside {
+        border-right: none;
+        border-bottom: 1px solid var(--line);
+        padding: 18px;
+      }
+
+      .sidebar-inner {
+        position: static;
+      }
+
+      aside .brand {
+        margin-bottom: 14px;
+      }
+
+      nav {
+        display: flex;
+        overflow-x: auto;
+        margin: 14px 0;
+        padding-bottom: 4px;
+      }
+
+      nav button {
+        white-space: nowrap;
+      }
+
+      #quota {
+        margin: 8px 0;
+      }
+
+      main {
+        padding: 20px 14px;
+      }
+
+      .panel {
+        padding: 17px;
+      }
+
+      #auth {
+        margin: 30px 14px;
+        max-width: none;
+      }
+
+      .chat-controls {
+        grid-template-columns: 1fr;
+      }
+
+      .bubble.user,
+      .bubble.assistant {
+        margin-left: 0;
+        margin-right: 0;
       }
     }
   </style>
 </head>
 
 <body>
-  <div
-    id="toast-container"
-    role="status"
-    aria-live="polite"
-  ></div>
+  <div id="notice" role="status" aria-live="polite" hidden></div>
 
-  <div id="auth-screen">
-    <div class="auth-box">
-      <h2>Scoffe2</h2>
-
-      <input
-        type="text"
-        id="auth-username"
-        placeholder="Имя пользователя"
-        aria-label="Имя пользователя"
-        autocomplete="username"
+  <section id="auth" class="panel">
+    <div class="brand">
+      <svg
+        viewBox="0 0 48 48"
+        fill="none"
+        aria-label="Логотип Scoffe2"
       >
-
-      <input
-        type="password"
-        id="auth-password"
-        placeholder="Пароль: минимум 8 символов"
-        aria-label="Пароль"
-        autocomplete="current-password"
-      >
-
-      <div class="auth-msg" id="auth-message"></div>
-
-      <button onclick="handleAuth('login')">
-        Войти
-      </button>
-
-      <button
-        class="secondary"
-        onclick="handleAuth('register')"
-      >
-        Создать аккаунт
-      </button>
-
-      <p class="auth-note">
-        В этой версии аккаунты и записи хранятся в текущем
-        браузере. Не очищайте данные сайта без резервной копии.
-      </p>
+        <path
+          d="M8 17h26v12a11 11 0 0 1-11 11h-4A11 11 0 0 1 8 29V17Z"
+          stroke="currentColor"
+          stroke-width="3"
+        />
+        <path
+          d="M34 20h3a6 6 0 0 1 0 12h-3M14 9v3m9-7v7m9-3v3M7 44h30"
+          stroke="currentColor"
+          stroke-width="3"
+          stroke-linecap="round"
+        />
+      </svg>
+      Scoffe2
     </div>
-  </div>
 
-  <div id="app-screen">
-    <aside class="sidebar">
-      <div class="logo-area">
-        <img
-          src="iconScoffe2.png"
-          alt="Scoffe2"
-          width="64"
-          height="64"
+    <h1>Место для твоих идей</h1>
+    <p class="muted">
+      Блокноты, календарь и ИИ в одном пространстве.
+    </p>
+
+    <form id="auth-form">
+      <label>
+        <span>Логин</span>
+        <input
+          id="auth-name"
+          autocomplete="username"
+          minlength="3"
+          maxlength="24"
+          required
+          placeholder="Твой логин"
         >
-        <span>Scoffe2</span>
+      </label>
+
+      <label>
+        <span>Пароль</span>
+        <input
+          id="auth-password"
+          type="password"
+          autocomplete="current-password"
+          minlength="8"
+          maxlength="128"
+          required
+          placeholder="Не менее 8 символов"
+        >
+      </label>
+
+      <div class="row">
+        <button type="submit" id="login-button">
+          Войти
+        </button>
+
+        <button
+          type="button"
+          id="register-button"
+          class="secondary"
+        >
+          Создать аккаунт
+        </button>
       </div>
+    </form>
 
-      <div class="user-info">
-        <span class="uname" id="display-user-name"></span>
+    <p class="footer-note">
+      Старые аккаунты из локального хранилища браузера
+      не являются серверными аккаунтами. Для этой версии
+      зарегистрируйся заново. Автоматического восстановления
+      забытого пароля пока нет.
+    </p>
 
-        <span>
-          ID: <strong id="display-user-id"></strong>
-        </span>
+    <noscript>
+      Для работы приложения необходимо включить JavaScript.
+    </noscript>
+  </section>
 
-        <div>
-          <span class="tariff-badge" id="tariff-badge">
-            Бесплатный
-          </span>
+  <div id="layout" hidden>
+    <aside>
+      <div class="sidebar-inner">
+        <div class="brand">
+          <svg
+            viewBox="0 0 48 48"
+            fill="none"
+            aria-label="Логотип Scoffe2"
+          >
+            <path
+              d="M8 17h26v12a11 11 0 0 1-11 11h-4A11 11 0 0 1 8 29V17Z"
+              stroke="currentColor"
+              stroke-width="3"
+            />
+            <path
+              d="M34 20h3a6 6 0 0 1 0 12h-3M14 9v3m9-7v7m9-3v3M7 44h30"
+              stroke="currentColor"
+              stroke-width="3"
+              stroke-linecap="round"
+            />
+          </svg>
+          Scoffe2
+        </div>
+
+        <strong id="account-name"></strong>
+        <div id="account-id" class="muted"></div>
+
+        <p style="margin:12px 0 6px">
+          <span id="plan-badge" class="badge"></span>
+        </p>
+
+        <small id="plan-until"></small>
+        <div id="quota" class="muted"></div>
+
+        <nav aria-label="Разделы приложения">
+          <button data-view="notes" class="active">
+            Блокноты
+          </button>
+          <button data-view="calendar">Календарь</button>
+          <button data-view="ai">ИИ-чат</button>
+          <button data-view="pricing">Тарифы и оплата</button>
+          <button data-view="messages">Сообщения</button>
+        </nav>
+
+        <div class="row">
+          <button id="refresh-account" class="secondary">
+            Обновить тариф
+          </button>
+          <button id="logout-button" class="secondary">
+            Выйти
+          </button>
         </div>
       </div>
-
-      <button
-        class="nav-btn active"
-        data-view="notepad"
-        onclick="switchView('notepad', this)"
-      >
-        <img src="iconnote.png" alt="">
-        Блокнот
-      </button>
-
-      <button
-        class="nav-btn"
-        data-view="calendar"
-        onclick="switchView('calendar', this)"
-      >
-        <img src="calendar.png" alt="">
-        Календарь
-      </button>
-
-      <button
-        class="nav-btn"
-        data-view="ai-chat"
-        onclick="switchView('ai-chat', this)"
-      >
-        <img src="openai.png" alt="" id="nav-ai-icon">
-        ИИ Чат
-      </button>
-
-      <button
-        class="nav-btn"
-        data-view="pricing"
-        onclick="switchView('pricing', this)"
-      >
-        <img src="tickicon.png" alt="">
-        Тарифы
-      </button>
-
-      <button
-        class="nav-btn"
-        data-view="messages"
-        onclick="switchView('messages', this)"
-      >
-        <img src="chat.png" alt="">
-        Сообщения
-      </button>
-
-      <button
-        class="nav-btn"
-        onclick="logout()"
-        style="margin-top:auto;color:#FFCDD2"
-      >
-        <img src="crossicon.png" alt="">
-        Выйти
-      </button>
     </aside>
 
-    <main class="main">
-      <section id="view-notepad" class="view active">
-        <div id="notepad-list-view">
-          <div class="top-actions">
-            <button
-              class="action-btn"
-              onclick="createNotepad()"
-            >
-              <img src="iconnote.png" alt="">
-              Создать блокнот
-            </button>
+    <main>
+      <section data-section="notes">
+        <div class="row spread section-head">
+          <div>
+            <h2>Блокноты</h2>
+            <p class="muted">
+              Записи сохраняются в твоём аккаунте.
+            </p>
           </div>
 
-          <h3 style="margin-bottom:15px">
-            Мои блокноты
-          </h3>
-
-          <div
-            class="notepad-list"
-            id="notepad-container"
-          ></div>
+          <button id="new-note">Новый блокнот</button>
         </div>
 
-        <div
-          id="notepad-editor-view"
-          class="notepad-editor"
-          style="display:none"
-        >
-          <div class="editor-toolbar">
-            <img
-              src="crossicon.png"
-              alt="Закрыть блокнот"
-              title="Закрыть блокнот"
-              onclick="closeNotepad()"
-            >
+        <div class="note-layout">
+          <div id="note-list"></div>
 
-            <img
-              src="save.png"
-              alt="Сохранить"
-              title="Сохранить"
-              onclick="saveNotepad()"
-            >
-
-            <img
-              src="square.png"
-              alt="Добавить задачу"
-              title="Добавить задачу"
-              onclick="addChecklistItem()"
-            >
-
-            <img
-              src="microphone.png"
-              alt="Речь в текст"
-              title="Речь в текст"
-              onclick="startSpeechToText('notepad')"
-              id="btn-speech-notepad"
-            >
-
-            <img
-              src="rerank.png"
-              alt="Ранжировать содержимое"
-              title="Ранжировать содержимое"
-              onclick="rerankNotepad()"
-              id="btn-rerank-notepad"
-            >
-
-            <img
-              src="openai.png"
-              alt="Обработать текст с ИИ"
-              title="Обработать текст с ИИ"
-              onclick="generateAINotepad()"
-              id="btn-ai-notepad"
-            >
-
-            <img
-              src="save.png"
-              alt="Скачать TXT"
-              title="Скачать TXT"
-              onclick="downloadNotepad()"
-              style="border:2px solid var(--c-green)"
-            >
+          <div id="note-empty" class="panel muted">
+            Создай блокнот или выбери существующий.
           </div>
 
-          <div class="editor-content">
-            <h4 id="editor-title">Блокнот</h4>
+          <div id="note-editor" class="panel" hidden>
+            <label>
+              <span>Название</span>
+              <input id="note-title" maxlength="120">
+            </label>
 
-            <textarea
-              id="editor-text"
-              aria-label="Содержимое блокнота"
-              placeholder="Введите текст. Используйте %название для вставки другого блокнота."
-            ></textarea>
+            <label>
+              <span>Текст</span>
+              <textarea
+                id="note-text"
+                maxlength="50000"
+                placeholder="Запиши свою идею..."
+              ></textarea>
+            </label>
 
-            <div id="checklist-container"></div>
-          </div>
-        </div>
-      </section>
+            <div id="checklist"></div>
 
-      <section id="view-calendar" class="view">
-        <h2 style="margin-bottom:20px">Календарь</h2>
-
-        <div class="calendar-container">
-          <div class="calendar-header">
-            <button
-              class="calendar-arrow"
-              onclick="prevMonth()"
-              aria-label="Предыдущий месяц"
-            >
-              ←
-            </button>
-
-            <h3 id="calendar-month-year"></h3>
-
-            <button
-              class="calendar-arrow"
-              onclick="nextMonth()"
-              aria-label="Следующий месяц"
-            >
-              →
-            </button>
-          </div>
-
-          <div class="calendar-grid" id="calendar-grid"></div>
-        </div>
-
-        <div
-          id="day-detail-panel"
-          class="day-detail-panel"
-          style="display:none"
-        >
-          <h4 id="selected-date-title"></h4>
-
-          <div class="calendar-toolbar">
-            <img
-              src="save.png"
-              alt="Сохранить заметку"
-              title="Сохранить"
-              onclick="saveDayNote()"
-            >
-
-            <img
-              src="microphone.png"
-              alt="Речь в текст"
-              title="Речь в текст"
-              onclick="startSpeechToText('calendar')"
-              id="btn-speech-calendar"
-            >
-
-            <img
-              src="rerank.png"
-              alt="Ранжировать заметки"
-              title="Ранжировать заметки"
-              onclick="rerankCalendar()"
-              id="btn-rerank-calendar"
-            >
-
-            <img
-              src="openai.png"
-              alt="Обработать заметку с ИИ"
-              title="Обработать заметку с ИИ"
-              onclick="generateAICalendar()"
-              id="btn-ai-calendar"
-            >
-          </div>
-
-          <textarea
-            id="day-note-text"
-            aria-label="Заметка на выбранную дату"
-            placeholder="Заметка"
-          ></textarea>
-        </div>
-      </section>
-
-      <section id="view-ai-chat" class="view">
-        <div class="ai-chat-container">
-          <div class="ai-chat-header">
-            <h3>ИИ Чат</h3>
-
-            <button
-              class="action-btn"
-              onclick="clearChatHistory()"
-              style="background:var(--c-light)"
-            >
-              <img src="crossicon.png" alt="">
-              Очистить
-            </button>
-          </div>
-
-          <div
-            class="ai-chat-messages"
-            id="ai-chat-messages"
-          ></div>
-
-          <div class="ai-chat-input-area">
-            <textarea
-              id="ai-chat-input"
-              aria-label="Сообщение для ИИ"
-              placeholder="Напишите сообщение ИИ"
-            ></textarea>
-
-            <div class="ai-chat-controls">
-              <select
-                id="ai-model"
-                aria-label="Текстовая модель"
-              ></select>
-
-              <select
-                id="image-model-select"
-                aria-label="Модель изображений"
-                style="display:none"
-              ></select>
-
-              <select
-                id="video-model-select"
-                aria-label="Модель видео"
-                style="display:none"
-              ></select>
-
-              <button
-                id="ai-send-button"
-                onclick="sendAIChatMessage(currentTool)"
-              >
-                Отправить
+            <div class="row">
+              <button id="save-note">Сохранить</button>
+              <button id="add-check" class="secondary">
+                Пункт списка
+              </button>
+              <button id="download-note" class="secondary">
+                Скачать TXT
+              </button>
+              <button id="speak-note" class="secondary">
+                Диктовка
               </button>
             </div>
 
-            <div class="ai-chat-tools">
-              <img
-                src="openai.png"
-                alt="Текст"
-                title="Текстовый ответ"
-                onclick="selectTool('text')"
-                id="tool-text"
-                class="active-tool"
-              >
+            <div class="row" style="margin-top:10px">
+              <button id="analyze-note" class="secondary">
+                Разобрать с ИИ
+              </button>
+              <button id="rerank-note" class="secondary">
+                Ранжировать
+              </button>
+              <button id="delete-note" class="danger">
+                Удалить блокнот
+              </button>
+            </div>
 
-              <img
-                src="square.png"
-                alt="Изображение"
-                title="Сгенерировать изображение"
-                onclick="selectTool('image')"
-                id="tool-image"
-              >
+            <p class="footer-note">
+              Модель для анализа выбирается в разделе ИИ-чат.
+              Перед уходом со страницы нажимай «Сохранить».
+            </p>
+          </div>
+        </div>
+      </section>
 
-              <img
-                src="camera.png"
-                alt="Видео"
-                title="Сгенерировать видео"
-                onclick="selectTool('video')"
-                id="tool-video"
-              >
+      <section data-section="calendar" hidden>
+        <div class="section-head">
+          <h2>Календарь</h2>
+          <p class="muted">Планы и заметки на каждый день.</p>
+        </div>
+
+        <div class="calendar-layout">
+          <div class="panel">
+            <div class="row spread">
+              <button id="prev-month" class="secondary">
+                Назад
+              </button>
+              <strong id="month-title"></strong>
+              <button id="next-month" class="secondary">
+                Вперёд
+              </button>
+            </div>
+
+            <div id="calendar-grid"></div>
+          </div>
+
+          <div class="panel">
+            <h3 id="selected-date"></h3>
+
+            <textarea
+              id="day-text"
+              maxlength="12000"
+              placeholder="Что запланировано на этот день?"
+            ></textarea>
+
+            <div class="row" style="margin-top:12px">
+              <button id="save-day">Сохранить</button>
+              <button id="speak-day" class="secondary">
+                Диктовка
+              </button>
+              <button id="analyze-day" class="secondary">
+                Разобрать с ИИ
+              </button>
+              <button id="rerank-day" class="secondary">
+                Ранжировать
+              </button>
             </div>
           </div>
         </div>
       </section>
 
-      <section id="view-pricing" class="view">
-        <h2 style="text-align:center;margin-bottom:10px">
-          Выберите тариф
-        </h2>
+      <section data-section="ai" hidden>
+        <div class="row spread section-head">
+          <div>
+            <h2>ИИ-чат</h2>
+            <p class="muted">
+              Текст, изображения и видео через AITUNNEL.
+            </p>
+          </div>
 
-        <p class="section-note">
-          Автоматическое подтверждение платежей и серверные
-          подписки пока не подключены. Оплата через ЮMoney
-          не включает тариф автоматически.
-        </p>
+          <button id="clear-chat" class="secondary">
+            Очистить чат
+          </button>
+        </div>
 
-        <div class="pricing-cards">
-          <div class="pricing-card free">
-            <h3>Бесплатный</h3>
+        <div class="panel">
+          <div id="chat" aria-live="polite"></div>
 
-            <div class="price">
-              0 ₽ <span>/ навсегда</span>
-            </div>
+          <div class="chat-controls">
+            <select id="ai-kind" aria-label="Режим генерации">
+              <option value="ai">Текст</option>
+              <option value="image">Изображение</option>
+              <option value="video">Видео</option>
+              <option value="rerank">Ранжирование</option>
+            </select>
 
-            <ul>
-              <li>Блокноты в текущем браузере</li>
-              <li>Календарь с заметками</li>
-              <li>Скачивание заметок в TXT</li>
-            </ul>
+            <select id="ai-model" aria-label="Модель"></select>
+          </div>
 
-            <button
-              class="sber-btn"
-              style="background:var(--c-light)"
-              disabled
-            >
-              Бесплатный тариф
+          <textarea
+            id="ai-input"
+            maxlength="8000"
+            placeholder="Напиши запрос..."
+          ></textarea>
+
+          <div class="row" style="margin-top:12px">
+            <button id="send-ai">Отправить</button>
+            <button id="speak-chat" class="secondary">
+              Диктовка
             </button>
           </div>
 
-          <div class="pricing-card flash">
-            <h3>Флэш</h3>
+          <p class="footer-note">
+            Для ранжирования введи фрагменты отдельными строками.
+            Чат хранится только до обновления страницы.
+            Запрос учитывается в квоте перед отправкой провайдеру;
+            при неоднозначном сбое автоматического повтора нет.
+          </p>
+        </div>
 
-            <div class="price">
-              59 ₽ <span>/ месяц</span>
-            </div>
-
-            <ul>
-              <li>Всё из бесплатного</li>
-              <li>ИИ-ассистент: базовые модели</li>
-              <li>Генерация изображений</li>
-              <li>Генерация видео</li>
-              <li>Ранжирование текста</li>
-              <li>Речь в текст</li>
-            </ul>
-
-            <button
-              class="sber-btn"
-              onclick="showPaymentModal('flash')"
-            >
-              Выбрать Флэш
+        <div class="panel" style="margin-top:20px">
+          <div class="row spread">
+            <h3>Мои видео</h3>
+            <button id="refresh-videos" class="secondary">
+              Обновить список
             </button>
           </div>
 
-          <div class="pricing-card home">
-            <h3>Домашний</h3>
-
-            <div class="price">
-              99 ₽ <span>/ месяц</span>
-            </div>
-
-            <ul>
-              <li>Всё из Флэш</li>
-              <li>Дополнительные текстовые модели</li>
-              <li>Дополнительные модели изображений</li>
-              <li>Дополнительные модели видео</li>
-              <li>Дополнительные модели ранжирования</li>
-            </ul>
-
-            <button
-              class="sber-btn"
-              onclick="showPaymentModal('home')"
-            >
-              Выбрать Домашний
-            </button>
-          </div>
+          <div id="video-jobs"></div>
         </div>
       </section>
 
-      <section id="view-messages" class="view">
-        <h2 style="margin-bottom:12px">Сообщения</h2>
+      <section data-section="pricing" hidden>
+        <div class="section-head">
+          <h2>Тарифы и оплата</h2>
+          <p class="muted">
+            Разовая оплата за 30 дней. Автоматических списаний нет.
+          </p>
+        </div>
 
-        <p
-          class="section-note"
-          style="text-align:left;margin:0 0 20px"
-        >
-          В этой версии это локальный журнал.
-          Доставка сообщений другим пользователям не подключена.
-        </p>
+        <label style="max-width:340px">
+          <span>Способ оплаты</span>
+          <select id="payment-type">
+            <option value="AC">Банковская карта</option>
+            <option value="PC">Кошелёк ЮMoney</option>
+          </select>
+        </label>
 
-        <div class="message-list" id="message-container"></div>
+        <div id="plans" class="cards"></div>
 
-        <button
-          class="compose-btn"
-          aria-label="Новое сообщение"
-          onclick="openModal('modal-message')"
-        >
-          <img src="chat.png" alt="">
-        </button>
+        <div class="panel">
+          <h3>Как работает оплата</h3>
+          <p class="muted">
+            После нажатия кнопки откроется форма ЮMoney.
+            Доступ включается только после подтверждённого
+            уведомления о платеже. Сам возврат на сайт
+            не подтверждает оплату.
+          </p>
+          <p class="muted">
+            Повторная оплата того же тарифа добавляет 30 дней
+            и новый пакет запросов. Периоды «Флэш» и «Домашний»
+            учитываются отдельно; пока действует «Домашний»,
+            используются его права доступа.
+          </p>
+          <p class="muted">
+            Неизрасходованные запросы остаются на аккаунте,
+            но использовать их можно только при действующем
+            платном тарифе.
+          </p>
+        </div>
+
+        <div class="panel" style="margin-top:20px">
+          <div class="row spread">
+            <h3>Мои заказы</h3>
+            <button id="refresh-orders" class="secondary">
+              Проверить оплату
+            </button>
+          </div>
+
+          <div id="orders"></div>
+        </div>
+      </section>
+
+      <section data-section="messages" hidden>
+        <div class="section-head">
+          <h2>Сообщения</h2>
+          <p class="muted">
+            Переписка с зарегистрированными пользователями.
+          </p>
+        </div>
+
+        <form id="message-form" class="panel">
+          <label>
+            <span>Логин или ID получателя</span>
+            <input
+              id="message-recipient"
+              maxlength="64"
+              required
+            >
+          </label>
+
+          <label>
+            <span>Сообщение</span>
+            <textarea
+              id="message-text"
+              maxlength="4000"
+              required
+            ></textarea>
+          </label>
+
+          <div class="row">
+            <button type="submit" id="send-message">
+              Отправить
+            </button>
+            <button
+              type="button"
+              id="refresh-messages"
+              class="secondary"
+            >
+              Обновить
+            </button>
+          </div>
+        </form>
+
+        <div
+          id="messages"
+          class="panel"
+          style="margin-top:20px"
+        ></div>
       </section>
     </main>
   </div>
 
-  <div id="modal-message" class="modal">
-    <div class="modal-content">
-      <h3>Новое сообщение</h3>
-
-      <input
-        type="text"
-        id="msg-recipient"
-        placeholder="ID получателя"
-        aria-label="ID получателя"
-      >
-
-      <textarea
-        id="msg-text"
-        rows="4"
-        placeholder="Текст сообщения"
-        aria-label="Текст сообщения"
-      ></textarea>
-
-      <div class="modal-actions">
-        <button
-          class="btn-cancel"
-          onclick="closeModal('modal-message')"
-        >
-          Отмена
-        </button>
-
-        <button
-          class="btn-confirm"
-          onclick="sendMessage()"
-        >
-          Сохранить в журнал
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <div id="modal-payment" class="modal">
-    <div class="modal-content">
-      <h3 id="payment-title">Оплата тарифа</h3>
-
-      <div class="payment-summary">
-        <div>
-          <strong id="payment-plan-name"></strong>
-
-          <div
-            style="font-size:13px;color:var(--c-light);margin-top:4px"
-          >
-            За месяц
-          </div>
-        </div>
-
-        <div class="amount" id="payment-amount"></div>
-      </div>
-
-      <p class="payment-warning">
-        Автоматическое подтверждение оплаты ещё не настроено.
-        Не выполняйте перевод ради проверки сайта.
-        После перевода тариф автоматически не активируется.
-      </p>
-
-      <button
-        class="sber-btn"
-        id="payment-submit-button"
-        onclick="processPayment()"
-      >
-        Перейти в ЮMoney
+  <dialog id="result-dialog">
+    <div class="row spread">
+      <h3>Ответ ИИ</h3>
+      <button id="close-result" class="secondary">
+        Закрыть
       </button>
-
-      <p
-        style="font-size:12px;color:var(--c-light);margin-top:12px;line-height:1.5"
-      >
-        Данные банковской карты вводятся только на стороне ЮMoney.
-      </p>
-
-      <div class="modal-actions">
-        <button
-          class="btn-cancel"
-          onclick="closeModal('modal-payment')"
-        >
-          Закрыть
-        </button>
-      </div>
     </div>
-  </div>
 
-  <div id="modal-premium-lock" class="modal">
-    <div class="modal-content">
-      <div class="premium-lock-modal">
-        <h3 id="premium-lock-title">
-          Функция недоступна
-        </h3>
+    <div id="ai-result"></div>
 
-        <p id="premium-lock-text">
-          Требуется платный тариф
-        </p>
-
-        <button
-          class="sber-btn"
-          onclick="openPricingFromLock()"
-        >
-          Посмотреть тарифы
-        </button>
-
-        <button
-          class="btn-cancel"
-          style="margin-top:10px"
-          onclick="closeModal('modal-premium-lock')"
-        >
-          Закрыть
-        </button>
-      </div>
+    <div class="row" style="margin-top:18px">
+      <button id="copy-result" class="secondary">
+        Скопировать
+      </button>
     </div>
-  </div>
-
-  <div id="modal-rename" class="modal">
-    <div class="modal-content">
-      <h3>Переименовать блокнот</h3>
-
-      <input
-        type="text"
-        id="rename-input"
-        placeholder="Новое название"
-        aria-label="Новое название блокнота"
-      >
-
-      <div class="modal-actions">
-        <button
-          class="btn-cancel"
-          onclick="closeModal('modal-rename')"
-        >
-          Отмена
-        </button>
-
-        <button
-          class="btn-confirm"
-          onclick="confirmRename()"
-        >
-          Сохранить
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <footer class="site-footer">
-    <a
-      href="https://neocities.org"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="neocities-link"
-    >
-      <img src="iconScoffe2.png" alt="">
-      <span>Neocities</span>
-    </a>
-  </footer>
+  </dialog>
 
   <script>
     "use strict";
 
-    // Запросы идут на этот же сайт.
-    // Значения AITUNNEL_KEY и YOOMONEY_WALLET
-    // существуют только в серверной функции Pages.
-    const API_BASE = "/api";
+    const $ = id => document.getElementById(id);
 
-    const AI_MODELS = {
-      flash: [
-        { value: "gpt-oss-120b", label: "GPT OSS 120B" },
-        { value: "mistral-nemo", label: "Mistral Nemo" },
-        { value: "gpt-oss-20b", label: "GPT OSS 20B" },
-        { value: "mimo-v2.5", label: "Mimo v2.5" }
-      ],
-
-      home: [
-        { value: "gpt-4o-mini", label: "GPT-4o Mini" },
-        { value: "minimax-m2", label: "MiniMax M2" },
-        {
-          value: "gemini-3.1-flash-lite",
-          label: "Gemini 3.1 Flash Lite"
-        },
-        { value: "gigachat-2", label: "GigaChat 2" },
-        { value: "sonar", label: "Sonar" }
-      ]
-    };
-
-    const IMAGE_MODELS = {
-      flash: [
-        {
-          value: "gpt-image-1-mini",
-          label: "GPT Image 1 Mini"
-        },
-        {
-          value: "mai-image-2.6",
-          label: "Mai Image 2.6"
-        }
-      ],
-
-      home: [
-        {
-          value: "recraft-v4.1-pro",
-          label: "Recraft V4.1 Pro"
-        },
-        {
-          value: "gemini-3-pro-image",
-          label: "Gemini 3 Pro Image"
-        },
-        {
-          value: "gpt-image-1",
-          label: "GPT Image 1"
-        }
-      ]
-    };
-
-    const VIDEO_MODELS = {
-      flash: [
-        {
-          value: "seedance-1.5-pro",
-          label: "Seedance 1.5 Pro"
-        },
-        {
-          value: "grok-imagine-video",
-          label: "Grok Imagine Video"
-        },
-        {
-          value: "seedance-2.0-fast",
-          label: "Seedance 2.0 Fast"
-        }
-      ],
-
-      home: [
-        {
-          value: "hailuo-2.3",
-          label: "Hailuo 2.3"
-        },
-        {
-          value: "veo-3.1-lite",
-          label: "Veo 3.1 Lite"
-        },
-        {
-          value: "aleph-2",
-          label: "Aleph 2"
-        }
-      ]
-    };
-
-    const RERANK_MODELS = {
-      flash: [
-        {
-          value: "rerank-v3.5",
-          label: "Rerank V3.5"
-        }
-      ],
-
-      home: [
-        {
-          value: "rerank-4-pro",
-          label: "Rerank 4 Pro"
-        },
-        {
-          value: "qwen3-reranker-8b",
-          label: "Qwen3 Reranker 8b"
-        }
-      ]
-    };
-
-    let currentUser = null;
-    let currentUserId = null;
-    let userTariff = "free";
-    let tariffExpiry = null;
-
-    let notepads = [];
-    let activeNotepad = null;
-    let calendarNotes = {};
-    let messages = [];
-    let aiChatHistory = [];
-
-    let currentCalendarDate = new Date();
-    currentCalendarDate.setDate(1);
-
-    let selectedDate = null;
-    let renamingNotepadId = null;
-    let currentTool = "text";
-    let selectedTariffForPayment = "flash";
-
-    let speechRecognition = null;
-    let isListening = false;
-    let speechTarget = null;
-    let speechToast = null;
-
+    let account = null;
+    let plans = {};
+    let models = {};
+    let state = { notes: [], calendar: {} };
+    let version = 0;
+    let activeNoteId = null;
+    let dirty = false;
+    let saving = false;
     let chatBusy = false;
+    let chatHistory = [];
     let paymentBusy = false;
-    let authBusy = false;
+    let selectedDate = dateKey(new Date());
+    let calendarMonth = new Date();
+    let paymentPolling = false;
+    let speech = null;
 
-    function byId(id) {
-      return document.getElementById(id);
+    calendarMonth.setDate(1);
+
+    function node(tag, content, className) {
+      const element = document.createElement(tag);
+
+      if (content !== undefined && content !== null) {
+        element.textContent = String(content);
+      }
+
+      if (className) {
+        element.className = className;
+      }
+
+      return element;
     }
 
-    function isObject(value) {
+    function notice(message, error = false) {
+      $("notice").textContent = String(message);
+      $("notice").className = error ? "error" : "";
+      $("notice").hidden = false;
+    }
+
+    function fail(error) {
+      notice(error?.message || "Что-то пошло не так.", true);
+    }
+
+    function run(fn) {
+      return Promise.resolve().then(fn).catch(fail);
+    }
+
+    function bind(id, fn) {
+      $(id).addEventListener("click", () => run(fn));
+    }
+
+    function button(label, fn, className = "secondary") {
+      const result = node("button", label, className);
+      result.type = "button";
+      result.addEventListener("click", () => run(fn));
+      return result;
+    }
+
+    function dateKey(value) {
       return (
-        value !== null &&
-        typeof value === "object" &&
-        !Array.isArray(value)
+        value.getFullYear() + "-" +
+        String(value.getMonth() + 1).padStart(2, "0") + "-" +
+        String(value.getDate()).padStart(2, "0")
       );
     }
 
-    function normalizeTariff(value) {
-      return ["free", "flash", "home"].includes(value)
-        ? value
-        : "free";
+    function formatDate(seconds) {
+      return new Date(seconds * 1000)
+        .toLocaleString("ru-RU");
     }
 
-    function generateId() {
-      const values = new Uint8Array(8);
-      crypto.getRandomValues(values);
+    async function api(path, body) {
+      let response;
 
-      return Array.from(values)
-        .map(value => value.toString(16).padStart(2, "0"))
-        .join("")
-        .toUpperCase();
-    }
-
-    async function hashPassword(password) {
-      if (!crypto.subtle) {
+      try {
+        response = await fetch("/api/" + path, {
+          method: body === undefined ? "GET" : "POST",
+          credentials: "same-origin",
+          cache: "no-store",
+          headers:
+            body === undefined
+              ? {}
+              : { "Content-Type": "application/json" },
+          body:
+            body === undefined
+              ? undefined
+              : JSON.stringify(body),
+          signal: AbortSignal.timeout(210000)
+        });
+      } catch {
         throw new Error(
-          "Для входа нужен HTTPS. Открой опубликованный сайт."
+          "Нет соединения с сервером. Если это была платная " +
+          "генерация, не повторяй её автоматически."
         );
       }
 
-      const encoder = new TextEncoder();
-
-      const hashBuffer = await crypto.subtle.digest(
-        "SHA-256",
-        encoder.encode(password + "_scoffe2_salt_2026")
-      );
-
-      return Array.from(new Uint8Array(hashBuffer))
-        .map(value => value.toString(16).padStart(2, "0"))
-        .join("");
-    }
-
-    function showToast(message, type = "info") {
-      const toast = document.createElement("div");
-      const allowedTypes = ["info", "success", "error", "loading"];
-
-      toast.className =
-        "toast " + (allowedTypes.includes(type) ? type : "info");
-
-      // Не вставляем текст ошибок или пользователя через innerHTML.
-      toast.textContent = String(message);
-      byId("toast-container").appendChild(toast);
-
-      if (type !== "loading") {
-        setTimeout(() => {
-          toast.style.opacity = "0";
-          toast.style.transform = "translateX(100%)";
-
-          setTimeout(() => {
-            toast.remove();
-          }, 300);
-        }, type === "error" ? 8000 : 5000);
-      }
-
-      return toast;
-    }
-
-    function removeLoadingToast(toast) {
-      if (toast) toast.remove();
-    }
-
-    function getUsers() {
-      const raw = localStorage.getItem("scoffe2_users");
-      if (!raw) return {};
-
-      let value;
-
-      try {
-        value = JSON.parse(raw);
-      } catch {
-        throw new Error(
-          "Данные аккаунтов повреждены. " +
-          "Не очищай хранилище без резервной копии."
-        );
-      }
-
-      if (!isObject(value)) {
-        throw new Error("Некорректный формат данных аккаунтов");
-      }
-
-      return value;
-    }
-
-    function saveUsers(users) {
-      localStorage.setItem(
-        "scoffe2_users",
-        JSON.stringify(users)
-      );
-    }
-
-    function getCurrentSession() {
-      const raw = localStorage.getItem("scoffe2_session");
-      if (!raw) return null;
-
-      try {
-        const session = JSON.parse(raw);
-
-        return (
-          isObject(session) &&
-          typeof session.username === "string"
-        ) ? session : null;
-      } catch {
-        return null;
-      }
-    }
-
-    function saveSession(username, userId, tariff) {
-      localStorage.setItem(
-        "scoffe2_session",
-        JSON.stringify({
-          username,
-          userId,
-          tariff: normalizeTariff(tariff)
-        })
-      );
-    }
-
-    function clearSession() {
-      localStorage.removeItem("scoffe2_session");
-    }
-
-    function getUserDataKey(username) {
-      return "scoffe2_data_" + username.toLowerCase();
-    }
-
-    function emptyUserData() {
-      return {
-        notepads: [],
-        calendarNotes: {},
-        messages: [{
-          from: "Система",
-          text: "Добро пожаловать!",
-          time: new Date().toISOString()
-        }],
-        aiChatHistory: []
-      };
-    }
-
-    function loadUserData(username) {
-      const raw = localStorage.getItem(
-        getUserDataKey(username)
-      );
-
-      if (!raw) return emptyUserData();
-
+      const raw = await response.text();
       let data;
 
       try {
         data = JSON.parse(raw);
       } catch {
         throw new Error(
-          "Сохранённые данные повреждены. " +
-          "Не очищай данные сайта: сначала сохрани резервную копию."
+          "Сервер вернул не JSON. Проверь развёртывание " +
+          "Pages Functions и путь /api/."
         );
       }
 
-      if (!isObject(data)) {
-        throw new Error("Некорректный формат сохранённых данных");
+      if (!response.ok) {
+        const error = new Error(
+          data.error || "Ошибка сервера."
+        );
+
+        error.status = response.status;
+        throw error;
       }
 
       return data;
     }
 
-    function saveUserData(showNotification = true) {
-      if (!currentUser) return false;
+    async function authenticate(register) {
+      if (!$("auth-form").reportValidity()) return;
+
+      $("login-button").disabled = true;
+      $("register-button").disabled = true;
 
       try {
-        localStorage.setItem(
-          getUserDataKey(currentUser),
-          JSON.stringify({
-            notepads,
-            calendarNotes,
-            messages,
-            tariff: userTariff,
-            tariffExpiry,
-            aiChatHistory
-          })
-        );
-
-        if (showNotification) {
-          showToast("Сохранено", "success");
-        }
-
-        return true;
-      } catch {
-        showToast(
-          "Не удалось сохранить данные. " +
-          "Возможно, хранилище браузера заполнено. " +
-          "Скачай важные заметки в TXT.",
-          "error"
-        );
-
-        return false;
-      }
-    }
-
-    function checkTariffExpiry() {
-      if (!tariffExpiry || Date.now() <= tariffExpiry) {
-        return false;
-      }
-
-      userTariff = "free";
-      tariffExpiry = null;
-
-      if (currentUser) {
-        try {
-          const users = getUsers();
-          const key = currentUser.toLowerCase();
-
-          if (Object.hasOwn(users, key)) {
-            users[key].tariff = "free";
-            users[key].tariffExpiry = null;
-            saveUsers(users);
-          }
-
-          saveSession(currentUser, currentUserId, "free");
-        } catch {
-          showToast(
-            "Не удалось обновить локальные данные тарифа",
-            "error"
-          );
-        }
-
-        saveUserData(false);
-      }
-
-      updateTariffBadge();
-      updateAIIcons();
-      updateAllModels();
-
-      return true;
-    }
-
-    function updateTariffBadge() {
-      const badge = byId("tariff-badge");
-
-      const labels = {
-        free: "Бесплатный",
-        flash: "Флэш",
-        home: "Домашний"
-      };
-
-      badge.textContent = labels[userTariff] || labels.free;
-      badge.className = "tariff-badge";
-
-      if (userTariff !== "free") {
-        badge.classList.add("tariff-" + userTariff);
-      }
-
-      if (tariffExpiry && tariffExpiry > Date.now()) {
-        const days = Math.ceil(
-          (tariffExpiry - Date.now()) / 86400000
-        );
-
-        badge.textContent += ` (${days} дн.)`;
-      }
-    }
-
-    function requirePremium(title = "Функция недоступна") {
-      checkTariffExpiry();
-
-      if (userTariff !== "free") {
-        return true;
-      }
-
-      byId("premium-lock-title").textContent = title;
-
-      byId("premium-lock-text").textContent =
-        "В интерфейсе функция относится к платному тарифу. " +
-        "Автоматическая оплата и серверная активация подписок " +
-        "пока не подключены.";
-
-      openModal("modal-premium-lock");
-      return false;
-    }
-
-    function getAvailableModels(category) {
-      if (userTariff === "free") {
-        return [];
-      }
-
-      const categories = {
-        ai: AI_MODELS,
-        image: IMAGE_MODELS,
-        video: VIDEO_MODELS,
-        rerank: RERANK_MODELS
-      };
-
-      const group = categories[category];
-      if (!group) return [];
-
-      if (userTariff === "home") {
-        return [...group.flash, ...group.home];
-      }
-
-      return [...group.flash];
-    }
-
-    function updateModelSelect(id, category) {
-      const select = byId(id);
-      const previous = select.value;
-      const models = getAvailableModels(category);
-
-      select.replaceChildren();
-
-      if (!models.length) {
-        select.appendChild(new Option("Недоступно", ""));
-        select.disabled = true;
-        return;
-      }
-
-      for (const model of models) {
-        select.appendChild(
-          new Option(model.label, model.value)
-        );
-      }
-
-      select.disabled = false;
-
-      if (models.some(model => model.value === previous)) {
-        select.value = previous;
-      }
-    }
-
-    function updateAIModels() {
-      updateModelSelect("ai-model", "ai");
-    }
-
-    function updateImageModels() {
-      updateModelSelect("image-model-select", "image");
-    }
-
-    function updateVideoModels() {
-      updateModelSelect("video-model-select", "video");
-    }
-
-    function updateAllModels() {
-      updateAIModels();
-      updateImageModels();
-      updateVideoModels();
-    }
-
-    function updateAIIcons() {
-      const isFree = userTariff === "free";
-
-      byId("nav-ai-icon").src = isFree
-        ? "lock.png"
-        : "openai.png";
-
-      const ids = [
-        "btn-speech-notepad",
-        "btn-speech-calendar",
-        "btn-rerank-notepad",
-        "btn-rerank-calendar",
-        "btn-ai-notepad",
-        "btn-ai-calendar",
-        "tool-image",
-        "tool-video",
-        "tool-text"
-      ];
-
-      for (const id of ids) {
-        const element = byId(id);
-
-        if (element) {
-          element.classList.toggle(
-            "premium-disabled",
-            isFree
-          );
-        }
-      }
-    }
-
-    function selectTool(tool) {
-      if (!["text", "image", "video"].includes(tool)) {
-        return;
-      }
-
-      currentTool = tool;
-
-      document
-        .querySelectorAll(".ai-chat-tools img")
-        .forEach(image => {
-          image.classList.remove("active-tool");
-        });
-
-      byId("tool-" + tool).classList.add("active-tool");
-
-      byId("ai-model").style.display =
-        tool === "text" ? "block" : "none";
-
-      byId("image-model-select").style.display =
-        tool === "image" ? "block" : "none";
-
-      byId("video-model-select").style.display =
-        tool === "video" ? "block" : "none";
-    }
-
-    async function callAPI(endpoint, payload) {
-      const controller = new AbortController();
-
-      const timeout = setTimeout(() => {
-        controller.abort();
-      }, 190000);
-
-      try {
-        const response = await fetch(
-          `${API_BASE}/${endpoint}`,
+        await api(
+          register ? "auth/register" : "auth/login",
           {
-            method: "POST",
-            credentials: "same-origin",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify(payload),
-            signal: controller.signal
+            username: $("auth-name").value,
+            password: $("auth-password").value
           }
         );
 
-        const contentType =
-          response.headers.get("Content-Type") || "";
-
-        if (!contentType.includes("application/json")) {
-          throw new Error(
-            "Серверная функция Pages не запущена. " +
-            "Проверь functions/api/[[path]].js и новый deployment."
-          );
-        }
-
-        const data = await response.json();
-
-        if (!response.ok) {
-          throw new Error(
-            typeof data.error === "string"
-              ? data.error
-              : `Ошибка API: ${response.status}`
-          );
-        }
-
-        return data;
-      } catch (error) {
-        if (error.name === "AbortError") {
-          throw new Error(
-            "Время ожидания истекло. " +
-            "Не повторяй платную генерацию автоматически."
-          );
-        }
-
-        throw error;
+        $("auth-password").value = "";
+        await enterApp();
       } finally {
-        clearTimeout(timeout);
+        $("login-button").disabled = false;
+        $("register-button").disabled = false;
       }
     }
 
-    function safeImageSource(value) {
-      if (typeof value !== "string") return "";
+    async function refreshProfile() {
+      const data = await api("me");
 
-      if (
-        /^data:image\/(?:png|jpeg|webp);base64,[A-Za-z0-9+/=\s]+$/.test(
-          value
-        )
-      ) {
-        return value;
-      }
+      account = data.user;
+      plans = data.plans;
+      models = data.models;
 
-      try {
-        const url = new URL(value, window.location.origin);
+      $("account-name").textContent = account.username;
+      $("account-id").textContent = "ID: " + account.id;
 
-        return url.protocol === "https:"
-          ? url.href
-          : "";
-      } catch {
-        return "";
-      }
+      $("plan-badge").textContent =
+        account.plan === "free"
+          ? "Бесплатный"
+          : plans[account.plan].name;
+
+      $("plan-until").textContent =
+        account.until
+          ? "Действует до " + formatDate(account.until)
+          : "Блокноты, календарь и сообщения";
+
+      $("quota").textContent =
+        "Осталось запросов:\n" +
+        "Текст: " + account.quota.ai +
+        " · Изображения: " + account.quota.image +
+        "\nВидео: " + account.quota.video +
+        " · Ранжирование: " + account.quota.rerank;
+
+      renderModels();
+      renderPlans();
     }
 
-    function safeVideoSource(value) {
-      if (typeof value !== "string") return "";
+    async function enterApp() {
+      await refreshProfile();
 
-      if (/^\/api\/video-content\/[A-Za-z0-9_-]+$/.test(value)) {
-        return value;
-      }
+      const saved = await api("state");
+      state = saved.data;
+      version = saved.version;
+      dirty = false;
 
-      try {
-        const url = new URL(value, window.location.origin);
+      activeNoteId = state.notes[0]?.id || null;
 
-        return url.protocol === "https:"
-          ? url.href
-          : "";
-      } catch {
-        return "";
-      }
-    }
+      $("auth").hidden = true;
+      $("layout").hidden = false;
+      $("notice").hidden = true;
 
-    function renderAIChat() {
-      const container = byId("ai-chat-messages");
-      container.replaceChildren();
-
-      if (!aiChatHistory.length) {
-        const empty = document.createElement("div");
-        empty.className = "empty-state";
-        empty.textContent =
-          "Здесь появится история разговора с ИИ.";
-
-        container.appendChild(empty);
-        return;
-      }
-
-      for (const message of aiChatHistory) {
-        if (!isObject(message)) continue;
-
-        const item = document.createElement("div");
-        const isUser = message.role === "user";
-
-        item.className =
-          "ai-message " + (isUser ? "user" : "ai");
-
-        if (
-          message.type === "image" ||
-          message.type === "video"
-        ) {
-          const title = document.createElement("strong");
-
-          title.textContent =
-            (message.type === "image" ? "Изображение" : "Видео") +
-            (message.model ? ` (${message.model})` : "");
-
-          item.appendChild(title);
-
-          const source = message.type === "image"
-            ? safeImageSource(message.url)
-            : safeVideoSource(message.url);
-
-          if (source) {
-            const media = document.createElement(
-              message.type === "image" ? "img" : "video"
-            );
-
-            media.src = source;
-
-            if (message.type === "image") {
-              media.alt = "Сгенерированное изображение";
-              media.loading = "lazy";
-            } else {
-              media.controls = true;
-              media.preload = "metadata";
-            }
-
-            item.appendChild(media);
-          } else {
-            const error = document.createElement("p");
-            error.textContent = "Некорректный адрес медиа";
-            item.appendChild(error);
-          }
-
-          const caption = document.createElement("p");
-          caption.className = "ai-media-caption";
-          caption.textContent = String(message.prompt || "");
-
-          item.appendChild(caption);
-        } else if (message.type === "video-pending") {
-          const label = document.createElement("p");
-
-          label.textContent =
-            "Видео ещё не получено. ID задачи: " +
-            String(message.id || "");
-
-          item.appendChild(label);
-
-          const checkButton = document.createElement("button");
-          checkButton.className = "action-btn";
-          checkButton.style.marginTop = "10px";
-          checkButton.textContent = "Проверить готовность";
-
-          checkButton.onclick = () => {
-            checkPendingVideo(message);
-          };
-
-          item.appendChild(checkButton);
-        } else {
-          item.textContent = String(message.content || "");
-        }
-
-        container.appendChild(item);
-      }
-
-      container.scrollTop = container.scrollHeight;
-    }
-
-    async function waitForVideo(id) {
-      for (let attempt = 0; attempt < 40; attempt++) {
-        await new Promise(resolve => {
-          setTimeout(resolve, 15000);
-        });
-
-        const result = await callAPI("video-status", { id });
-
-        if (result.video_url) {
-          return result;
-        }
-
-        if (
-          ["failed", "expired", "cancelled"].includes(result.status)
-        ) {
-          throw new Error(
-            `Генерация видео завершилась: ${result.status}`
-          );
-        }
-      }
-
-      throw new Error(
-        "Видео ещё не готово. " +
-        "Используй кнопку проверки в истории, " +
-        "не создавая новую платную задачу."
-      );
-    }
-
-    async function checkPendingVideo(message) {
-      if (!requirePremium("Генерация видео недоступна")) {
-        return;
-      }
-
-      const toast = showToast(
-        "Проверяю готовность видео",
-        "loading"
-      );
-
-      try {
-        const result = await callAPI("video-status", {
-          id: message.id
-        });
-
-        if (result.video_url) {
-          message.type = "video";
-          message.url = result.video_url;
-          delete message.id;
-
-          renderAIChat();
-          saveUserData(false);
-          showToast("Видео готово", "success");
-        } else if (
-          ["failed", "expired", "cancelled"].includes(result.status)
-        ) {
-          message.type = "text";
-          message.role = "ai";
-          message.content =
-            `Генерация видео завершилась: ${result.status}`;
-
-          renderAIChat();
-          saveUserData(false);
-        } else {
-          showToast(
-            "Видео ещё обрабатывается. " +
-            "Повтори проверку позже.",
-            "info"
-          );
-        }
-      } catch (error) {
-        showToast(error.message, "error");
-      } finally {
-        removeLoadingToast(toast);
-      }
-    }
-
-    async function sendAIChatMessage(mode = currentTool) {
-      if (chatBusy) return;
-      if (!requirePremium("ИИ Чат недоступен")) return;
-
-      const input = byId("ai-chat-input");
-      const prompt = input.value.trim();
-
-      if (!prompt) {
-        showToast("Введите сообщение", "error");
-        return;
-      }
-
-      const actualMode = ["text", "image", "video"].includes(mode)
-        ? mode
-        : "text";
-
-      const selectId = actualMode === "image"
-        ? "image-model-select"
-        : actualMode === "video"
-          ? "video-model-select"
-          : "ai-model";
-
-      const model = byId(selectId).value;
-
-      if (!model) {
-        showToast("Нет доступной модели", "error");
-        return;
-      }
-
-      chatBusy = true;
-      byId("ai-send-button").disabled = true;
-
-      aiChatHistory.push({
-        role: "user",
-        content: actualMode === "text"
-          ? prompt
-          : `${actualMode === "image" ? "Изображение" : "Видео"}: ${prompt}`
-      });
-
-      renderAIChat();
-      input.value = "";
-
-      const toast = showToast(
-        actualMode === "text"
-          ? "ИИ готовит ответ"
-          : actualMode === "image"
-            ? "Генерация изображения"
-            : "Генерация видео",
-        "loading"
-      );
-
-      try {
-        if (actualMode === "image") {
-          const result = await callAPI("image", {
-            model,
-            prompt
-          });
-
-          if (!result.image_url) {
-            throw new Error("Изображение не получено");
-          }
-
-          aiChatHistory.push({
-            type: "image",
-            url: result.image_url,
-            model,
-            prompt
-          });
-        } else if (actualMode === "video") {
-          const result = await callAPI("video", {
-            model,
-            prompt
-          });
-
-          if (!result.id) {
-            throw new Error("Не получен ID задачи видео");
-          }
-
-          const pending = {
-            type: "video-pending",
-            id: result.id,
-            model,
-            prompt
-          };
-
-          aiChatHistory.push(pending);
-          renderAIChat();
-          saveUserData(false);
-
-          const ready = result.video_url
-            ? result
-            : await waitForVideo(result.id);
-
-          pending.type = "video";
-          pending.url = ready.video_url;
-          delete pending.id;
-        } else {
-          const history = aiChatHistory
-            .filter(message =>
-              isObject(message) &&
-              ["user", "ai", "assistant"].includes(message.role) &&
-              typeof message.content === "string"
-            )
-            .slice(-10)
-            .map(message => ({
-              role: message.role === "ai"
-                ? "assistant"
-                : message.role,
-              content: message.content
-            }));
-
-          const result = await callAPI("ai", {
-            model,
-            messages: [
-              {
-                role: "system",
-                content:
-                  "Ты полезный ассистент в приложении Scoffe2. " +
-                  "Отвечай на русском языке, кратко и по делу."
-              },
-              ...history
-            ],
-            temperature: 0.7,
-            max_tokens: 1500
-          });
-
-          const answer = result.choices?.[0]?.message?.content;
-
-          if (typeof answer !== "string") {
-            throw new Error("ИИ не вернул текст");
-          }
-
-          aiChatHistory.push({
-            role: "ai",
-            content: answer
-          });
-        }
-
-        renderAIChat();
-        saveUserData(false);
-      } catch (error) {
-        showToast(error.message, "error");
-        renderAIChat();
-        saveUserData(false);
-      } finally {
-        removeLoadingToast(toast);
-        chatBusy = false;
-        byId("ai-send-button").disabled = false;
-      }
-    }
-
-    function clearChatHistory() {
-      if (chatBusy) {
-        showToast(
-          "Дождись завершения текущего запроса",
-          "info"
-        );
-        return;
-      }
-
-      if (
-        aiChatHistory.length &&
-        !confirm("Удалить историю чата из этого браузера?")
-      ) {
-        return;
-      }
-
-      aiChatHistory = [];
-      renderAIChat();
-      saveUserData(false);
-      showToast("История чата очищена", "success");
-    }
-
-    async function requestTextAnalysis(content) {
-      const model = byId("ai-model").value;
-
-      if (!model) {
-        throw new Error("Нет доступной текстовой модели");
-      }
-
-      const result = await callAPI("ai", {
-        model,
-        messages: [
-          {
-            role: "system",
-            content:
-              "Проанализируй текст пользователя и дай " +
-              "структурированный ответ на русском языке."
-          },
-          {
-            role: "user",
-            content
-          }
-        ],
-        temperature: 0.7,
-        max_tokens: 1500
-      });
-
-      const answer = result.choices?.[0]?.message?.content;
-
-      if (typeof answer !== "string") {
-        throw new Error("ИИ не вернул текст");
-      }
-
-      return answer;
-    }
-
-    async function generateAINotepad() {
-      if (!requirePremium("ИИ недоступен")) return;
-
-      if (!activeNotepad) {
-        showToast("Открой блокнот", "error");
-        return;
-      }
-
-      const content = byId("editor-text").value;
-
-      if (!content.trim()) {
-        showToast("Блокнот пуст", "error");
-        return;
-      }
-
-      const target = activeNotepad;
-      const toast = showToast(
-        "ИИ обрабатывает текст",
-        "loading"
-      );
-
-      try {
-        const answer = await requestTextAnalysis(content);
-
-        target.content = answer;
-        target.updatedAt = Date.now();
-
-        if (activeNotepad?.id === target.id) {
-          byId("editor-text").value = answer;
-        }
-
-        saveUserData(false);
-        renderNotepads();
-
-        showToast("Текст обработан", "success");
-      } catch (error) {
-        showToast(error.message, "error");
-      } finally {
-        removeLoadingToast(toast);
-      }
-    }
-
-    async function generateAICalendar() {
-      if (!requirePremium("ИИ недоступен")) return;
-
-      if (!selectedDate) {
-        showToast("Выбери дату", "error");
-        return;
-      }
-
-      const content = byId("day-note-text").value;
-
-      if (!content.trim()) {
-        showToast("Заметка пуста", "error");
-        return;
-      }
-
-      const targetDate = selectedDate;
-      const toast = showToast(
-        "ИИ обрабатывает заметку",
-        "loading"
-      );
-
-      try {
-        const answer = await requestTextAnalysis(content);
-        calendarNotes[targetDate] = answer;
-
-        if (selectedDate === targetDate) {
-          byId("day-note-text").value = answer;
-        }
-
-        renderCalendar();
-        saveUserData(false);
-        showToast("Заметка обработана", "success");
-      } catch (error) {
-        showToast(error.message, "error");
-      } finally {
-        removeLoadingToast(toast);
-      }
-    }
-
-    async function rerankNotepad() {
-      if (!requirePremium("Ранжирование недоступно")) {
-        return;
-      }
-
-      if (!activeNotepad) {
-        showToast("Открой блокнот", "error");
-        return;
-      }
-
-      const lines = byId("editor-text")
-        .value
-        .split("\n")
-        .filter(line => line.trim());
-
-      if (lines.length < 2) {
-        showToast(
-          "Нужно минимум две непустые строки",
-          "error"
-        );
-        return;
-      }
-
-      const models = getAvailableModels("rerank");
-
-      if (!models.length) {
-        showToast(
-          "Нет доступных моделей ранжирования",
-          "error"
-        );
-        return;
-      }
-
-      const target = activeNotepad;
-      const toast = showToast(
-        "Ранжирование содержимого",
-        "loading"
-      );
-
-      try {
-        const result = await callAPI("rerank", {
-          model: models[0].value,
-          query: "основная тема текста",
-          documents: lines
-        });
-
-        if (!Array.isArray(result.results)) {
-          throw new Error("Нет результата ранжирования");
-        }
-
-        const content = result.results
-          .map(row => row.text || lines[row.index])
-          .filter(value => typeof value === "string")
-          .join("\n");
-
-        target.content = content;
-        target.updatedAt = Date.now();
-
-        if (activeNotepad?.id === target.id) {
-          byId("editor-text").value = content;
-        }
-
-        saveUserData(false);
-        renderNotepads();
-        showToast("Содержимое отранжировано", "success");
-      } catch (error) {
-        showToast(error.message, "error");
-      } finally {
-        removeLoadingToast(toast);
-      }
-    }
-
-    async function rerankCalendar() {
-      if (!requirePremium("Ранжирование недоступно")) {
-        return;
-      }
-
-      const notes = Object.entries(calendarNotes)
-        .filter(([, value]) =>
-          typeof value === "string" && value.trim()
-        );
-
-      if (notes.length < 2) {
-        showToast(
-          "Нужно минимум две заметки",
-          "error"
-        );
-        return;
-      }
-
-      const models = getAvailableModels("rerank");
-
-      if (!models.length) {
-        showToast(
-          "Нет доступных моделей ранжирования",
-          "error"
-        );
-        return;
-      }
-
-      const toast = showToast(
-        "Ранжирование заметок",
-        "loading"
-      );
-
-      try {
-        const result = await callAPI("rerank", {
-          model: models[0].value,
-          query: "самые важные заметки",
-          documents: notes.map(([, value]) => value)
-        });
-
-        if (!Array.isArray(result.results)) {
-          throw new Error("Нет результата ранжирования");
-        }
-
-        const best = result.results[0];
-        const selected = best ? notes[best.index] : null;
-
-        if (selected) {
-          const [year, month, day] = selected[0]
-            .split("-")
-            .map(Number);
-
-          currentCalendarDate = new Date(year, month - 1, 1);
-          renderCalendar();
-          selectDate(year, month - 1, day);
-        }
-
-        showToast(
-          `Обработано заметок: ${result.results.length}. ` +
-          "Открыта наиболее релевантная.",
-          "success"
-        );
-      } catch (error) {
-        showToast(error.message, "error");
-      } finally {
-        removeLoadingToast(toast);
-      }
-    }
-
-    function startSpeechToText(target) {
-      if (!requirePremium("Речь в текст недоступна")) {
-        return;
-      }
-
-      const Recognition =
-        window.SpeechRecognition ||
-        window.webkitSpeechRecognition;
-
-      if (!Recognition) {
-        showToast(
-          "Браузер не поддерживает распознавание речи",
-          "error"
-        );
-        return;
-      }
-
-      if (target === "notepad" && !activeNotepad) {
-        showToast("Открой блокнот", "error");
-        return;
-      }
-
-      if (target === "calendar" && !selectedDate) {
-        showToast("Выбери дату", "error");
-        return;
-      }
-
-      if (isListening && speechRecognition) {
-        speechRecognition.stop();
-        return;
-      }
-
-      speechTarget = target;
-      speechRecognition = new Recognition();
-      speechRecognition.lang = "ru-RU";
-      speechRecognition.continuous = true;
-      speechRecognition.interimResults = true;
-
-      speechRecognition.onresult = event => {
-        let transcript = "";
-
-        for (
-          let index = event.resultIndex;
-          index < event.results.length;
-          index++
-        ) {
-          if (event.results[index].isFinal) {
-            transcript += event.results[index][0].transcript + " ";
-          }
-        }
-
-        if (!transcript) return;
-
-        if (speechTarget === "notepad" && activeNotepad) {
-          const textarea = byId("editor-text");
-          const start = textarea.selectionStart;
-          const end = textarea.selectionEnd;
-
-          textarea.value =
-            textarea.value.substring(0, start) +
-            transcript +
-            textarea.value.substring(end);
-
-          textarea.selectionStart =
-            textarea.selectionEnd =
-              start + transcript.length;
-
-          activeNotepad.content = textarea.value;
-          saveUserData(false);
-        }
-
-        if (speechTarget === "calendar" && selectedDate) {
-          const textarea = byId("day-note-text");
-          textarea.value += transcript;
-
-          calendarNotes[selectedDate] = textarea.value;
-          renderCalendar();
-          saveUserData(false);
-        }
-      };
-
-      speechRecognition.onerror = event => {
-        showToast(
-          "Ошибка распознавания: " + event.error,
-          "error"
-        );
-
-        finishSpeech();
-      };
-
-      speechRecognition.onend = finishSpeech;
-
-      try {
-        isListening = true;
-
-        speechToast = showToast(
-          "Говорите. Нажмите на микрофон ещё раз для остановки.",
-          "loading"
-        );
-
-        speechRecognition.start();
-      } catch {
-        finishSpeech();
-
-        showToast(
-          "Не удалось запустить распознавание речи",
-          "error"
-        );
-      }
-    }
-
-    function finishSpeech() {
-      isListening = false;
-      removeLoadingToast(speechToast);
-      speechToast = null;
-    }
-
-    async function handleAuth(type) {
-      if (authBusy) return;
-
-      const username = byId("auth-username").value.trim();
-      const password = byId("auth-password").value;
-      const message = byId("auth-message");
-
-      function authError(value) {
-        message.textContent = value;
-        message.className = "auth-msg error";
-      }
-
-      if (username.length < 3 || username.length > 64) {
-        authError("Имя: от 3 до 64 символов");
-        return;
-      }
-
-      if (password.length < 8) {
-        authError("Пароль: минимум 8 символов");
-        return;
-      }
-
-      const key = username.toLowerCase();
-
-      if (["__proto__", "prototype", "constructor"].includes(key)) {
-        authError("Выбери другое имя");
-        return;
-      }
-
-      authBusy = true;
-
-      try {
-        const users = getUsers();
-
-        if (type === "register") {
-          if (Object.hasOwn(users, key)) {
-            authError("Пользователь уже существует");
-            return;
-          }
-
-          users[key] = {
-            username,
-            passwordHash: await hashPassword(password),
-            userId: generateId(),
-            tariff: "free",
-            tariffExpiry: null,
-            createdAt: new Date().toISOString()
-          };
-
-          saveUsers(users);
-
-          message.textContent =
-            "Локальный аккаунт создан. Теперь войди.";
-
-          message.className = "auth-msg success";
-          return;
-        }
-
-        if (type === "login") {
-          const user = Object.hasOwn(users, key)
-            ? users[key]
-            : null;
-
-          if (
-            !isObject(user) ||
-            await hashPassword(password) !== user.passwordHash
-          ) {
-            authError("Неверное имя или пароль");
-            return;
-          }
-
-          currentUser = user.username;
-          currentUserId = user.userId;
-          userTariff = normalizeTariff(user.tariff);
-
-          tariffExpiry = Number.isFinite(user.tariffExpiry)
-            ? user.tariffExpiry
-            : null;
-
-          enterApp();
-
-          saveSession(
-            currentUser,
-            currentUserId,
-            userTariff
-          );
-        }
-      } catch (error) {
-        authError(
-          error.message ||
-          "Не удалось открыть локальное хранилище"
-        );
-      } finally {
-        authBusy = false;
-      }
-    }
-
-    function enterApp() {
-      const data = loadUserData(currentUser);
-
-      notepads = Array.isArray(data.notepads)
-        ? data.notepads
-            .filter(isObject)
-            .map(notepad => ({
-              ...notepad,
-              id: String(notepad.id || generateId()),
-              title: String(notepad.title || "Без названия"),
-              content: String(notepad.content || ""),
-              checklist: Array.isArray(notepad.checklist)
-                ? notepad.checklist
-                    .filter(isObject)
-                    .map(item => ({
-                      text: String(item.text || ""),
-                      checked: Boolean(item.checked)
-                    }))
-                : []
-            }))
-        : [];
-
-      calendarNotes = Object.create(null);
-
-      if (isObject(data.calendarNotes)) {
-        for (const [key, value] of Object.entries(data.calendarNotes)) {
-          if (
-            /^\d{4}-\d{1,2}-\d{1,2}$/.test(key) &&
-            typeof value === "string"
-          ) {
-            calendarNotes[key] = value;
-          }
-        }
-      }
-
-      messages = Array.isArray(data.messages)
-        ? data.messages.filter(isObject)
-        : emptyUserData().messages;
-
-      aiChatHistory = Array.isArray(data.aiChatHistory)
-        ? data.aiChatHistory.filter(isObject)
-        : [];
-
-      if (data.tariff) {
-        userTariff = normalizeTariff(data.tariff);
-      }
-
-      if (Number.isFinite(data.tariffExpiry)) {
-        tariffExpiry = data.tariffExpiry;
-      }
-
-      byId("display-user-name").textContent = currentUser;
-      byId("display-user-id").textContent = currentUserId;
-
-      checkTariffExpiry();
-      updateTariffBadge();
-      updateAIIcons();
-      updateAllModels();
-
-      renderNotepads();
+      renderNotes();
       renderCalendar();
-      renderMessages();
-      renderAIChat();
+      selectDate(selectedDate);
 
-      selectTool("text");
-      handlePaymentReturn();
+      const orderId = new URL(location.href)
+        .searchParams.get("order");
 
-      byId("auth-screen").style.display = "none";
-      byId("app-screen").style.display = "flex";
-    }
-
-    function logout() {
-      if (activeNotepad) {
-        activeNotepad.content = byId("editor-text").value;
-        saveUserData(false);
-      }
-
-      if (speechRecognition && isListening) {
-        speechRecognition.stop();
-      }
-
-      try {
-        clearSession();
-        location.reload();
-      } catch {
-        showToast(
-          "Не удалось завершить локальную сессию",
-          "error"
-        );
+      if (orderId) {
+        await switchView("pricing");
+        run(() => pollPayment(orderId));
       }
     }
 
-    function switchView(viewName, button) {
-      const view = byId("view-" + viewName);
-      if (!view) return;
-
-      if (activeNotepad && viewName !== "notepad") {
-        activeNotepad.content = byId("editor-text").value;
-        saveUserData(false);
-      }
-
-      document.querySelectorAll(".view").forEach(element => {
-        element.classList.remove("active");
-      });
-
-      document.querySelectorAll(".nav-btn").forEach(element => {
-        element.classList.remove("active");
-      });
-
-      view.classList.add("active");
-
-      const targetButton = button ||
-        document.querySelector(
-          `.nav-btn[data-view="${viewName}"]`
-        );
-
-      if (targetButton) {
-        targetButton.classList.add("active");
-      }
-
-      if (viewName === "calendar") renderCalendar();
-      if (viewName === "ai-chat") renderAIChat();
-      if (viewName === "messages") renderMessages();
-    }
-
-    function openModal(id) {
-      const modal = byId(id);
-      if (modal) modal.style.display = "flex";
-    }
-
-    function closeModal(id) {
-      const modal = byId(id);
-      if (modal) modal.style.display = "none";
-    }
-
-    function openPricingFromLock() {
-      closeModal("modal-premium-lock");
-      switchView("pricing");
-    }
-
-    function createNotepad() {
-      const value = prompt("Название блокнота:");
-      const title = typeof value === "string"
-        ? value.trim()
-        : "";
-
-      if (!title) return;
-
-      notepads.push({
-        id: generateId(),
-        title: title.slice(0, 200),
-        content: "",
-        checklist: [],
-        createdAt: Date.now()
-      });
-
-      renderNotepads();
-      saveUserData();
-    }
-
-    function renderNotepads() {
-      const container = byId("notepad-container");
-      container.replaceChildren();
-
-      if (!notepads.length) {
-        const empty = document.createElement("div");
-        empty.className = "empty-state";
-        empty.textContent =
-          "Блокнотов пока нет. Создай первый кнопкой выше.";
-
-        container.appendChild(empty);
+    async function logout() {
+      if (
+        dirty &&
+        !confirm("Есть несохранённые изменения. Всё равно выйти?")
+      ) {
         return;
       }
 
-      for (const notepad of notepads) {
-        const card = document.createElement("div");
-        card.className = "notepad-card";
-        card.tabIndex = 0;
-        card.setAttribute("role", "button");
+      await api("auth/logout", {});
+      dirty = false;
+      location.assign("/");
+    }
 
-        card.onclick = () => openNotepad(notepad.id);
+    async function switchView(view) {
+      document.querySelectorAll("[data-section]")
+        .forEach(section => {
+          section.hidden = section.dataset.section !== view;
+        });
 
-        card.onkeydown = event => {
-          if (
-            event.target === card &&
-            ["Enter", " "].includes(event.key)
-          ) {
-            event.preventDefault();
-            openNotepad(notepad.id);
-          }
-        };
+      document.querySelectorAll("[data-view]")
+        .forEach(item => {
+          item.classList.toggle(
+            "active",
+            item.dataset.view === view
+          );
+        });
 
-        const rename = document.createElement("button");
-        rename.className = "rename-btn";
-        rename.title = "Переименовать";
-        rename.setAttribute("aria-label", "Переименовать блокнот");
+      if (view === "pricing") {
+        await loadOrders();
+      }
 
-        rename.onclick = event => {
-          event.stopPropagation();
-          openRenameModal(notepad.id);
-        };
+      if (view === "messages") {
+        await loadMessages();
+      }
 
-        const renameIcon = document.createElement("img");
-        renameIcon.src = "save.png";
-        renameIcon.alt = "";
-
-        rename.appendChild(renameIcon);
-
-        const icon = document.createElement("img");
-        icon.src = "iconnote.png";
-        icon.alt = "";
-
-        const content = document.createElement("div");
-        content.style.minWidth = "0";
-
-        const title = document.createElement("div");
-        title.className = "notepad-title";
-        title.textContent = notepad.title;
-
-        const preview = document.createElement("div");
-        preview.className = "notepad-preview";
-
-        preview.textContent = notepad.content
-          ? notepad.content.slice(0, 50) +
-            (notepad.content.length > 50 ? "…" : "")
-          : "Пусто";
-
-        content.append(title, preview);
-        card.append(rename, icon, content);
-        container.appendChild(card);
+      if (view === "ai") {
+        await loadVideos();
       }
     }
 
-    function openNotepad(id) {
-      const notepad = notepads.find(item => item.id === id);
-      if (!notepad) return;
-
-      activeNotepad = notepad;
-
-      byId("notepad-list-view").style.display = "none";
-      byId("notepad-editor-view").style.display = "flex";
-      byId("editor-title").textContent = notepad.title;
-
-      const content = notepad.content.replace(
-        /%([\p{L}\p{N}_-]+)/gu,
-        (match, name) => {
-          const found = notepads.find(item =>
-            item.title.toLowerCase() === name.toLowerCase()
-          );
-
-          return found ? found.content : match;
-        }
+    function activeNote() {
+      return state.notes.find(
+        note => note.id === activeNoteId
       );
+    }
 
-      byId("editor-text").value = content;
+    function markDirty() {
+      dirty = true;
+    }
+
+    async function saveState() {
+      if (saving) {
+        throw new Error(
+          "Сохранение уже выполняется. Дождись его завершения."
+        );
+      }
+
+      saving = true;
+      const snapshot = JSON.stringify(state);
+
+      try {
+        const result = await api("state", {
+          version,
+          data: JSON.parse(snapshot)
+        });
+
+        version = result.version;
+        dirty = JSON.stringify(state) !== snapshot;
+
+        notice(
+          dirty
+            ? "Сохранено. Есть новые изменения, сохрани их ещё раз."
+            : "Сохранено."
+        );
+      } finally {
+        saving = false;
+      }
+    }
+
+    function renderNotes() {
+      const list = $("note-list");
+      list.replaceChildren();
+
+      if (!state.notes.length) {
+        list.append(
+          node("p", "Пока нет блокнотов.", "muted")
+        );
+      }
+
+      for (const note of state.notes) {
+        list.append(button(
+          note.title,
+          () => {
+            activeNoteId = note.id;
+            renderNotes();
+          },
+          note.id === activeNoteId ? "" : "secondary"
+        ));
+      }
+
+      const note = activeNote();
+
+      $("note-empty").hidden = Boolean(note);
+      $("note-editor").hidden = !note;
+
+      if (!note) return;
+
+      $("note-title").value = note.title;
+      $("note-text").value = note.text;
+
       renderChecklist();
     }
 
-    function closeNotepad() {
-      if (activeNotepad) {
-        activeNotepad.content = byId("editor-text").value;
-        activeNotepad.updatedAt = Date.now();
-        saveUserData(false);
+    async function newNote() {
+      if (state.notes.length >= 100) {
+        throw new Error("Можно создать до 100 блокнотов.");
       }
 
-      activeNotepad = null;
+      const note = {
+        id: crypto.randomUUID(),
+        title: "Новый блокнот",
+        text: "",
+        checklist: []
+      };
 
-      byId("notepad-list-view").style.display = "block";
-      byId("notepad-editor-view").style.display = "none";
-
-      renderNotepads();
+      state.notes.unshift(note);
+      activeNoteId = note.id;
+      markDirty();
+      renderNotes();
+      await saveState();
     }
 
-    function saveNotepad() {
-      if (!activeNotepad) return;
+    function renderChecklist() {
+      const container = $("checklist");
+      container.replaceChildren();
 
-      activeNotepad.content = byId("editor-text").value;
-      activeNotepad.updatedAt = Date.now();
+      const note = activeNote();
 
-      saveUserData();
-      renderNotepads();
+      if (!note) return;
+
+      note.checklist.forEach((item, index) => {
+        const row = node("div", null, "check-row");
+
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.checked = item.checked;
+        checkbox.setAttribute("aria-label", "Выполнено");
+
+        checkbox.addEventListener("change", () => {
+          item.checked = checkbox.checked;
+          markDirty();
+        });
+
+        const input = document.createElement("input");
+        input.type = "text";
+        input.maxLength = 500;
+        input.value = item.text;
+        input.placeholder = "Пункт списка";
+        input.setAttribute("aria-label", "Текст пункта");
+
+        input.addEventListener("input", () => {
+          item.text = input.value;
+          markDirty();
+        });
+
+        const remove = button("Удалить", () => {
+          note.checklist.splice(index, 1);
+          markDirty();
+          renderChecklist();
+        }, "danger");
+
+        row.append(checkbox, input, remove);
+        container.append(row);
+      });
     }
 
-    function downloadNotepad() {
-      if (!activeNotepad) return;
+    function addCheck() {
+      const note = activeNote();
 
-      const content = byId("editor-text").value;
+      if (!note) return;
+
+      if (note.checklist.length >= 100) {
+        throw new Error("Можно добавить до 100 пунктов.");
+      }
+
+      note.checklist.push({
+        text: "",
+        checked: false
+      });
+
+      markDirty();
+      renderChecklist();
+    }
+
+    async function deleteNote() {
+      const note = activeNote();
+
+      if (
+        !note ||
+        !confirm(`Удалить блокнот «${note.title}»?`)
+      ) {
+        return;
+      }
+
+      state.notes = state.notes.filter(
+        item => item.id !== note.id
+      );
+
+      activeNoteId = state.notes[0]?.id || null;
+      markDirty();
+      renderNotes();
+
+      await saveState();
+    }
+
+    function downloadNote() {
+      const note = activeNote();
+
+      if (!note) return;
+
+      const checklist = note.checklist
+        .map(item =>
+          `${item.checked ? "[x]" : "[ ]"} ${item.text}`
+        )
+        .join("\n");
+
+      const content =
+        note.title + "\n\n" +
+        note.text +
+        (checklist ? "\n\n" + checklist : "");
 
       const blob = new Blob([content], {
         type: "text/plain;charset=utf-8"
       });
 
-      const url = URL.createObjectURL(blob);
+      const href = URL.createObjectURL(blob);
       const anchor = document.createElement("a");
 
-      const name = activeNotepad.title
-        .replace(/[<>:"/\\|?*\u0000-\u001F]/g, "_")
-        .slice(0, 100) || "Блокнот";
+      anchor.href = href;
+      anchor.download =
+        note.title.replace(/[<>:"/\\|?*]/g, "_") + ".txt";
 
-      anchor.href = url;
-      anchor.download = name + ".txt";
-
-      document.body.appendChild(anchor);
+      document.body.append(anchor);
       anchor.click();
       anchor.remove();
 
-      setTimeout(() => URL.revokeObjectURL(url), 1000);
-
-      showToast("Блокнот скачан", "success");
-    }
-
-    function openRenameModal(id) {
-      const notepad = notepads.find(item => item.id === id);
-      if (!notepad) return;
-
-      renamingNotepadId = id;
-      byId("rename-input").value = notepad.title;
-
-      openModal("modal-rename");
-      byId("rename-input").focus();
-    }
-
-    function confirmRename() {
-      const name = byId("rename-input").value.trim();
-
-      if (!name) {
-        showToast("Название не может быть пустым", "error");
-        return;
-      }
-
-      const notepad = notepads.find(item =>
-        item.id === renamingNotepadId
-      );
-
-      if (notepad) {
-        notepad.title = name.slice(0, 200);
-
-        if (activeNotepad?.id === notepad.id) {
-          byId("editor-title").textContent = notepad.title;
-        }
-
-        renderNotepads();
-        saveUserData(false);
-        showToast("Блокнот переименован", "success");
-      }
-
-      closeModal("modal-rename");
-      renamingNotepadId = null;
-    }
-
-    function addChecklistItem() {
-      if (!activeNotepad) return;
-
-      activeNotepad.checklist.push({
-        text: "Задача",
-        checked: false
-      });
-
-      renderChecklist();
-      saveUserData(false);
-    }
-
-    function renderChecklist() {
-      const container = byId("checklist-container");
-      container.replaceChildren();
-
-      if (!activeNotepad) return;
-
-      activeNotepad.checklist.forEach((item, index) => {
-        const row = document.createElement("div");
-        row.className = "checklist-item";
-
-        const checkbox = document.createElement("button");
-        checkbox.className = "square-placeholder";
-        checkbox.setAttribute("role", "checkbox");
-        checkbox.setAttribute(
-          "aria-checked",
-          String(Boolean(item.checked))
-        );
-
-        checkbox.setAttribute(
-          "aria-label",
-          "Отметить задачу"
-        );
-
-        checkbox.onclick = () => toggleCheck(index);
-
-        if (item.checked) {
-          const image = document.createElement("img");
-          image.src = "tickicon.png";
-          image.alt = "";
-          image.style.width = "20px";
-          image.style.height = "20px";
-          checkbox.appendChild(image);
-        }
-
-        const input = document.createElement("input");
-        input.type = "text";
-        input.value = item.text;
-        input.setAttribute("aria-label", "Текст задачи");
-
-        input.onchange = () => {
-          updateCheckText(index, input.value);
-        };
-
-        row.append(checkbox, input);
-        container.appendChild(row);
-      });
-    }
-
-    function toggleCheck(index) {
-      if (!activeNotepad?.checklist[index]) return;
-
-      activeNotepad.checklist[index].checked =
-        !activeNotepad.checklist[index].checked;
-
-      renderChecklist();
-      saveUserData(false);
-    }
-
-    function updateCheckText(index, value) {
-      if (!activeNotepad?.checklist[index]) return;
-
-      activeNotepad.checklist[index].text = value;
-      saveUserData(false);
+      setTimeout(() => URL.revokeObjectURL(href), 1000);
     }
 
     function renderCalendar() {
-      const year = currentCalendarDate.getFullYear();
-      const month = currentCalendarDate.getMonth();
-
-      const monthNames = [
-        "Январь",
-        "Февраль",
-        "Март",
-        "Апрель",
-        "Май",
-        "Июнь",
-        "Июль",
-        "Август",
-        "Сентябрь",
-        "Октябрь",
-        "Ноябрь",
-        "Декабрь"
-      ];
-
-      byId("calendar-month-year").textContent =
-        `${monthNames[month]} ${year}`;
-
-      const firstDay = new Date(year, month, 1);
-      const lastDay = new Date(year, month + 1, 0);
-      const offset = (firstDay.getDay() + 6) % 7;
-      const grid = byId("calendar-grid");
-
+      const grid = $("calendar-grid");
       grid.replaceChildren();
 
-      for (const dayName of ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"]) {
-        const header = document.createElement("div");
-        header.className = "calendar-day-header";
-        header.textContent = dayName;
-        grid.appendChild(header);
+      $("month-title").textContent =
+        calendarMonth.toLocaleDateString("ru-RU", {
+          month: "long",
+          year: "numeric"
+        });
+
+      for (const day of [
+        "Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"
+      ]) {
+        grid.append(node("div", day, "weekday"));
       }
 
-      for (let index = 0; index < offset; index++) {
-        const empty = document.createElement("div");
-        empty.className = "calendar-day empty";
-        grid.appendChild(empty);
+      const year = calendarMonth.getFullYear();
+      const month = calendarMonth.getMonth();
+      const start = new Date(year, month, 1);
+      const offset = (start.getDay() + 6) % 7;
+      const count = new Date(year, month + 1, 0).getDate();
+
+      for (let i = 0; i < offset; i++) {
+        grid.append(node("div"));
       }
 
-      const today = new Date();
+      for (let day = 1; day <= count; day++) {
+        const key = dateKey(new Date(year, month, day));
 
-      for (let day = 1; day <= lastDay.getDate(); day++) {
-        const element = document.createElement("button");
-        element.className = "calendar-day";
-        element.textContent = String(day);
-
-        const key = `${year}-${month + 1}-${day}`;
-
-        if (calendarNotes[key]) {
-          element.classList.add("has-note");
-
-          const indicator = document.createElement("span");
-          indicator.className = "note-indicator";
-          element.appendChild(indicator);
-        }
-
-        if (
-          today.getFullYear() === year &&
-          today.getMonth() === month &&
-          today.getDate() === day
-        ) {
-          element.classList.add("today");
-        }
-
-        element.setAttribute(
-          "aria-label",
-          `${day}.${month + 1}.${year}`
+        const dayButton = button(
+          day,
+          () => selectDate(key),
+          "day"
         );
 
-        element.onclick = () => {
-          selectDate(year, month, day);
-        };
-
-        grid.appendChild(element);
-      }
-    }
-
-    function prevMonth() {
-      currentCalendarDate = new Date(
-        currentCalendarDate.getFullYear(),
-        currentCalendarDate.getMonth() - 1,
-        1
-      );
-
-      renderCalendar();
-    }
-
-    function nextMonth() {
-      currentCalendarDate = new Date(
-        currentCalendarDate.getFullYear(),
-        currentCalendarDate.getMonth() + 1,
-        1
-      );
-
-      renderCalendar();
-    }
-
-    function selectDate(year, month, day) {
-      selectedDate = `${year}-${month + 1}-${day}`;
-
-      byId("selected-date-title").textContent =
-        `Заметка на ${day}.${month + 1}.${year}`;
-
-      byId("day-note-text").value =
-        calendarNotes[selectedDate] || "";
-
-      byId("day-detail-panel").style.display = "block";
-    }
-
-    function saveDayNote() {
-      if (!selectedDate) return;
-
-      const note = byId("day-note-text").value;
-
-      if (note.trim()) {
-        calendarNotes[selectedDate] = note;
-      } else {
-        delete calendarNotes[selectedDate];
-      }
-
-      renderCalendar();
-      saveUserData();
-    }
-
-    function renderMessages() {
-      const container = byId("message-container");
-      container.replaceChildren();
-
-      if (!messages.length) {
-        const empty = document.createElement("div");
-        empty.className = "empty-state";
-        empty.textContent = "Сообщений пока нет";
-        container.appendChild(empty);
-        return;
-      }
-
-      for (const message of messages) {
-        const row = document.createElement("div");
-        row.className = "message-item";
-
-        const content = document.createElement("div");
-        content.style.minWidth = "0";
-
-        const from = document.createElement("strong");
-        from.textContent = String(message.from || "");
-
-        const body = document.createElement("p");
-        body.textContent = String(message.text || "");
-
-        const time = document.createElement("span");
-        time.className = "message-time";
-
-        const date = new Date(message.time);
-
-        time.textContent = Number.isNaN(date.getTime())
-          ? ""
-          : date.toLocaleDateString("ru-RU");
-
-        content.append(from, body);
-        row.append(content, time);
-        container.appendChild(row);
-      }
-    }
-
-    function sendMessage() {
-      const recipient = byId("msg-recipient").value.trim();
-      const content = byId("msg-text").value.trim();
-
-      if (!recipient || !content) {
-        showToast(
-          "Укажи получателя и текст сообщения",
-          "error"
+        dayButton.classList.toggle(
+          "selected",
+          key === selectedDate
         );
-        return;
+
+        dayButton.classList.toggle(
+          "has-note",
+          Boolean(state.calendar[key])
+        );
+
+        dayButton.setAttribute("aria-label", key);
+        grid.append(dayButton);
+      }
+    }
+
+    function selectDate(key) {
+      selectedDate = key;
+
+      $("selected-date").textContent =
+        new Date(key + "T12:00:00")
+          .toLocaleDateString("ru-RU", {
+            day: "numeric",
+            month: "long",
+            year: "numeric"
+          });
+
+      $("day-text").value = state.calendar[key] || "";
+      renderCalendar();
+    }
+
+    function moveMonth(delta) {
+      calendarMonth.setMonth(
+        calendarMonth.getMonth() + delta
+      );
+
+      renderCalendar();
+    }
+
+    function renderModels() {
+      const kind = $("ai-kind").value;
+      const select = $("ai-model");
+      const previous = select.value;
+
+      select.replaceChildren();
+
+      for (const model of models[kind] || []) {
+        const option = node("option", model);
+        option.value = model;
+        select.append(option);
       }
 
-      messages.unshift({
-        from: `Вы → ${recipient}`,
-        text: content,
-        time: new Date().toISOString()
-      });
+      if (!(models[kind] || []).length) {
+        const option = node(
+          "option",
+          "Выбери платный тариф"
+        );
 
-      renderMessages();
-      saveUserData(false);
+        option.value = "";
+        select.append(option);
+      } else if ((models[kind] || []).includes(previous)) {
+        select.value = previous;
+      }
 
-      byId("msg-recipient").value = "";
-      byId("msg-text").value = "";
-
-      closeModal("modal-message");
-
-      showToast(
-        "Сохранено в локальный журнал. " +
-        "Доставка получателю не подключена.",
-        "info"
-      );
+      $("ai-input").placeholder =
+        kind === "rerank"
+          ? "Каждый фрагмент текста с новой строки..."
+          : kind === "image"
+            ? "Опиши изображение..."
+            : kind === "video"
+              ? "Опиши видео..."
+              : "Напиши сообщение ИИ...";
     }
 
-    function showPaymentModal(tariff) {
-      if (!["flash", "home"].includes(tariff)) return;
+    function pickModel(kind) {
+      const selected =
+        $("ai-kind").value === kind
+          ? $("ai-model").value
+          : null;
 
-      selectedTariffForPayment = tariff;
+      const model = selected || models[kind]?.[0];
 
-      const name = tariff === "flash"
-        ? "Флэш"
-        : "Домашний";
+      if (!model) {
+        throw new Error("Для ИИ нужен действующий платный тариф.");
+      }
 
-      const amount = tariff === "flash"
-        ? 59
-        : 99;
-
-      byId("payment-title").textContent =
-        `Оплата тарифа «${name}»`;
-
-      byId("payment-plan-name").textContent =
-        `Тариф «${name}»`;
-
-      byId("payment-amount").textContent =
-        `${amount} ₽`;
-
-      byId("payment-submit-button").textContent =
-        `Перейти к переводу ${amount} ₽`;
-
-      openModal("modal-payment");
+      return model;
     }
 
-    async function processPayment() {
-      if (paymentBusy) return;
+    function bubble(role, content) {
+      const item = node("div", null, "bubble " + role);
 
-      const confirmed = confirm(
-        "Автоматическая активация тарифа ещё не настроена. " +
-        "Продолжить переход к реальному переводу в ЮMoney?"
+      item.append(
+        node("small", role === "user" ? "Ты" : "Scoffe2"),
+        node("div", content)
       );
 
-      if (!confirmed) return;
+      $("chat").append(item);
+      $("chat").scrollTop = $("chat").scrollHeight;
 
-      paymentBusy = true;
-      byId("payment-submit-button").disabled = true;
+      return item;
+    }
+
+    async function sendAI() {
+      if (chatBusy) return;
+
+      await refreshProfile();
+
+      const kind = $("ai-kind").value;
+      const model = pickModel(kind);
+      const promptText = $("ai-input").value.trim();
+
+      if (!promptText) {
+        throw new Error("Сначала напиши запрос.");
+      }
+
+      let query = "";
+
+      if (kind === "rerank") {
+        query = prompt("По какому вопросу ранжировать фрагменты?") || "";
+
+        if (!query.trim()) return;
+      }
+
+      chatBusy = true;
+      $("send-ai").disabled = true;
+      bubble("user", promptText);
+
+      const pending = bubble(
+        "assistant",
+        "Запрос выполняется..."
+      );
 
       try {
-        const data = await callAPI("pay", {
-          tariff: selectedTariffForPayment,
-          userId: currentUserId
+        if (kind === "ai") {
+          const messages = [
+            ...chatHistory.slice(-12),
+            { role: "user", content: promptText }
+          ];
+
+          const result = await api("ai", {
+            model,
+            messages
+          });
+
+          pending.remove();
+          bubble("assistant", result.content);
+
+          chatHistory = [
+            ...messages,
+            { role: "assistant", content: result.content }
+          ].slice(-14);
+        } else if (kind === "image") {
+          const result = await api("image", {
+            model,
+            prompt: promptText
+          });
+
+          pending.remove();
+
+          const item = bubble(
+            "assistant",
+            "Изображение готово."
+          );
+
+          const image = document.createElement("img");
+          image.src = result.image_url;
+          image.alt = promptText;
+          image.referrerPolicy = "no-referrer";
+          item.append(image);
+
+          const download = node("a", "Открыть изображение");
+          download.href = result.image_url;
+          download.target = "_blank";
+          download.rel = "noopener noreferrer";
+          item.append(download);
+        } else if (kind === "video") {
+          const result = await api("video", {
+            model,
+            prompt: promptText
+          });
+
+          pending.remove();
+
+          const item = bubble(
+            "assistant",
+            "Задание на видео создано. ID: " + result.id
+          );
+
+          item.append(button(
+            "Проверить готовность",
+            () => checkVideo(result.id, item)
+          ));
+
+          await loadVideos();
+        } else {
+          const documents = promptText
+            .split(/\n+/)
+            .map(value => value.trim())
+            .filter(Boolean);
+
+          const result = await api("rerank", {
+            model,
+            query,
+            documents
+          });
+
+          pending.remove();
+
+          bubble(
+            "assistant",
+            result.results
+              .map((item, index) =>
+                `${index + 1}. ${item.text}`
+              )
+              .join("\n\n")
+          );
+        }
+
+        $("ai-input").value = "";
+      } catch (error) {
+        pending.remove();
+        bubble("assistant", error.message);
+        throw error;
+      } finally {
+        chatBusy = false;
+        $("send-ai").disabled = false;
+
+        try {
+          await refreshProfile();
+        } catch (error) {
+          fail(error);
+        }
+      }
+    }
+
+    async function showAnalysis(content, rerank = false) {
+      if (chatBusy) {
+        throw new Error("Дождись завершения текущего запроса.");
+      }
+
+      if (!content.trim()) {
+        throw new Error("Сначала добавь текст.");
+      }
+
+      await refreshProfile();
+
+      const kind = rerank ? "rerank" : "ai";
+      const model = pickModel(kind);
+
+      const instruction = prompt(
+        rerank
+          ? "По какому вопросу ранжировать фрагменты?"
+          : "Что сделать с текстом?",
+        rerank ? "" : "Кратко изложи основные мысли и предложи действия."
+      );
+
+      if (!instruction?.trim()) return;
+
+      chatBusy = true;
+      notice("ИИ обрабатывает текст...");
+
+      try {
+        let result;
+
+        if (rerank) {
+          const documents = content
+            .split(/\n+/)
+            .map(item => item.trim())
+            .filter(Boolean);
+
+          const data = await api("rerank", {
+            model,
+            query: instruction,
+            documents
+          });
+
+          result = data.results
+            .map((item, index) =>
+              `${index + 1}. ${item.text}`
+            )
+            .join("\n\n");
+        } else {
+          const data = await api("ai", {
+            model,
+            messages: [{
+              role: "user",
+              content: instruction + "\n\n" + content
+            }]
+          });
+
+          result = data.content;
+        }
+
+        $("ai-result").textContent = result;
+        $("result-dialog").showModal();
+        notice("Ответ готов. Исходная заметка не изменена.");
+      } finally {
+        chatBusy = false;
+
+        try {
+          await refreshProfile();
+        } catch (error) {
+          fail(error);
+        }
+      }
+    }
+
+    function dictate(targetId) {
+      const SpeechRecognition =
+        window.SpeechRecognition ||
+        window.webkitSpeechRecognition;
+
+      if (!SpeechRecognition) {
+        throw new Error(
+          "Этот браузер не поддерживает распознавание речи."
+        );
+      }
+
+      if (speech) {
+        speech.stop();
+        speech = null;
+        return;
+      }
+
+      const target = $(targetId);
+      const recognition = new SpeechRecognition();
+
+      speech = recognition;
+      recognition.lang = "ru-RU";
+      recognition.interimResults = false;
+      recognition.continuous = false;
+
+      recognition.onresult = event => {
+        const transcript = Array.from(event.results)
+          .map(result => result[0].transcript)
+          .join(" ");
+
+        target.value +=
+          (target.value.trim() ? " " : "") + transcript;
+
+        target.dispatchEvent(new Event("input", {
+          bubbles: true
+        }));
+      };
+
+      recognition.onerror = event => {
+        notice(
+          "Не удалось распознать речь: " + event.error,
+          true
+        );
+      };
+
+      recognition.onend = () => {
+        if (speech === recognition) {
+          speech = null;
+        }
+      };
+
+      recognition.start();
+      notice("Говори. Повторное нажатие остановит диктовку.");
+    }
+
+    function renderPlans() {
+      const container = $("plans");
+      container.replaceChildren();
+
+      const free = node("div", null, "panel card");
+      free.append(
+        node("h3", "Бесплатный"),
+        node("div", "0 ₽", "price")
+      );
+
+      const freeList = node("ul");
+
+      for (const label of [
+        "Блокноты и списки задач",
+        "Календарные заметки",
+        "Сообщения пользователям",
+        "Без доступа к платным моделям"
+      ]) {
+        freeList.append(node("li", label));
+      }
+
+      free.append(freeList);
+      container.append(free);
+
+      for (const [key, plan] of Object.entries(plans)) {
+        const card = node("div", null, "panel card");
+
+        card.append(
+          node("h3", plan.name),
+          node("div", (plan.price / 100) + " ₽", "price"),
+          node("p", "За 30 дней", "muted")
+        );
+
+        const list = node("ul");
+
+        for (const label of [
+          `Текстовых запросов: ${plan.text}`,
+          `Изображений: ${plan.image}`,
+          `Видео: ${plan.video}`,
+          `Ранжирований: ${plan.rerank}`,
+          "Блокноты, календарь и сообщения"
+        ]) {
+          list.append(node("li", label));
+        }
+
+        card.append(
+          list,
+          button(
+            "Оплатить " + (plan.price / 100) + " ₽",
+            () => pay(key),
+            ""
+          )
+        );
+
+        container.append(card);
+      }
+    }
+
+    async function pay(plan) {
+      if (paymentBusy) return;
+
+      if (
+        dirty &&
+        !confirm(
+          "Есть несохранённые записи. Перейти к оплате без сохранения?"
+        )
+      ) {
+        return;
+      }
+
+      paymentBusy = true;
+      notice("Создаю заказ и открываю ЮMoney...");
+
+      try {
+        const result = await api("pay", {
+          plan,
+          paymentType: $("payment-type").value
         });
 
         if (
-          data.paymentAction !==
-            "https://yoomoney.ru/quickpay/confirm" ||
-          data.paymentMethod !== "POST" ||
-          !isObject(data.paymentFields)
+          result.action !== "https://yoomoney.ru/quickpay/confirm"
         ) {
-          throw new Error(
-            "Некорректный ответ сервера оплаты"
-          );
+          throw new Error("Неверный адрес платёжной формы.");
         }
 
         const form = document.createElement("form");
         form.method = "POST";
-        form.action = data.paymentAction;
+        form.action = result.action;
+        form.acceptCharset = "UTF-8";
 
-        for (
-          const [name, value] of
-          Object.entries(data.paymentFields)
-        ) {
+        for (const [name, value] of Object.entries(result.fields)) {
           const input = document.createElement("input");
           input.type = "hidden";
           input.name = name;
           input.value = String(value);
-
-          form.appendChild(input);
+          form.append(input);
         }
 
-        document.body.appendChild(form);
+        document.body.append(form);
         form.submit();
       } catch (error) {
-        showToast(error.message, "error");
-      } finally {
         paymentBusy = false;
-        byId("payment-submit-button").disabled = false;
+        throw error;
       }
     }
 
-    function handlePaymentReturn() {
-      const params = new URLSearchParams(
-        window.location.search
-      );
+    const orderLabels = {
+      pending: "Ожидается оплата или уведомление",
+      paid: "Оплачен",
+      review: "Нужна ручная проверка платежа"
+    };
 
-      if (!params.has("payment")) return;
+    async function loadOrders() {
+      const data = await api("orders");
+      const container = $("orders");
+      container.replaceChildren();
 
-      // Параметры URL не подтверждают поступление денег.
-      // Здесь нет автоматического изменения тарифа.
-      showToast(
-        "Возврат из ЮMoney. Оплата требует " +
-        "подтверждения на сервере. " +
-        "Тариф автоматически не изменён.",
-        "info"
-      );
+      if (!data.orders.length) {
+        container.append(
+          node("p", "Заказов пока нет.", "muted")
+        );
+      }
 
-      params.delete("payment");
-      params.delete("tariff");
-      params.delete("label");
+      for (const order of data.orders) {
+        const item = node("div", null, "record");
 
-      const query = params.toString();
+        item.append(
+          node(
+            "strong",
+            (plans[order.plan]?.name || order.plan) +
+            " · " + (order.amount_minor / 100) + " ₽"
+          ),
+          node(
+            "p",
+            orderLabels[order.status] || order.status
+          ),
+          node(
+            "small",
+            formatDate(order.created_at) +
+            "\nID заказа: " + order.id
+          )
+        );
 
-      window.history.replaceState(
-        {},
-        "",
-        window.location.pathname +
-          (query ? "?" + query : "") +
-          window.location.hash
+        container.append(item);
+      }
+
+      return data.orders;
+    }
+
+    async function checkPayment() {
+      await refreshProfile();
+      const orders = await loadOrders();
+
+      notice(
+        orders.some(order => order.status === "paid")
+          ? "Статусы заказов и тариф обновлены."
+          : "Подтверждённая оплата пока не найдена."
       );
     }
 
-    window.addEventListener("click", event => {
+    async function pollPayment(orderId) {
       if (
-        event.target instanceof Element &&
-        event.target.classList.contains("modal")
+        paymentPolling ||
+        !/^sc2_[0-9a-f]{32}$/.test(orderId)
       ) {
-        event.target.style.display = "none";
+        return;
       }
-    });
 
-    window.addEventListener("keydown", event => {
-      if (event.key === "Escape") {
-        document.querySelectorAll(".modal").forEach(modal => {
-          modal.style.display = "none";
-        });
-      }
-    });
-
-    window.addEventListener("DOMContentLoaded", () => {
-      byId("auth-password").addEventListener("keydown", event => {
-        if (event.key === "Enter") {
-          handleAuth("login");
-        }
-      });
-
-      byId("rename-input").addEventListener("keydown", event => {
-        if (event.key === "Enter") {
-          confirmRename();
-        }
-      });
+      paymentPolling = true;
 
       try {
-        const session = getCurrentSession();
+        notice("Проверяю подтверждение оплаты от ЮMoney...");
 
-        if (!session) return;
+        for (let attempt = 0; attempt < 24; attempt++) {
+          const orders = await loadOrders();
+          const order = orders.find(item => item.id === orderId);
 
-        const users = getUsers();
-        const key = session.username.toLowerCase();
+          if (!order) {
+            notice(
+              "Заказ не найден в этом аккаунте. " +
+              "Войди под логином, с которого оплачивал.",
+              true
+            );
+            return;
+          }
 
-        const user = Object.hasOwn(users, key)
-          ? users[key]
-          : null;
+          if (order.status === "paid") {
+            await refreshProfile();
 
-        if (!isObject(user)) {
-          clearSession();
+            const url = new URL(location.href);
+            url.searchParams.delete("order");
+            history.replaceState({}, "", url.pathname + url.search);
+
+            notice("Оплата подтверждена. Тариф активирован.");
+            return;
+          }
+
+          if (order.status === "review") {
+            notice(
+              "Платёж получен, но его параметры не совпали с заказом. " +
+              "Нужна ручная проверка владельцем сайта. ID: " + order.id,
+              true
+            );
+            return;
+          }
+
+          await new Promise(resolve => setTimeout(resolve, 5000));
+        }
+
+        notice(
+          "Подтверждение пока не пришло. " +
+          "Позже нажми «Проверить оплату». " +
+          "Не оплачивай повторно, если деньги уже списались."
+        );
+      } finally {
+        paymentPolling = false;
+      }
+    }
+
+    const videoLabels = {
+      reserved: "Запрос отправляется",
+      pending: "Генерация выполняется",
+      completed: "Готово",
+      failed: "Ошибка генерации",
+      unknown: "Статус неизвестен после сбоя"
+    };
+
+    async function loadVideos() {
+      const data = await api("jobs");
+      const container = $("video-jobs");
+      container.replaceChildren();
+
+      if (!data.jobs.length) {
+        container.append(
+          node("p", "Пока нет видеогенераций.", "muted")
+        );
+      }
+
+      for (const job of data.jobs) {
+        const item = node("div", null, "record");
+        const output = node("div");
+
+        item.append(
+          node("strong", job.model),
+          node(
+            "p",
+            (videoLabels[job.status] || job.status) +
+            " · " + formatDate(job.created_at)
+          ),
+          node("small", "ID: " + job.id),
+          node("div")
+        );
+
+        item.append(
+          button(
+            "Проверить / открыть",
+            () => checkVideo(job.id, output)
+          ),
+          output
+        );
+
+        container.append(item);
+      }
+    }
+
+    async function checkVideo(generationId, target) {
+      const result = await api(
+        "video-status/" + encodeURIComponent(generationId)
+      );
+
+      if (result.status === "completed" && result.url) {
+        if (target.querySelector("video")) {
           return;
         }
 
-        currentUser = user.username;
-        currentUserId = user.userId;
-        userTariff = normalizeTariff(user.tariff);
+        const video = document.createElement("video");
+        video.controls = true;
+        video.preload = "metadata";
+        video.src = result.url;
 
-        tariffExpiry = Number.isFinite(user.tariffExpiry)
-          ? user.tariffExpiry
-          : null;
+        video.style.maxWidth = "100%";
+        video.style.display = "block";
+        video.style.marginTop = "12px";
 
-        enterApp();
-      } catch (error) {
-        byId("auth-message").textContent =
-          error.message ||
-          "Не удалось восстановить локальную сессию";
-
-        byId("auth-message").className =
-          "auth-msg error";
+        target.append(video);
+        notice("Видео готово.");
+      } else {
+        notice(
+          videoLabels[result.status] ||
+          "Видео ещё не готово."
+        );
       }
+    }
+
+    async function loadMessages() {
+      const data = await api("messages");
+      const container = $("messages");
+      container.replaceChildren();
+
+      if (!data.messages.length) {
+        container.append(
+          node("p", "Сообщений пока нет.", "muted")
+        );
+      }
+
+      for (const message of data.messages) {
+        const item = node("div", null, "record");
+
+        item.append(
+          node(
+            "strong",
+            message.sender_name + " → " + message.recipient_name
+          ),
+          node("p", message.text),
+          node("small", formatDate(message.created_at))
+        );
+
+        container.append(item);
+      }
+    }
+
+    async function sendMessage() {
+      if (!$("message-form").reportValidity()) return;
+
+      $("send-message").disabled = true;
+
+      try {
+        await api("messages", {
+          recipient: $("message-recipient").value,
+          text: $("message-text").value
+        });
+
+        $("message-text").value = "";
+        await loadMessages();
+
+        notice("Сообщение отправлено.");
+      } finally {
+        $("send-message").disabled = false;
+      }
+    }
+
+    $("auth-form").addEventListener("submit", event => {
+      event.preventDefault();
+      run(() => authenticate(false));
     });
 
-    setInterval(() => {
-      if (currentUser) {
-        checkTariffExpiry();
+    $("message-form").addEventListener("submit", event => {
+      event.preventDefault();
+      run(sendMessage);
+    });
+
+    document.querySelectorAll("[data-view]")
+      .forEach(item => {
+        item.addEventListener("click", () =>
+          run(() => switchView(item.dataset.view))
+        );
+      });
+
+    $("note-title").addEventListener("input", () => {
+      const note = activeNote();
+
+      if (!note) return;
+
+      note.title = $("note-title").value;
+      markDirty();
+    });
+
+    $("note-title").addEventListener("change", () => {
+      const note = activeNote();
+
+      if (note && !note.title.trim()) {
+        note.title = "Без названия";
       }
-    }, 60000);
+
+      renderNotes();
+    });
+
+    $("note-text").addEventListener("input", () => {
+      const note = activeNote();
+
+      if (!note) return;
+
+      note.text = $("note-text").value;
+      markDirty();
+    });
+
+    $("day-text").addEventListener("input", () => {
+      const value = $("day-text").value;
+
+      if (value) {
+        state.calendar[selectedDate] = value;
+      } else {
+        delete state.calendar[selectedDate];
+      }
+
+      markDirty();
+      renderCalendar();
+    });
+
+    $("ai-kind").addEventListener("change", renderModels);
+
+    bind("register-button", () => authenticate(true));
+    bind("logout-button", logout);
+
+    bind("refresh-account", async () => {
+      await refreshProfile();
+      notice("Тариф и остаток запросов обновлены.");
+    });
+
+    bind("new-note", newNote);
+    bind("save-note", saveState);
+    bind("add-check", addCheck);
+    bind("download-note", downloadNote);
+    bind("delete-note", deleteNote);
+
+    bind("analyze-note", () =>
+      showAnalysis(activeNote()?.text || "")
+    );
+
+    bind("rerank-note", () =>
+      showAnalysis(activeNote()?.text || "", true)
+    );
+
+    bind("speak-note", () => dictate("note-text"));
+
+    bind("prev-month", () => moveMonth(-1));
+    bind("next-month", () => moveMonth(1));
+    bind("save-day", saveState);
+    bind("speak-day", () => dictate("day-text"));
+
+    bind("analyze-day", () =>
+      showAnalysis($("day-text").value)
+    );
+
+    bind("rerank-day", () =>
+      showAnalysis($("day-text").value, true)
+    );
+
+    bind("send-ai", sendAI);
+    bind("speak-chat", () => dictate("ai-input"));
+
+    bind("clear-chat", () => {
+      if (chatBusy) {
+        throw new Error("Дождись завершения запроса.");
+      }
+
+      if (!confirm("Очистить историю этого чата?")) {
+        return;
+      }
+
+      chatHistory = [];
+      $("chat").replaceChildren();
+    });
+
+    bind("refresh-videos", loadVideos);
+    bind("refresh-orders", checkPayment);
+    bind("refresh-messages", loadMessages);
+
+    bind("close-result", () => $("result-dialog").close());
+
+    bind("copy-result", async () => {
+      await navigator.clipboard.writeText(
+        $("ai-result").textContent
+      );
+
+      notice("Ответ скопирован.");
+    });
+
+    window.addEventListener("beforeunload", event => {
+      if (!dirty) return;
+
+      event.preventDefault();
+      event.returnValue = "";
+    });
+
+    (async () => {
+      try {
+        await enterApp();
+      } catch (error) {
+        $("auth").hidden = false;
+        $("layout").hidden = true;
+
+        if (error.status !== 401) {
+          fail(error);
+        }
+      }
+    })();
   </script>
 </body>
 </html>
