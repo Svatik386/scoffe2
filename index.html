@@ -2,50 +2,43 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#3E2723">
-
 <title>Scoffe2</title>
 <link rel="icon" type="image/png" href="iconScoffe2.png">
 
 <style>
 :root {
-  --c-dark: #3E2723;
-  --c-med: #6D4C41;
-  --c-light: #8D6E63;
-  --c-cream: #D7CCC8;
-  --c-beige: #EFEBE9;
-  --c-milk: #FAF7F5;
-  --c-accent: #D4A574;
-  --c-caramel: #A1887F;
-  --c-red: #C62828;
-  --c-green: #2E7D32;
-  --c-flash: #FF8F00;
-  --c-home: #7B1FA2;
+  --c-dark:#3E2723;
+  --c-med:#6D4C41;
+  --c-light:#8D6E63;
+  --c-cream:#D7CCC8;
+  --c-beige:#EFEBE9;
+  --c-milk:#FAF7F5;
+  --c-accent:#D4A574;
+  --c-caramel:#A1887F;
+  --c-red:#C62828;
+  --c-green:#2E7D32;
+  --c-flash:#FF8F00;
+  --c-home:#7B1FA2;
 }
 
 * {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: "Segoe UI", sans-serif;
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:"Segoe UI",sans-serif;
 }
 
 body {
-  background: linear-gradient(135deg, var(--c-beige), var(--c-cream));
-  color: var(--c-dark);
-  height: 100vh;
-  display: flex;
+  background:linear-gradient(135deg,var(--c-beige),var(--c-cream));
+  color:var(--c-dark);
+  height:100vh;
+  display:flex;
 }
 
-button, input, textarea, select {
-  font: inherit;
-}
-
-button:disabled {
-  opacity: .55;
-  cursor: not-allowed;
-}
+button,input,textarea,select { font:inherit; }
+button:disabled { opacity:.55; cursor:not-allowed; }
 
 button:focus-visible,
 input:focus-visible,
@@ -53,1102 +46,907 @@ textarea:focus-visible,
 select:focus-visible,
 [role="button"]:focus-visible,
 [role="checkbox"]:focus-visible {
-  outline: 3px solid var(--c-accent);
-  outline-offset: 3px;
+  outline:3px solid var(--c-accent);
+  outline-offset:3px;
 }
 
 #toast-container {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 9999;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  max-width: calc(100vw - 40px);
+  position:fixed;
+  top:20px;
+  right:20px;
+  z-index:9999;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  max-width:calc(100vw - 40px);
 }
 
 .toast {
-  padding: 14px 20px;
-  border-radius: 8px;
-  color: white;
-  font-size: 14px;
-  font-weight: 500;
-  box-shadow: 0 4px 12px rgba(0,0,0,.15);
-  animation: slideIn .3s ease;
-  max-width: 420px;
-  overflow-wrap: anywhere;
+  padding:14px 20px;
+  border-radius:8px;
+  color:white;
+  font-size:14px;
+  font-weight:500;
+  box-shadow:0 4px 12px rgba(0,0,0,.15);
+  animation:slideIn .3s ease;
+  max-width:420px;
+  overflow-wrap:anywhere;
 }
 
-.toast.success { background: var(--c-green); }
-.toast.error { background: var(--c-red); }
-.toast.info { background: var(--c-med); }
-.toast.loading { background: var(--c-med); cursor: wait; }
+.toast.success { background:var(--c-green); }
+.toast.error { background:var(--c-red); }
+.toast.info,.toast.loading { background:var(--c-med); }
+.toast.loading { cursor:wait; }
 
 @keyframes slideIn {
-  from { transform: translateX(100%); opacity: 0; }
-  to { transform: translateX(0); opacity: 1; }
+  from { transform:translateX(100%); opacity:0; }
+  to { transform:translateX(0); opacity:1; }
 }
 
 #auth-screen {
-  position: fixed;
-  inset: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: linear-gradient(135deg, var(--c-dark), var(--c-med));
-  z-index: 100;
-  padding: 20px;
-  overflow-y: auto;
+  position:fixed;
+  inset:0;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:linear-gradient(135deg,var(--c-dark),var(--c-med));
+  z-index:100;
+  padding:20px;
+  overflow-y:auto;
 }
 
 .auth-box {
-  background: white;
-  padding: 40px;
-  border-radius: 16px;
-  width: 380px;
-  max-width: 100%;
-  box-shadow: 0 12px 40px rgba(62,39,35,.4);
-  border: 3px solid var(--c-accent);
+  background:white;
+  padding:40px;
+  border-radius:16px;
+  width:380px;
+  max-width:100%;
+  box-shadow:0 12px 40px rgba(62,39,35,.4);
+  border:3px solid var(--c-accent);
 }
 
 .auth-box h2 {
-  margin-bottom: 20px;
-  color: var(--c-dark);
-  font-size: 28px;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
+  margin-bottom:20px;
+  color:var(--c-dark);
+  font-size:28px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
 }
 
-.auth-box h2 img {
-  width: 44px;
-  height: 44px;
-  object-fit: contain;
-}
+.auth-box h2 img { width:44px; height:44px; object-fit:contain; }
 
 .auth-box input {
-  width: 100%;
-  padding: 12px;
-  margin: 8px 0;
-  border: 2px solid var(--c-cream);
-  border-radius: 8px;
-  font-size: 14px;
-  background: var(--c-milk);
+  width:100%;
+  padding:12px;
+  margin:8px 0;
+  border:2px solid var(--c-cream);
+  border-radius:8px;
+  font-size:14px;
+  background:var(--c-milk);
 }
 
-.auth-box input:focus {
-  border-color: var(--c-accent);
-}
+.auth-box input:focus { border-color:var(--c-accent); }
 
 .auth-box button {
-  width: 100%;
-  padding: 12px;
-  background: linear-gradient(135deg, var(--c-accent), var(--c-caramel));
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 16px;
-  margin-top: 10px;
-  font-weight: bold;
-  transition: all .3s;
+  width:100%;
+  padding:12px;
+  background:linear-gradient(135deg,var(--c-accent),var(--c-caramel));
+  color:white;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:16px;
+  margin-top:10px;
+  font-weight:bold;
+  transition:all .3s;
 }
 
 .auth-box button:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(212,165,116,.4);
+  transform:translateY(-2px);
+  box-shadow:0 6px 16px rgba(212,165,116,.4);
 }
 
 .auth-box button.secondary {
-  background: linear-gradient(135deg, var(--c-light), var(--c-med));
+  background:linear-gradient(135deg,var(--c-light),var(--c-med));
 }
 
 .auth-msg {
-  font-size: 13px;
-  margin-top: 8px;
-  min-height: 18px;
-  overflow-wrap: anywhere;
+  font-size:13px;
+  margin-top:8px;
+  min-height:18px;
+  overflow-wrap:anywhere;
 }
 
-.auth-msg.error { color: var(--c-red); }
-.auth-msg.success { color: var(--c-green); }
+.auth-msg.error { color:var(--c-red); }
+.auth-msg.success { color:var(--c-green); }
 
-#app-screen {
-  display: none;
-  width: 100%;
-  height: 100vh;
-}
+#app-screen { display:none; width:100%; height:100vh; }
 
 .sidebar {
-  width: 260px;
-  flex: 0 0 260px;
-  background: linear-gradient(180deg, var(--c-dark), var(--c-med));
-  padding: 20px 0;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 4px 0 12px rgba(0,0,0,.15);
-  overflow-y: auto;
+  width:260px;
+  flex:0 0 260px;
+  background:linear-gradient(180deg,var(--c-dark),var(--c-med));
+  padding:20px 0;
+  display:flex;
+  flex-direction:column;
+  box-shadow:4px 0 12px rgba(0,0,0,.15);
+  overflow-y:auto;
 }
 
 .logo-area {
-  text-align: center;
-  padding: 0 20px 20px;
-  border-bottom: 2px solid var(--c-accent);
-  margin-bottom: 15px;
+  text-align:center;
+  padding:0 20px 20px;
+  border-bottom:2px solid var(--c-accent);
+  margin-bottom:15px;
 }
 
 .logo-area img {
-  width: 64px;
-  height: 64px;
-  object-fit: contain;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,.3));
+  width:64px;
+  height:64px;
+  object-fit:contain;
+  filter:drop-shadow(0 2px 4px rgba(0,0,0,.3));
 }
 
 .logo-area span {
-  display: block;
-  margin-top: 8px;
-  font-weight: bold;
-  font-size: 22px;
-  color: var(--c-cream);
+  display:block;
+  margin-top:8px;
+  font-weight:bold;
+  font-size:22px;
+  color:var(--c-cream);
 }
 
 .user-info {
-  text-align: center;
-  padding: 10px 20px;
-  color: var(--c-cream);
-  font-size: 12px;
-  border-bottom: 1px solid rgba(255,255,255,.1);
+  text-align:center;
+  padding:10px 20px;
+  color:var(--c-cream);
+  font-size:12px;
+  border-bottom:1px solid rgba(255,255,255,.1);
 }
 
 .user-info .uname {
-  font-weight: bold;
-  color: white;
-  font-size: 14px;
-  display: block;
-  margin-bottom: 4px;
+  font-weight:bold;
+  color:white;
+  font-size:14px;
+  display:block;
+  margin-bottom:4px;
 }
 
-#display-user-id {
-  overflow-wrap: anywhere;
-}
+#display-user-id { overflow-wrap:anywhere; }
 
 .tariff-badge {
-  display: inline-block;
-  padding: 3px 10px;
-  border-radius: 10px;
-  font-size: 11px;
-  font-weight: bold;
-  margin-top: 4px;
-  background: var(--c-light);
-  color: white;
+  display:inline-block;
+  padding:3px 10px;
+  border-radius:10px;
+  font-size:12px;
+  font-weight:bold;
+  margin-top:4px;
+  background:var(--c-light);
+  color:white;
 }
 
-.tariff-flash { background: var(--c-flash); }
-.tariff-home { background: var(--c-home); }
+.tariff-flash { background:var(--c-flash); }
+.tariff-home { background:var(--c-home); }
 
-#tariff-expiry,
-#account-quota {
-  margin-top: 8px;
-  line-height: 1.6;
-  white-space: pre-line;
+#tariff-expiry,#account-quota {
+  margin-top:8px;
+  line-height:1.6;
+  white-space:pre-line;
 }
 
 .nav-btn {
-  display: flex;
-  align-items: center;
-  padding: 14px 20px;
-  cursor: pointer;
-  border: none;
-  background: none;
-  width: 100%;
-  text-align: left;
-  font-size: 15px;
-  color: var(--c-cream);
-  border-left: 4px solid transparent;
-  transition: all .2s;
+  display:flex;
+  align-items:center;
+  padding:14px 20px;
+  cursor:pointer;
+  border:none;
+  background:none;
+  width:100%;
+  text-align:left;
+  font-size:15px;
+  color:var(--c-cream);
+  border-left:4px solid transparent;
+  transition:all .2s;
 }
 
 .nav-btn:hover {
-  background: rgba(255,255,255,.1);
-  border-left-color: var(--c-accent);
+  background:rgba(255,255,255,.1);
+  border-left-color:var(--c-accent);
 }
 
 .nav-btn.active {
-  background: rgba(212,165,116,.25);
-  border-left-color: var(--c-accent);
-  color: white;
+  background:rgba(212,165,116,.25);
+  border-left-color:var(--c-accent);
+  color:white;
 }
 
 .nav-btn img {
-  width: 18px;
-  height: 18px;
-  object-fit: contain;
-  margin-right: 12px;
+  width:18px;
+  height:18px;
+  object-fit:contain;
+  margin-right:12px;
 }
 
-.main {
-  flex: 1;
-  min-width: 0;
-  padding: 30px;
-  overflow-y: auto;
-}
-
-.view { display: none; }
-
-.view.active {
-  display: block;
-  animation: fadeIn .3s;
-}
+.main { flex:1; min-width:0; padding:30px; overflow-y:auto; }
+.view { display:none; }
+.view.active { display:block; animation:fadeIn .3s; }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { opacity:0; transform:translateY(10px); }
+  to { opacity:1; transform:translateY(0); }
 }
 
 .top-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
+  display:flex;
+  justify-content:flex-end;
+  gap:10px;
+  margin-bottom:20px;
+  flex-wrap:wrap;
 }
 
 .action-btn {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 18px;
-  background: linear-gradient(135deg, var(--c-accent), var(--c-caramel));
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: bold;
-  transition: all .3s;
-  box-shadow: 0 2px 8px rgba(212,165,116,.3);
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:10px 18px;
+  background:linear-gradient(135deg,var(--c-accent),var(--c-caramel));
+  color:white;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:14px;
+  font-weight:bold;
+  transition:all .3s;
+  box-shadow:0 2px 8px rgba(212,165,116,.3);
 }
 
 .action-btn:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(212,165,116,.4);
+  transform:translateY(-2px);
+  box-shadow:0 4px 12px rgba(212,165,116,.4);
 }
 
 .action-btn img {
-  width: 16px;
-  height: 16px;
-  object-fit: contain;
-  filter: brightness(0) invert(1);
+  width:16px;
+  height:16px;
+  object-fit:contain;
+  filter:brightness(0) invert(1);
 }
 
 .notepad-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 15px;
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+  gap:15px;
 }
 
 .notepad-card {
-  background: white;
-  padding: 18px;
-  border-radius: 10px;
-  border: 2px solid var(--c-cream);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  transition: all .3s;
-  box-shadow: 0 2px 8px rgba(62,39,35,.08);
-  position: relative;
-  min-width: 0;
-  overflow-wrap: anywhere;
+  background:white;
+  padding:18px;
+  border-radius:10px;
+  border:2px solid var(--c-cream);
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  transition:all .3s;
+  box-shadow:0 2px 8px rgba(62,39,35,.08);
+  position:relative;
+  min-width:0;
+  overflow-wrap:anywhere;
 }
 
 .notepad-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 16px rgba(62,39,35,.15);
-  border-color: var(--c-accent);
+  transform:translateY(-3px);
+  box-shadow:0 6px 16px rgba(62,39,35,.15);
+  border-color:var(--c-accent);
 }
 
 .notepad-card > img {
-  width: 20px;
-  height: 20px;
-  object-fit: contain;
-  flex-shrink: 0;
+  width:20px;
+  height:20px;
+  object-fit:contain;
+  flex-shrink:0;
 }
 
 .notepad-card .rename-btn {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  width: 26px;
-  height: 26px;
-  border: none;
-  background: var(--c-beige);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transition: opacity .3s;
-  cursor: pointer;
+  position:absolute;
+  top:5px;
+  right:5px;
+  width:26px;
+  height:26px;
+  border:none;
+  background:var(--c-beige);
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  opacity:0;
+  transition:opacity .3s;
+  cursor:pointer;
 }
 
 .notepad-card:hover .rename-btn,
-.notepad-card:focus-within .rename-btn {
-  opacity: 1;
+.notepad-card:focus-within .rename-btn { opacity:1; }
+
+.notepad-card .rename-btn img { width:14px; height:14px; }
+
+.notepad-editor,.ai-chat-container {
+  background:white;
+  border-radius:12px;
+  padding:25px;
+  height:calc(100vh - 100px);
+  min-height:440px;
+  display:flex;
+  flex-direction:column;
+  box-shadow:0 4px 16px rgba(62,39,35,.1);
+  border:2px solid var(--c-cream);
 }
 
-.notepad-card .rename-btn img {
-  width: 14px;
-  height: 14px;
+.editor-toolbar,.calendar-toolbar {
+  display:flex;
+  gap:10px;
+  margin-bottom:20px;
+  padding-bottom:15px;
+  border-bottom:2px solid var(--c-cream);
+  flex-wrap:wrap;
 }
 
-.notepad-editor,
-.ai-chat-container {
-  background: white;
-  border-radius: 12px;
-  padding: 25px;
-  height: calc(100vh - 100px);
-  min-height: 440px;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0 4px 16px rgba(62,39,35,.1);
-  border: 2px solid var(--c-cream);
-}
-
-.editor-toolbar,
-.calendar-toolbar {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-  padding-bottom: 15px;
-  border-bottom: 2px solid var(--c-cream);
-  flex-wrap: wrap;
-}
-
-.editor-toolbar img,
-.calendar-toolbar img {
-  width: 36px;
-  height: 36px;
-  object-fit: contain;
-  cursor: pointer;
-  padding: 6px;
-  border-radius: 8px;
-  transition: all .3s;
-  background: var(--c-beige);
+.editor-toolbar img,.calendar-toolbar img {
+  width:36px;
+  height:36px;
+  object-fit:contain;
+  cursor:pointer;
+  padding:6px;
+  border-radius:8px;
+  transition:all .3s;
+  background:var(--c-beige);
 }
 
 .editor-toolbar img:hover:not(.premium-disabled),
 .calendar-toolbar img:hover:not(.premium-disabled) {
-  background: var(--c-accent);
-  transform: scale(1.1);
+  background:var(--c-accent);
+  transform:scale(1.1);
 }
 
-.premium-disabled {
-  opacity: .4;
-  cursor: not-allowed !important;
-}
+.premium-disabled { opacity:.4; cursor:not-allowed!important; }
 
 .editor-content {
-  flex: 1;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  overflow-y: auto;
+  flex:1;
+  min-height:0;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  overflow-y:auto;
 }
 
 .editor-content textarea {
-  flex: 1;
-  min-height: 180px;
-  width: 100%;
-  padding: 14px;
-  border: 2px solid var(--c-cream);
-  border-radius: 8px;
-  resize: vertical;
-  font-size: 16px;
-  background: var(--c-milk);
-  font-family: Georgia, serif;
+  flex:1;
+  min-height:180px;
+  width:100%;
+  padding:14px;
+  border:2px solid var(--c-cream);
+  border-radius:8px;
+  resize:vertical;
+  font-size:16px;
+  background:var(--c-milk);
+  font-family:Georgia,serif;
 }
 
 .editor-content textarea:focus {
-  border-color: var(--c-accent);
-  background: white;
+  border-color:var(--c-accent);
+  background:white;
 }
 
 .checklist-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px;
-  background: var(--c-beige);
-  border-radius: 6px;
-  border: 1px solid var(--c-cream);
-  margin-bottom: 8px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px;
+  background:var(--c-beige);
+  border-radius:6px;
+  border:1px solid var(--c-cream);
+  margin-bottom:8px;
 }
 
 .square-placeholder {
-  width: 24px;
-  height: 24px;
-  flex-shrink: 0;
-  border: 2px solid var(--c-light);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 4px;
-  background: white;
+  width:24px;
+  height:24px;
+  flex-shrink:0;
+  border:2px solid var(--c-light);
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:4px;
+  background:white;
 }
 
 .checklist-item input {
-  border: none;
-  background: transparent;
-  flex: 1;
-  min-width: 0;
-  color: var(--c-dark);
+  border:none;
+  background:transparent;
+  flex:1;
+  min-width:0;
+  color:var(--c-dark);
 }
 
 .ai-chat-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 20px;
-  padding-bottom: 15px;
-  border-bottom: 2px solid var(--c-cream);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  margin-bottom:20px;
+  padding-bottom:15px;
+  border-bottom:2px solid var(--c-cream);
 }
 
 .ai-chat-header h3 {
-  color: var(--c-dark);
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  display:flex;
+  align-items:center;
+  gap:8px;
 }
 
-.ai-chat-header h3 img {
-  width: 24px;
-  height: 24px;
-}
+.ai-chat-header h3 img { width:24px; height:24px; }
 
 .ai-chat-messages {
-  flex: 1;
-  min-height: 100px;
-  overflow-y: auto;
-  padding: 15px;
-  background: var(--c-beige);
-  border-radius: 8px;
-  margin-bottom: 15px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+  flex:1;
+  min-height:100px;
+  overflow-y:auto;
+  padding:15px;
+  background:var(--c-beige);
+  border-radius:8px;
+  margin-bottom:15px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
 }
 
 .ai-message {
-  padding: 12px 16px;
-  border-radius: 12px;
-  max-width: 85%;
-  overflow-wrap: anywhere;
-  white-space: pre-wrap;
+  padding:12px 16px;
+  border-radius:12px;
+  max-width:85%;
+  overflow-wrap:anywhere;
+  white-space:pre-wrap;
 }
 
 .ai-message.user {
-  background: var(--c-accent);
-  color: var(--c-dark);
-  align-self: flex-end;
-  border-bottom-right-radius: 4px;
+  background:var(--c-accent);
+  color:var(--c-dark);
+  align-self:flex-end;
+  border-bottom-right-radius:4px;
 }
 
 .ai-message.ai {
-  background: white;
-  border: 1px solid var(--c-cream);
-  align-self: flex-start;
-  border-bottom-left-radius: 4px;
+  background:white;
+  border:1px solid var(--c-cream);
+  align-self:flex-start;
+  border-bottom-left-radius:4px;
 }
 
-.ai-message.ai img,
-.ai-message.ai video {
-  display: block;
-  max-width: 100%;
-  max-height: 520px;
-  border-radius: 8px;
-  margin-top: 8px;
+.ai-message.ai img,.ai-message.ai video {
+  display:block;
+  max-width:100%;
+  max-height:520px;
+  border-radius:8px;
+  margin-top:8px;
 }
 
 .ai-chat-input-area {
-  display: flex;
-  gap: 10px;
-  flex-direction: column;
+  display:flex;
+  gap:10px;
+  flex-direction:column;
 }
 
 .ai-chat-input-area textarea {
-  width: 100%;
-  padding: 12px;
-  border: 2px solid var(--c-cream);
-  border-radius: 8px;
-  resize: vertical;
-  font-size: 14px;
-  background: var(--c-milk);
-  min-height: 60px;
-  max-height: 240px;
+  width:100%;
+  padding:12px;
+  border:2px solid var(--c-cream);
+  border-radius:8px;
+  resize:vertical;
+  font-size:14px;
+  background:var(--c-milk);
+  min-height:60px;
+  max-height:240px;
 }
 
 .ai-chat-controls {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  flex-wrap: wrap;
+  display:flex;
+  gap:10px;
+  align-items:center;
+  flex-wrap:wrap;
 }
 
 .ai-chat-controls select {
-  padding: 10px;
-  border: 2px solid var(--c-cream);
-  border-radius: 8px;
-  background: var(--c-milk);
-  font-size: 14px;
-  flex: 1;
-  min-width: 140px;
+  padding:10px;
+  border:2px solid var(--c-cream);
+  border-radius:8px;
+  background:var(--c-milk);
+  font-size:14px;
+  flex:1;
+  min-width:140px;
 }
 
 .ai-chat-controls button {
-  padding: 12px 20px;
-  background: var(--c-accent);
-  color: var(--c-dark);
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
+  padding:12px 20px;
+  background:var(--c-accent);
+  color:var(--c-dark);
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:bold;
 }
 
 .ai-chat-tools {
-  display: flex;
-  gap: 8px;
-  padding-top: 10px;
-  border-top: 1px solid var(--c-cream);
+  display:flex;
+  gap:8px;
+  padding-top:10px;
+  border-top:1px solid var(--c-cream);
 }
 
 .ai-chat-tools img {
-  width: 36px;
-  height: 36px;
-  object-fit: contain;
-  cursor: pointer;
-  padding: 6px;
-  border-radius: 8px;
-  background: var(--c-beige);
-  transition: all .3s;
+  width:36px;
+  height:36px;
+  object-fit:contain;
+  cursor:pointer;
+  padding:6px;
+  border-radius:8px;
+  background:var(--c-beige);
+  transition:all .3s;
 }
 
 .ai-chat-tools img:hover:not(.premium-disabled) {
-  background: var(--c-accent);
-  transform: scale(1.1);
+  background:var(--c-accent);
+  transform:scale(1.1);
 }
 
 .ai-chat-tools img.active-tool {
-  background: var(--c-accent);
-  box-shadow: 0 0 0 2px var(--c-dark);
+  background:var(--c-accent);
+  box-shadow:0 0 0 2px var(--c-dark);
 }
 
 .calendar-container {
-  background: white;
-  border-radius: 12px;
-  padding: 25px;
-  border: 2px solid var(--c-cream);
-  box-shadow: 0 4px 16px rgba(62,39,35,.1);
-  margin-bottom: 20px;
+  background:white;
+  border-radius:12px;
+  padding:25px;
+  border:2px solid var(--c-cream);
+  box-shadow:0 4px 16px rgba(62,39,35,.1);
+  margin-bottom:20px;
 }
 
 .calendar-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  margin-bottom:20px;
 }
 
-.calendar-header h3 {
-  color: var(--c-dark);
-  font-size: 22px;
-  text-align: center;
-}
+.calendar-header h3 { font-size:22px; text-align:center; }
 
 .calendar-grid {
-  display: grid;
-  grid-template-columns: repeat(7, minmax(0, 1fr));
-  gap: 6px;
+  display:grid;
+  grid-template-columns:repeat(7,minmax(0,1fr));
+  gap:6px;
 }
 
 .calendar-day-header {
-  text-align: center;
-  font-weight: bold;
-  padding: 12px 4px;
-  background: linear-gradient(135deg, var(--c-med), var(--c-light));
-  color: white;
-  border-radius: 6px;
-  font-size: 13px;
+  text-align:center;
+  font-weight:bold;
+  padding:12px 4px;
+  background:linear-gradient(135deg,var(--c-med),var(--c-light));
+  color:white;
+  border-radius:6px;
+  font-size:13px;
 }
 
 .calendar-day {
-  aspect-ratio: 1;
-  min-height: 42px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  border: 2px solid var(--c-cream);
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all .3s;
-  background: var(--c-milk);
-  color: var(--c-dark);
-  font-weight: 500;
+  aspect-ratio:1;
+  min-height:42px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  border:2px solid var(--c-cream);
+  border-radius:8px;
+  cursor:pointer;
+  transition:all .3s;
+  background:var(--c-milk);
+  color:var(--c-dark);
+  font-weight:500;
 }
 
-.calendar-day:hover {
-  background: var(--c-cream);
-  transform: scale(1.03);
-}
+.calendar-day:hover { background:var(--c-cream); transform:scale(1.03); }
 
 .calendar-day.has-note {
-  background: linear-gradient(135deg, var(--c-accent), var(--c-caramel));
-  color: var(--c-dark);
-  border-color: var(--c-accent);
+  background:linear-gradient(135deg,var(--c-accent),var(--c-caramel));
+  border-color:var(--c-accent);
 }
 
-.calendar-day.today {
-  border: 3px solid var(--c-dark);
-  font-weight: bold;
-}
-
-.calendar-day.selected {
-  outline: 2px solid var(--c-med);
-  outline-offset: 1px;
-}
+.calendar-day.today { border:3px solid var(--c-dark); font-weight:bold; }
+.calendar-day.selected { outline:2px solid var(--c-med); outline-offset:1px; }
 
 .note-indicator {
-  width: 7px;
-  height: 7px;
-  background: var(--c-dark);
-  border-radius: 50%;
-  margin-top: 4px;
+  width:7px;
+  height:7px;
+  background:var(--c-dark);
+  border-radius:50%;
+  margin-top:4px;
 }
 
-.calendar-day.empty {
-  cursor: default;
-  background: transparent;
-  border: none;
-}
+.calendar-day.empty { cursor:default; background:transparent; border:none; }
 
 .day-detail-panel {
-  background: white;
-  border-radius: 10px;
-  padding: 20px;
-  border: 2px solid var(--c-cream);
+  background:white;
+  border-radius:10px;
+  padding:20px;
+  border:2px solid var(--c-cream);
 }
 
-.day-detail-panel h4 {
-  color: var(--c-dark);
-  margin-bottom: 12px;
-}
+.day-detail-panel h4 { margin-bottom:12px; }
 
 .day-detail-panel textarea {
-  width: 100%;
-  padding: 12px;
-  border: 2px solid var(--c-cream);
-  border-radius: 6px;
-  resize: vertical;
-  min-height: 150px;
-  background: var(--c-milk);
+  width:100%;
+  padding:12px;
+  border:2px solid var(--c-cream);
+  border-radius:6px;
+  resize:vertical;
+  min-height:150px;
+  background:var(--c-milk);
 }
 
 .pricing-cards {
-  display: flex;
-  gap: 20px;
-  justify-content: center;
-  margin-top: 30px;
-  flex-wrap: wrap;
+  display:flex;
+  gap:20px;
+  justify-content:center;
+  margin-top:30px;
+  flex-wrap:wrap;
 }
 
 .pricing-card {
-  background: white;
-  padding: 30px;
-  border-radius: 12px;
-  border: 2px solid var(--c-cream);
-  width: 300px;
-  max-width: 100%;
-  text-align: center;
-  transition: transform .3s;
+  background:white;
+  padding:30px;
+  border-radius:12px;
+  border:2px solid var(--c-cream);
+  width:300px;
+  max-width:100%;
+  text-align:center;
+  transition:transform .3s;
 }
 
-.pricing-card:hover {
-  transform: translateY(-5px);
-  border-color: var(--c-accent);
-}
-
-.pricing-card h3 {
-  margin-bottom: 15px;
-  font-size: 24px;
-}
-
-.pricing-card .price {
-  font-size: 36px;
-  font-weight: bold;
-  margin-bottom: 20px;
-}
-
-.pricing-card .price span {
-  font-size: 16px;
-  color: var(--c-light);
-  font-weight: normal;
-}
-
-.pricing-card.free .price { color: var(--c-light); }
-.pricing-card.flash .price { color: var(--c-flash); }
-.pricing-card.home .price { color: var(--c-home); }
-
-.pricing-card ul {
-  list-style: none;
-  margin: 20px 0;
-  text-align: left;
-}
+.pricing-card:hover { transform:translateY(-5px); border-color:var(--c-accent); }
+.pricing-card h3 { margin-bottom:15px; font-size:24px; }
+.pricing-card .price { font-size:36px; font-weight:bold; margin-bottom:20px; }
+.pricing-card .price span { font-size:16px; color:var(--c-light); font-weight:normal; }
+.pricing-card.free .price { color:var(--c-light); }
+.pricing-card.flash .price { color:var(--c-flash); }
+.pricing-card.home .price { color:var(--c-home); }
+.pricing-card ul { list-style:none; margin:20px 0; text-align:left; }
 
 .pricing-card ul li {
-  padding: 8px 0;
-  border-bottom: 1px solid var(--c-beige);
-  font-size: 14px;
-  line-height: 1.5;
+  padding:8px 0;
+  border-bottom:1px solid var(--c-beige);
+  font-size:14px;
+  line-height:1.5;
 }
 
 .pricing-card ul li::before {
-  content: "✓";
-  margin-right: 8px;
-  color: var(--c-green);
-  font-weight: bold;
+  content:"✓";
+  margin-right:8px;
+  color:var(--c-green);
+  font-weight:bold;
 }
 
 .sber-btn {
-  background: linear-gradient(135deg, var(--c-accent), var(--c-caramel));
-  color: var(--c-dark);
-  padding: 12px 20px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 16px;
-  width: 100%;
-  margin-top: 15px;
-  font-weight: bold;
-  transition: all .3s;
+  background:linear-gradient(135deg,var(--c-accent),var(--c-caramel));
+  color:var(--c-dark);
+  padding:12px 20px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:16px;
+  width:100%;
+  margin-top:15px;
+  font-weight:bold;
+  transition:all .3s;
 }
 
 .sber-btn:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(212,165,116,.4);
+  transform:translateY(-2px);
+  box-shadow:0 4px 12px rgba(212,165,116,.4);
 }
 
 .message-list {
-  background: white;
-  border-radius: 10px;
-  border: 2px solid var(--c-cream);
-  padding: 0 15px;
+  background:white;
+  border-radius:10px;
+  border:2px solid var(--c-cream);
+  padding:0 15px;
 }
 
 .message-item {
-  padding: 15px 0;
-  border-bottom: 1px solid var(--c-beige);
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-  overflow-wrap: anywhere;
+  padding:15px 0;
+  border-bottom:1px solid var(--c-beige);
+  display:flex;
+  justify-content:space-between;
+  gap:16px;
+  overflow-wrap:anywhere;
 }
 
-.message-item:last-child {
-  border-bottom: none;
-}
+.message-item:last-child { border-bottom:none; }
 
 .message-item p {
-  font-size: 14px;
-  color: var(--c-light);
-  margin-top: 6px;
-  white-space: pre-wrap;
+  font-size:14px;
+  color:var(--c-light);
+  margin-top:6px;
+  white-space:pre-wrap;
 }
 
 .compose-btn {
-  position: fixed;
-  bottom: 30px;
-  right: 30px;
-  width: 60px;
-  height: 60px;
-  border: none;
-  background: linear-gradient(135deg, var(--c-accent), var(--c-caramel));
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 12px rgba(212,165,116,.4);
-  cursor: pointer;
+  position:fixed;
+  bottom:30px;
+  right:30px;
+  width:60px;
+  height:60px;
+  border:none;
+  background:linear-gradient(135deg,var(--c-accent),var(--c-caramel));
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 4px 12px rgba(212,165,116,.4);
+  cursor:pointer;
 }
 
-.compose-btn img {
-  width: 32px;
-  height: 32px;
-  filter: brightness(0) invert(1);
-}
+.compose-btn img { width:32px; height:32px; filter:brightness(0) invert(1); }
 
 .modal {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(62,39,35,.7);
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-  backdrop-filter: blur(4px);
-  padding: 16px;
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(62,39,35,.7);
+  justify-content:center;
+  align-items:center;
+  z-index:1000;
+  backdrop-filter:blur(4px);
+  padding:16px;
 }
 
 .modal-content {
-  background: white;
-  padding: 30px;
-  border-radius: 12px;
-  width: 450px;
-  max-width: 100%;
-  max-height: 90vh;
-  overflow-y: auto;
-  border: 3px solid var(--c-accent);
-  box-shadow: 0 12px 40px rgba(62,39,35,.3);
+  background:white;
+  padding:30px;
+  border-radius:12px;
+  width:450px;
+  max-width:100%;
+  max-height:90vh;
+  overflow-y:auto;
+  border:3px solid var(--c-accent);
+  box-shadow:0 12px 40px rgba(62,39,35,.3);
 }
 
-.modal-content h3 {
-  margin-bottom: 15px;
-}
+.modal-content h3 { margin-bottom:15px; }
 
 .modal-content input,
 .modal-content textarea,
 .modal-content select {
-  width: 100%;
-  padding: 12px;
-  margin-bottom: 12px;
-  border: 2px solid var(--c-cream);
-  border-radius: 8px;
-  font-size: 14px;
-  background: var(--c-milk);
-  color: var(--c-dark);
+  width:100%;
+  padding:12px;
+  margin-bottom:12px;
+  border:2px solid var(--c-cream);
+  border-radius:8px;
+  font-size:14px;
+  background:var(--c-milk);
+  color:var(--c-dark);
 }
 
 .modal-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  margin-top: 15px;
-  flex-wrap: wrap;
+  display:flex;
+  justify-content:flex-end;
+  gap:10px;
+  margin-top:15px;
+  flex-wrap:wrap;
 }
 
-.modal-actions button,
-.small-btn {
-  padding: 10px 16px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
+.modal-actions button,.small-btn {
+  padding:10px 16px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:bold;
 }
 
-.btn-cancel {
-  background: var(--c-light);
-  color: white;
-}
+.btn-cancel { background:var(--c-light); color:white; }
+.btn-confirm,.small-btn { background:var(--c-accent); color:var(--c-dark); }
 
-.btn-confirm,
-.small-btn {
-  background: var(--c-accent);
-  color: var(--c-dark);
-}
-
-.premium-lock-modal {
-  text-align: center;
-  padding: 20px;
-}
+.premium-lock-modal { text-align:center; padding:20px; }
 
 .lock-icon-large {
-  display: block;
-  width: 64px;
-  height: 64px;
-  object-fit: contain;
-  margin: 0 auto 20px;
+  display:block;
+  width:64px;
+  height:64px;
+  object-fit:contain;
+  margin:0 auto 20px;
 }
 
-.small-muted {
-  font-size: 12px;
-  color: var(--c-light);
-  line-height: 1.6;
-}
+.small-muted { font-size:12px; color:var(--c-light); line-height:1.6; }
 
 .section-panel {
-  background: white;
-  border: 2px solid var(--c-cream);
-  border-radius: 12px;
-  padding: 22px;
-  margin-top: 22px;
+  background:white;
+  border:2px solid var(--c-cream);
+  border-radius:12px;
+  padding:22px;
+  margin-top:22px;
 }
 
-.section-panel h3 {
-  margin-bottom: 12px;
-}
+.section-panel h3 { margin-bottom:12px; }
 
 .record {
-  padding: 14px 0;
-  border-bottom: 1px solid var(--c-beige);
-  overflow-wrap: anywhere;
+  padding:14px 0;
+  border-bottom:1px solid var(--c-beige);
+  overflow-wrap:anywhere;
 }
 
-.record:last-child {
-  border-bottom: none;
+.record:last-child { border-bottom:none; }
+.record p { margin-top:6px; line-height:1.5; }
+
+#result-text,#support-command-result {
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+  line-height:1.7;
 }
 
-.record p {
-  margin-top: 6px;
-  line-height: 1.5;
-}
+#support-command { font-family:monospace; }
+#support-history { overflow-wrap:anywhere; }
+#support-command-result { margin:16px 0; }
+.support-modal { width:680px; }
 
-.record video {
-  display: block;
-  max-width: 100%;
-  max-height: 500px;
-  margin-top: 12px;
-  border-radius: 8px;
-}
-
-#result-text {
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
-  line-height: 1.7;
-}
-
-@media (max-width: 760px) {
-  body {
-    height: auto;
-    min-height: 100vh;
-    display: block;
-  }
-
-  #app-screen {
-    height: auto;
-    min-height: 100vh;
-    flex-direction: column;
-  }
-
+@media(max-width:760px) {
+  body { height:auto; min-height:100vh; display:block; }
+  #app-screen { height:auto; min-height:100vh; flex-direction:column; }
   .sidebar {
-    width: 100%;
-    flex: none;
-    overflow: visible;
-    flex-direction: row;
-    flex-wrap: wrap;
-    padding: 16px 0;
+    width:100%;
+    flex:none;
+    overflow:visible;
+    flex-direction:row;
+    flex-wrap:wrap;
+    padding:16px 0;
   }
-
-  .logo-area {
-    width: 100%;
-    padding-bottom: 12px;
-  }
-
-  .logo-area img {
-    width: 48px;
-    height: 48px;
-  }
-
-  .user-info {
-    width: 100%;
-    padding-bottom: 14px;
-  }
-
-  .nav-btn {
-    width: 50%;
-    padding: 12px 15px;
-    font-size: 14px;
-  }
-
-  .main {
-    padding: 18px 12px;
-    overflow: visible;
-  }
-
-  .auth-box {
-    padding: 28px;
-  }
-
-  .notepad-editor,
-  .ai-chat-container {
-    height: auto;
-    min-height: 560px;
-    padding: 16px;
-  }
-
-  .ai-chat-messages {
-    min-height: 230px;
-    max-height: 450px;
-  }
-
-  .editor-content textarea {
-    min-height: 300px;
-  }
-
-  .ai-message {
-    max-width: 95%;
-  }
-
-  .calendar-container {
-    padding: 12px;
-  }
-
-  .calendar-header h3 {
-    font-size: 17px;
-  }
-
-  .calendar-grid {
-    gap: 4px;
-  }
-
-  .calendar-day-header {
-    padding: 8px 2px;
-    font-size: 12px;
-  }
-
-  .notepad-card .rename-btn {
-    opacity: 1;
-  }
-
-  .pricing-card {
-    width: 100%;
-  }
-
-  .modal-content {
-    padding: 20px;
-  }
+  .logo-area { width:100%; padding-bottom:12px; }
+  .logo-area img { width:48px; height:48px; }
+  .user-info { width:100%; padding-bottom:14px; }
+  .nav-btn { width:50%; padding:12px 15px; font-size:14px; }
+  .main { padding:18px 12px; overflow:visible; }
+  .auth-box { padding:28px; }
+  .notepad-editor,.ai-chat-container { height:auto; min-height:560px; padding:16px; }
+  .ai-chat-messages { min-height:230px; max-height:450px; }
+  .editor-content textarea { min-height:300px; }
+  .ai-message { max-width:95%; }
+  .calendar-container { padding:12px; }
+  .calendar-header h3 { font-size:17px; }
+  .calendar-grid { gap:4px; }
+  .calendar-day-header { padding:8px 2px; font-size:12px; }
+  .notepad-card .rename-btn { opacity:1; }
+  .pricing-card { width:100%; }
+  .modal-content { padding:20px; }
+  .message-item { flex-direction:column; gap:8px; }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation: none !important;
-    transition: none !important;
+@media(prefers-reduced-motion:reduce) {
+  *,*::before,*::after {
+    animation:none!important;
+    transition:none!important;
   }
 }
 </style>
 </head>
 
 <body>
-
 <div id="toast-container" role="status" aria-live="polite"></div>
 
 <div id="auth-screen">
   <div class="auth-box">
-    <h2>
-      <img src="iconScoffe2.png" alt="">
-      Scoffe2
-    </h2>
+    <h2><img src="iconScoffe2.png" alt="">Scoffe2</h2>
 
     <input
-      type="text"
       id="auth-username"
+      type="text"
       placeholder="Имя пользователя"
       aria-label="Имя пользователя"
       autocomplete="username"
@@ -1157,8 +955,8 @@ select:focus-visible,
     >
 
     <input
-      type="password"
       id="auth-password"
+      type="password"
       placeholder="Пароль: минимум 8 символов"
       aria-label="Пароль"
       autocomplete="current-password"
@@ -1168,22 +966,17 @@ select:focus-visible,
 
     <div class="auth-msg" id="auth-message"></div>
 
-    <button onclick="handleAuth('login')">
-      Войти
-    </button>
-
+    <button onclick="handleAuth('login')">Войти</button>
     <button class="secondary" onclick="handleAuth('register')">
       Создать аккаунт
     </button>
 
     <p class="small-muted" style="margin-top:16px">
       Аккаунт и блокноты сохраняются на сервере.
-      Используй логин новой серверной версии сайта.
+      Входи под логином серверной версии сайта.
     </p>
 
-    <noscript>
-      Для работы приложения включи JavaScript.
-    </noscript>
+    <noscript>Для работы приложения включи JavaScript.</noscript>
   </div>
 </div>
 
@@ -1197,85 +990,63 @@ select:focus-visible,
     <div class="user-info">
       <span class="uname" id="display-user-name"></span>
       <span>ID: <strong id="display-user-id"></strong></span>
-
       <div>
-        <span class="tariff-badge" id="tariff-badge">
-          Бесплатный
-        </span>
+        <span id="tariff-badge" class="tariff-badge">Бесплатный</span>
       </div>
-
       <div id="tariff-expiry"></div>
       <div id="account-quota"></div>
     </div>
 
-    <button
-      class="nav-btn active"
-      data-view="notepad"
-      onclick="switchView('notepad', this)"
-    >
-      <img src="iconnote.png" alt="">
-      Блокнот
+    <button class="nav-btn active" data-view="notepad"
+      onclick="switchView('notepad',this)">
+      <img src="iconnote.png" alt="">Блокнот
     </button>
 
-    <button
-      class="nav-btn"
-      data-view="calendar"
-      onclick="switchView('calendar', this)"
-    >
-      <img src="calendar.png" alt="">
-      Календарь
+    <button class="nav-btn" data-view="calendar"
+      onclick="switchView('calendar',this)">
+      <img src="calendar.png" alt="">Календарь
     </button>
 
-    <button
-      class="nav-btn"
-      data-view="ai-chat"
-      onclick="switchView('ai-chat', this)"
-    >
-      <img src="openai.png" alt="" id="nav-ai-icon">
-      ИИ Чат
+    <button class="nav-btn" data-view="ai-chat"
+      onclick="switchView('ai-chat',this)">
+      <img src="openai.png" alt="" id="nav-ai-icon">ИИ Чат
     </button>
 
-    <button
-      class="nav-btn"
-      data-view="pricing"
-      onclick="switchView('pricing', this)"
-    >
-      <img src="tickicon.png" alt="">
-      Тарифы
+    <button class="nav-btn" data-view="pricing"
+      onclick="switchView('pricing',this)">
+      <img src="tickicon.png" alt="">Тарифы
     </button>
 
-    <button
-      class="nav-btn"
-      data-view="messages"
-      onclick="switchView('messages', this)"
-    >
-      <img src="chat.png" alt="">
-      Сообщения
+    <button class="nav-btn" data-view="messages"
+      onclick="switchView('messages',this)">
+      <img src="chat.png" alt="">Сообщения
+    </button>
+
+    <button class="nav-btn" onclick="contactSupport()">
+      <img src="chat.png" alt="">Написать в поддержку
+    </button>
+
+    <button class="nav-btn" id="support-panel-button"
+      onclick="openSupportPanel()" style="display:none">
+      <img src="lock.png" alt="">Панель поддержки
     </button>
 
     <button class="nav-btn" onclick="refreshAccountClick()">
-      <img src="save.png" alt="">
-      Обновить тариф
+      <img src="save.png" alt="">Обновить тариф
     </button>
 
-    <button
-      class="nav-btn"
-      onclick="logout()"
-      style="margin-top:auto; color:#FFCDD2"
-    >
-      <img src="crossicon.png" alt="">
-      Выйти
+    <button class="nav-btn" onclick="logout()"
+      style="margin-top:auto;color:#FFCDD2">
+      <img src="crossicon.png" alt="">Выйти
     </button>
   </div>
 
   <div class="main">
-
     <div id="view-notepad" class="view active">
       <div id="notepad-list-view">
         <div class="top-actions">
           <button class="action-btn" onclick="createNotepad()">
-            <img src="iconnote.png" alt="">
-            Создать блокнот
+            <img src="iconnote.png" alt="">Создать блокнот
           </button>
         </div>
 
@@ -1283,70 +1054,40 @@ select:focus-visible,
         <div class="notepad-list" id="notepad-container"></div>
       </div>
 
-      <div
-        id="notepad-editor-view"
-        class="notepad-editor"
-        style="display:none"
-      >
+      <div id="notepad-editor-view" class="notepad-editor"
+        style="display:none">
         <div class="editor-toolbar">
-          <img
-            src="crossicon.png"
-            alt="Закрыть блокнот"
-            title="Сохранить и выйти"
-            onclick="closeNotepad()"
-          >
-          <img
-            src="save.png"
-            alt="Сохранить"
-            title="Сохранить"
-            onclick="saveNotepad()"
-          >
-          <img
-            src="square.png"
-            alt="Добавить задачу"
-            title="Добавить задачу"
-            onclick="addChecklistItem()"
-          >
-          <img
-            src="microphone.png"
-            alt="Речь в текст"
-            title="Речь в текст"
-            onclick="startSpeechToTextNotepad()"
-            id="btn-speech-notepad"
-          >
-          <img
-            src="rerank.png"
-            alt="Ранжировать текст"
-            title="Ранжировать строки"
-            onclick="rerankNotepad()"
-            id="btn-rerank-notepad"
-          >
-          <img
-            src="openai.png"
-            alt="Обработать текст с ИИ"
-            title="Заменить текст ответом ИИ"
-            onclick="generateAINotepad()"
-            id="btn-ai-notepad"
-          >
-          <img
-            src="save.png"
-            alt="Скачать TXT"
-            title="Скачать TXT"
-            onclick="downloadNotepad()"
-            style="border:2px solid var(--c-green)"
-          >
+          <img src="crossicon.png" alt="Закрыть блокнот"
+            title="Сохранить и выйти" onclick="closeNotepad()">
+
+          <img src="save.png" alt="Сохранить"
+            title="Сохранить" onclick="saveNotepad()">
+
+          <img src="square.png" alt="Добавить задачу"
+            title="Добавить задачу" onclick="addChecklistItem()">
+
+          <img src="microphone.png" alt="Речь в текст"
+            title="Речь в текст" id="btn-speech-notepad"
+            onclick="startSpeechToTextNotepad()">
+
+          <img src="rerank.png" alt="Ранжировать текст"
+            title="Ранжировать строки" id="btn-rerank-notepad"
+            onclick="rerankNotepad()">
+
+          <img src="openai.png" alt="Обработать текст с ИИ"
+            title="Заменить текст ответом ИИ" id="btn-ai-notepad"
+            onclick="generateAINotepad()">
+
+          <img src="save.png" alt="Скачать TXT"
+            title="Скачать TXT" onclick="downloadNotepad()"
+            style="border:2px solid var(--c-green)">
         </div>
 
         <div class="editor-content">
           <h4 id="editor-title">Блокнот</h4>
-
-          <textarea
-            id="editor-text"
-            maxlength="50000"
-            placeholder="Введите текст... Используйте %название или %{Название с пробелами} для вставки другого блокнота"
+          <textarea id="editor-text" maxlength="50000"
             aria-label="Текст блокнота"
-          ></textarea>
-
+            placeholder="Введите текст... Используйте %название или %{Название с пробелами} для вставки другого блокнота"></textarea>
           <div id="checklist-container"></div>
         </div>
       </div>
@@ -1357,161 +1098,98 @@ select:focus-visible,
 
       <div class="calendar-container">
         <div class="calendar-header">
-          <button
-            class="small-btn"
-            onclick="prevMonth()"
-            aria-label="Предыдущий месяц"
-          >←</button>
+          <button class="small-btn" onclick="prevMonth()"
+            aria-label="Предыдущий месяц">←</button>
 
           <h3 id="calendar-month-year"></h3>
 
-          <button
-            class="small-btn"
-            onclick="nextMonth()"
-            aria-label="Следующий месяц"
-          >→</button>
+          <button class="small-btn" onclick="nextMonth()"
+            aria-label="Следующий месяц">→</button>
         </div>
 
         <div class="calendar-grid" id="calendar-grid"></div>
       </div>
 
-      <div
-        id="day-detail-panel"
-        class="day-detail-panel"
-        style="display:none"
-      >
+      <div id="day-detail-panel" class="day-detail-panel"
+        style="display:none">
         <h4 id="selected-date-title"></h4>
 
         <div class="calendar-toolbar">
-          <img
-            src="save.png"
-            alt="Сохранить"
-            title="Сохранить"
-            onclick="saveDayNote()"
-          >
-          <img
-            src="microphone.png"
-            alt="Речь в текст"
-            title="Речь в текст"
-            onclick="startSpeechToTextCalendar()"
-            id="btn-speech-calendar"
-          >
-          <img
-            src="rerank.png"
-            alt="Ранжировать заметки"
+          <img src="save.png" alt="Сохранить"
+            title="Сохранить" onclick="saveDayNote()">
+
+          <img src="microphone.png" alt="Речь в текст"
+            title="Речь в текст" id="btn-speech-calendar"
+            onclick="startSpeechToTextCalendar()">
+
+          <img src="rerank.png" alt="Ранжировать заметки"
             title="Ранжировать календарные заметки"
-            onclick="rerankCalendar()"
-            id="btn-rerank-calendar"
-          >
-          <img
-            src="openai.png"
-            alt="Обработать заметку с ИИ"
+            id="btn-rerank-calendar" onclick="rerankCalendar()">
+
+          <img src="openai.png" alt="Обработать заметку с ИИ"
             title="Заменить заметку ответом ИИ"
-            onclick="generateAICalendar()"
-            id="btn-ai-calendar"
-          >
+            id="btn-ai-calendar" onclick="generateAICalendar()">
         </div>
 
-        <textarea
-          id="day-note-text"
-          maxlength="12000"
+        <textarea id="day-note-text" maxlength="12000"
           placeholder="Заметка..."
-          aria-label="Календарная заметка"
-        ></textarea>
+          aria-label="Календарная заметка"></textarea>
       </div>
     </div>
 
     <div id="view-ai-chat" class="view">
       <div class="ai-chat-container">
         <div class="ai-chat-header">
-          <h3>
-            <img src="chat.png" alt="">
-            ИИ Чат
-          </h3>
+          <h3><img src="chat.png" alt="">ИИ Чат</h3>
 
-          <button
-            class="action-btn"
-            onclick="clearChatHistory()"
-            style="background:var(--c-light)"
-          >
-            <img src="crossicon.png" alt="">
-            Очистить
+          <button class="action-btn" onclick="clearChatHistory()"
+            style="background:var(--c-light)">
+            <img src="crossicon.png" alt="">Очистить
           </button>
         </div>
 
-        <div
-          class="ai-chat-messages"
-          id="ai-chat-messages"
-          aria-live="polite"
-        ></div>
+        <div class="ai-chat-messages" id="ai-chat-messages"
+          aria-live="polite"></div>
 
         <div class="ai-chat-input-area">
-          <textarea
-            id="ai-chat-input"
-            maxlength="8000"
+          <textarea id="ai-chat-input" maxlength="8000"
             placeholder="Напишите сообщение ИИ..."
-            aria-label="Запрос к ИИ"
-          ></textarea>
+            aria-label="Запрос к ИИ"></textarea>
 
           <div class="ai-chat-controls">
             <select id="ai-model" aria-label="Текстовая модель"></select>
 
-            <select
-              id="image-model-select"
-              aria-label="Модель изображений"
-              style="display:none"
-            ></select>
+            <select id="image-model-select"
+              aria-label="Модель изображений" style="display:none"></select>
 
-            <select
-              id="video-model-select"
-              aria-label="Модель видео"
-              style="display:none"
-            ></select>
+            <select id="video-model-select"
+              aria-label="Модель видео" style="display:none"></select>
 
-            <select
-              id="rerank-model-select"
-              aria-label="Модель ранжирования"
-              style="display:none"
-            ></select>
+            <select id="rerank-model-select"
+              aria-label="Модель ранжирования" style="display:none"></select>
 
-            <button
-              id="send-ai-button"
-              onclick="sendAIChatMessage(currentTool)"
-            >
+            <button id="send-ai-button"
+              onclick="sendAIChatMessage(currentTool)">
               Отправить
             </button>
           </div>
 
           <div class="ai-chat-tools">
-            <img
-              src="openai.png"
-              alt="Текст"
-              title="Текстовый ответ"
-              onclick="selectTool('text')"
-              id="tool-text"
-              class="active-tool"
-            >
-            <img
-              src="square.png"
-              alt="Изображение"
-              title="Сгенерировать изображение"
-              onclick="selectTool('image')"
-              id="tool-image"
-            >
-            <img
-              src="camera.png"
-              alt="Видео"
-              title="Сгенерировать видео"
-              onclick="selectTool('video')"
-              id="tool-video"
-            >
-            <img
-              src="rerank.png"
-              alt="Ранжирование"
-              title="Ранжировать фрагменты"
-              onclick="selectTool('rerank')"
-              id="tool-rerank"
-            >
+            <img src="openai.png" alt="Текст"
+              title="Текстовый ответ" id="tool-text"
+              class="active-tool" onclick="selectTool('text')">
+
+            <img src="square.png" alt="Изображение"
+              title="Сгенерировать изображение" id="tool-image"
+              onclick="selectTool('image')">
+
+            <img src="camera.png" alt="Видео"
+              title="Сгенерировать видео" id="tool-video"
+              onclick="selectTool('video')">
+
+            <img src="rerank.png" alt="Ранжирование"
+              title="Ранжировать фрагменты" id="tool-rerank"
+              onclick="selectTool('rerank')">
           </div>
 
           <p class="small-muted">
@@ -1525,20 +1203,16 @@ select:focus-visible,
       <div class="section-panel">
         <div class="top-actions">
           <button class="action-btn" onclick="loadVideoJobsClick()">
-            <img src="camera.png" alt="">
-            Обновить список
+            <img src="camera.png" alt="">Обновить список
           </button>
         </div>
-
         <h3>Мои видео</h3>
         <div id="video-jobs"></div>
       </div>
     </div>
 
     <div id="view-pricing" class="view">
-      <h2 style="text-align:center; margin-bottom:10px">
-        Выберите тариф
-      </h2>
+      <h2 style="text-align:center;margin-bottom:10px">Выберите тариф</h2>
 
       <p class="small-muted" style="text-align:center">
         Разовый платёж за 30 дней. Автоматических списаний нет.
@@ -1547,11 +1221,7 @@ select:focus-visible,
       <div class="pricing-cards">
         <div class="pricing-card free">
           <h3>Бесплатный</h3>
-
-          <div class="price">
-            0 ₽ <span>/ навсегда</span>
-          </div>
-
+          <div class="price">0 ₽ <span>/ навсегда</span></div>
           <ul>
             <li>До 100 блокнотов</li>
             <li>Календарь с заметками</li>
@@ -1559,25 +1229,17 @@ select:focus-visible,
             <li>Сохранение записей в аккаунте</li>
             <li>Без доступа к платным ИИ-моделям</li>
           </ul>
-
-          <button
-            id="free-plan-button"
-            class="sber-btn"
-            style="background:var(--c-light); color:white"
-            disabled
-          >
+          <button id="free-plan-button" class="sber-btn" disabled
+            style="background:var(--c-light);color:white">
             Текущий тариф
           </button>
         </div>
 
         <div class="pricing-card flash">
           <h3>Флэш</h3>
-
           <div class="price">
-            <b id="flash-price">59 ₽</b>
-            <span>/ 30 дней</span>
+            <b id="flash-price">59 ₽</b> <span>/ 30 дней</span>
           </div>
-
           <ul>
             <li>Всё из бесплатного</li>
             <li>ИИ-ассистент: базовые модели</li>
@@ -1586,24 +1248,17 @@ select:focus-visible,
             <li>Ранжирование и речь в текст</li>
             <li id="flash-quota">Загрузка лимитов...</li>
           </ul>
-
-          <button
-            class="sber-btn"
-            id="flash-pay-button"
-            onclick="showPaymentModal('flash')"
-          >
+          <button class="sber-btn" id="flash-pay-button"
+            onclick="showPaymentModal('flash')">
             Выбрать Флэш
           </button>
         </div>
 
         <div class="pricing-card home">
           <h3>Домашний</h3>
-
           <div class="price">
-            <b id="home-price">99 ₽</b>
-            <span>/ 30 дней</span>
+            <b id="home-price">99 ₽</b> <span>/ 30 дней</span>
           </div>
-
           <ul>
             <li>Всё из Флэш</li>
             <li>Дополнительные ИИ-модели</li>
@@ -1612,12 +1267,8 @@ select:focus-visible,
             <li>Дополнительные модели ранжирования</li>
             <li id="home-quota">Загрузка лимитов...</li>
           </ul>
-
-          <button
-            class="sber-btn"
-            id="home-pay-button"
-            onclick="showPaymentModal('home')"
-          >
+          <button class="sber-btn" id="home-pay-button"
+            onclick="showPaymentModal('home')">
             Выбрать Домашний
           </button>
         </div>
@@ -1625,32 +1276,27 @@ select:focus-visible,
 
       <div class="section-panel">
         <h3>Об оплате и лимитах</h3>
-
         <p class="small-muted">
-          Каждая оплата добавляет пакет запросов и 30 дней
-          выбранного тарифа. Повторная оплата того же тарифа
-          продлевает его действующий срок.
+          Каждая оплата добавляет пакет запросов и 30 дней выбранного тарифа.
+          Повторная оплата продлевает его действующий срок.
           Периоды Флэш и Домашний учитываются отдельно.
           Пока действует Домашний, доступны его модели.
         </p>
-
         <p class="small-muted" style="margin-top:10px">
           Неиспользованные запросы сохраняются на аккаунте,
           но доступны только при действующем платном тарифе.
-          Общий размер сохраняемых блокнотов и календаря:
-          до 90 КБ. Тариф включается только после подтверждения
-          оплаты сервером.
+          Общий размер блокнотов и календаря: до 90 КБ.
+          Оплаченный тариф включается после подтверждения оплаты сервером.
+          Поддержка также может выдать тариф вручную.
         </p>
       </div>
 
       <div class="section-panel">
         <div class="top-actions">
           <button class="action-btn" onclick="refreshPaymentsClick()">
-            <img src="tickicon.png" alt="">
-            Проверить оплату
+            <img src="tickicon.png" alt="">Проверить оплату
           </button>
         </div>
-
         <h3>Мои заказы</h3>
         <div id="orders-container"></div>
       </div>
@@ -1658,59 +1304,91 @@ select:focus-visible,
 
     <div id="view-messages" class="view">
       <div class="top-actions">
+        <button class="action-btn" onclick="contactSupport()">
+          <img src="chat.png" alt="">Написать в поддержку
+        </button>
         <button class="action-btn" onclick="loadMessagesClick()">
-          <img src="chat.png" alt="">
-          Обновить
+          <img src="save.png" alt="">Обновить
         </button>
       </div>
 
       <h2 style="margin-bottom:20px">Сообщения</h2>
+      <p class="small-muted" style="margin-bottom:12px;overflow-wrap:anywhere">
+        ID поддержки: 1019a3fd516d4ce1b67df99e3133c46a
+      </p>
 
       <div class="message-list" id="message-container"></div>
 
-      <button
-        class="compose-btn"
-        onclick="openMessageModal()"
-        aria-label="Новое сообщение"
-      >
+      <button class="compose-btn" onclick="openMessageModal()"
+        aria-label="Новое сообщение">
         <img src="chat.png" alt="">
       </button>
     </div>
   </div>
 </div>
 
+<div id="modal-support" class="modal" role="dialog"
+  aria-modal="true" aria-labelledby="support-panel-title">
+  <div class="modal-content support-modal">
+    <h3 id="support-panel-title">Панель поддержки</h3>
+
+    <p class="small-muted" style="overflow-wrap:anywhere;margin-bottom:16px">
+      ID поддержки: 1019a3fd516d4ce1b67df99e3133c46a
+    </p>
+
+    <form onsubmit="event.preventDefault();submitSupportCommand()">
+      <label for="support-command">Команда выдачи тарифа</label>
+
+      <input id="support-command" type="text" maxlength="200"
+        placeholder=".$give ID_ПОЛЬЗОВАТЕЛЯ home 1"
+        autocomplete="off" autocapitalize="off"
+        spellcheck="false" required>
+
+      <p class="small-muted">
+        Тариф: flash / флэш или home / домашний.
+        Срок: 1–12 месяцев. Один месяц = 30 дней.
+        Команда продлевает тариф и добавляет месячные квоты.
+        Деньги с пользователя не списываются.
+      </p>
+
+      <div class="modal-actions">
+        <button type="button" class="btn-cancel"
+          onclick="closeModal('modal-support')">Закрыть</button>
+        <button type="submit" class="btn-confirm"
+          id="support-command-button">Выполнить</button>
+      </div>
+    </form>
+
+    <p id="support-command-result" role="status" aria-live="polite"></p>
+
+    <div class="top-actions">
+      <button class="action-btn" onclick="run(loadSupportHistory)">
+        <img src="save.png" alt="">Обновить журнал
+      </button>
+      <button class="action-btn" onclick="openSupportMessages()">
+        <img src="chat.png" alt="">Сообщения поддержки
+      </button>
+    </div>
+
+    <h3>Последние выдачи</h3>
+    <div id="support-history"></div>
+  </div>
+</div>
+
 <div id="modal-message" class="modal">
   <div class="modal-content">
     <h3>Новое сообщение</h3>
-
-    <input
-      type="text"
-      id="msg-recipient"
-      maxlength="64"
-      placeholder="Логин или ID получателя"
-      aria-label="Получатель"
-    >
-
-    <textarea
-      id="msg-text"
-      rows="4"
-      maxlength="4000"
-      placeholder="Текст..."
-      aria-label="Сообщение"
-    ></textarea>
+    <input type="text" id="msg-recipient" maxlength="64"
+      placeholder="Логин или ID получателя" aria-label="Получатель">
+    <textarea id="msg-text" rows="4" maxlength="4000"
+      placeholder="Текст..." aria-label="Сообщение"></textarea>
 
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeModal('modal-message')">
         Отмена
       </button>
-
-      <button
-        class="btn-confirm"
-        id="send-message-button"
-        onclick="sendMessage()"
-      >
-        Отправить
-      </button>
+      <button class="btn-confirm" id="send-message-button"
+        onclick="sendMessage()">Отправить</button>
     </div>
   </div>
 </div>
@@ -1723,24 +1401,14 @@ select:focus-visible,
   <div class="modal-content">
     <div class="premium-lock-modal">
       <img src="lock.png" class="lock-icon-large" alt="Нет доступа">
-
       <h3>Функция недоступна</h3>
       <p>Для этой функции нужен действующий платный тариф.</p>
-
-      <button
-        class="sber-btn"
-        onclick="closeModal('modal-premium-lock'); switchView('pricing')"
-      >
+      <button class="sber-btn"
+        onclick="closeModal('modal-premium-lock');switchView('pricing')">
         Перейти к тарифам
       </button>
-
-      <button
-        class="small-btn"
-        style="margin-top:10px"
-        onclick="closeModal('modal-premium-lock')"
-      >
-        Закрыть
-      </button>
+      <button class="small-btn" style="margin-top:10px"
+        onclick="closeModal('modal-premium-lock')">Закрыть</button>
     </div>
   </div>
 </div>
@@ -1748,23 +1416,13 @@ select:focus-visible,
 <div id="modal-rename" class="modal">
   <div class="modal-content">
     <h3>Переименовать блокнот</h3>
-
-    <input
-      type="text"
-      id="rename-input"
-      maxlength="120"
-      placeholder="Новое название"
-      aria-label="Название блокнота"
-    >
-
+    <input type="text" id="rename-input" maxlength="120"
+      placeholder="Новое название" aria-label="Название блокнота">
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeModal('modal-rename')">
         Отмена
       </button>
-
-      <button class="btn-confirm" onclick="confirmRename()">
-        Сохранить
-      </button>
+      <button class="btn-confirm" onclick="confirmRename()">Сохранить</button>
     </div>
   </div>
 </div>
@@ -1773,11 +1431,8 @@ select:focus-visible,
   <div class="modal-content" style="width:760px">
     <h3 id="result-title">Результат</h3>
     <div id="result-text"></div>
-
     <div class="modal-actions">
-      <button class="btn-confirm" onclick="copyResult()">
-        Скопировать
-      </button>
+      <button class="btn-confirm" onclick="copyResult()">Скопировать</button>
       <button class="btn-cancel" onclick="closeModal('modal-result')">
         Закрыть
       </button>
@@ -1789,54 +1444,52 @@ select:focus-visible,
 "use strict";
 
 const $ = id => document.getElementById(id);
+const SUPPORT_CONTACT_ID = "1019a3fd516d4ce1b67df99e3133c46a";
 
 const MODEL_LABELS = {
-  "gpt-oss-120b": "GPT OSS 120B",
-  "mistral-nemo": "Mistral Nemo",
-  "gpt-oss-20b": "GPT OSS 20B",
-  "mimo-v2.5": "Mimo v2.5",
-  "gpt-4o-mini": "GPT-4o Mini",
-  "minimax-m2": "MiniMax M2",
-  "gemini-3.1-flash-lite": "Gemini 3.1 Flash Lite",
-  "gigachat-2": "GigaChat 2",
-  "sonar": "Sonar",
-  "gpt-image-1-mini": "GPT Image 1 Mini",
-  "mai-image-2.6": "Mai Image 2.6",
-  "recraft-v4.1-pro": "Recraft V4.1 Pro",
-  "gemini-3-pro-image": "Gemini 3 Pro Image",
-  "gpt-image-1": "GPT Image 1",
-  "seedance-1.5-pro": "Seedance 1.5 Pro",
-  "grok-imagine-video": "Grok Imagine Video",
-  "seedance-2.0-fast": "Seedance 2.0 Fast",
-  "hailuo-2.3": "Hailuo 2.3",
-  "veo-3.1-lite": "Veo 3.1 Lite",
-  "aleph-2": "Aleph 2",
-  "rerank-v3.5": "Rerank V3.5",
-  "rerank-4-pro": "Rerank 4 Pro",
-  "qwen3-reranker-8b": "Qwen3 Reranker 8b"
+  "gpt-oss-120b":"GPT OSS 120B",
+  "mistral-nemo":"Mistral Nemo",
+  "gpt-oss-20b":"GPT OSS 20B",
+  "mimo-v2.5":"Mimo v2.5",
+  "gpt-4o-mini":"GPT-4o Mini",
+  "minimax-m2":"MiniMax M2",
+  "gemini-3.1-flash-lite":"Gemini 3.1 Flash Lite",
+  "gigachat-2":"GigaChat 2",
+  "sonar":"Sonar",
+  "gpt-image-1-mini":"GPT Image 1 Mini",
+  "mai-image-2.6":"Mai Image 2.6",
+  "recraft-v4.1-pro":"Recraft V4.1 Pro",
+  "gemini-3-pro-image":"Gemini 3 Pro Image",
+  "gpt-image-1":"GPT Image 1",
+  "seedance-1.5-pro":"Seedance 1.5 Pro",
+  "grok-imagine-video":"Grok Imagine Video",
+  "seedance-2.0-fast":"Seedance 2.0 Fast",
+  "hailuo-2.3":"Hailuo 2.3",
+  "veo-3.1-lite":"Veo 3.1 Lite",
+  "aleph-2":"Aleph 2",
+  "rerank-v3.5":"Rerank V3.5",
+  "rerank-4-pro":"Rerank 4 Pro",
+  "qwen3-reranker-8b":"Qwen3 Reranker 8b"
 };
 
 const MODEL_SELECTS = {
-  ai: "ai-model",
-  image: "image-model-select",
-  video: "video-model-select",
-  rerank: "rerank-model-select"
+  ai:"ai-model",
+  image:"image-model-select",
+  video:"video-model-select",
+  rerank:"rerank-model-select"
 };
 
 const VIDEO_STATUSES = {
-  reserved: "Запрос отправляется",
-  pending: "Видео создаётся",
-  completed: "Видео готово",
-  failed: "Ошибка генерации",
-  unknown: "Неизвестный статус после сбоя"
+  reserved:"Запрос отправляется",
+  pending:"Видео создаётся",
+  completed:"Видео готово",
+  failed:"Ошибка генерации",
+  unknown:"Неизвестный статус после сбоя"
 };
 
-let currentUser = null;
-let currentUserId = null;
 let account = null;
 let userTariff = "free";
 let tariffExpiry = null;
-
 let serverPlans = {};
 let serverModels = {};
 
@@ -1863,76 +1516,63 @@ let messageBusy = false;
 let paymentBusy = false;
 let paymentPolling = false;
 let selectedTariffForPayment = null;
-
 let speechRecognition = null;
 
-function el(tag, value, className) {
-  const element = document.createElement(tag);
+let supportCommandBusy = false;
+let supportAttempt = null;
 
+function el(tag,value,className) {
+  const element = document.createElement(tag);
   if (value !== undefined && value !== null) {
     element.textContent = String(value);
   }
-
   if (className) element.className = className;
-
   return element;
 }
 
-function icon(filename, alt = "") {
+function icon(filename,alt="") {
   const image = document.createElement("img");
   image.src = filename;
   image.alt = alt;
   return image;
 }
 
-function makeButton(label, action, className = "small-btn") {
-  const button = el("button", label, className);
+function makeButton(label,action,className="small-btn") {
+  const button = el("button",label,className);
   button.type = "button";
-  button.addEventListener("click", () => run(action));
+  button.addEventListener("click",() => run(action));
   return button;
 }
 
 function run(action) {
-  return Promise.resolve()
-    .then(action)
-    .catch(error => {
-      showToast(error?.message || "Не удалось выполнить действие.", "error");
-      return undefined;
-    });
+  return Promise.resolve().then(action).catch(error => {
+    showToast(error?.message || "Не удалось выполнить действие.","error");
+  });
 }
 
-function showToast(message, type = "info") {
-  const toast = el("div", message, "toast " + type);
+function showToast(message,type="info") {
+  const toast = el("div",message,"toast " + type);
   $("toast-container").append(toast);
-
   if (type !== "loading") {
-    setTimeout(() => toast.remove(), type === "error" ? 10000 : 5000);
+    setTimeout(() => toast.remove(),type === "error" ? 10000 : 5000);
   }
-
   return toast;
 }
 
 function dateKey(date) {
-  return (
-    date.getFullYear() + "-" +
-    String(date.getMonth() + 1).padStart(2, "0") + "-" +
-    String(date.getDate()).padStart(2, "0")
-  );
+  return date.getFullYear() + "-" +
+    String(date.getMonth()+1).padStart(2,"0") + "-" +
+    String(date.getDate()).padStart(2,"0");
 }
 
 function formatTimestamp(seconds) {
-  return new Date(seconds * 1000).toLocaleString("ru-RU");
+  return new Date(seconds*1000).toLocaleString("ru-RU");
 }
 
-function openModal(id) {
-  $(id).style.display = "flex";
-}
+function openModal(id) { $(id).style.display = "flex"; }
+function closeModal(id) { $(id).style.display = "none"; }
 
-function closeModal(id) {
-  $(id).style.display = "none";
-}
-
-function showResult(title, content) {
+function showResult(title,content) {
   $("result-title").textContent = title;
   $("result-text").textContent = content;
   openModal("modal-result");
@@ -1941,34 +1581,29 @@ function showResult(title, content) {
 function copyResult() {
   return run(async () => {
     await navigator.clipboard.writeText($("result-text").textContent);
-    showToast("Результат скопирован.", "success");
+    showToast("Результат скопирован.","success");
   });
 }
 
-async function api(path, body) {
+async function api(path,body) {
   let response;
-
   try {
-    response = await fetch("/api/" + path, {
-      method: body === undefined ? "GET" : "POST",
-      credentials: "same-origin",
-      cache: "no-store",
-      headers: body === undefined
-        ? {}
-        : { "Content-Type": "application/json" },
-      body: body === undefined ? undefined : JSON.stringify(body),
-      signal: AbortSignal.timeout(210000)
+    response = await fetch("/api/" + path,{
+      method:body === undefined ? "GET" : "POST",
+      credentials:"same-origin",
+      cache:"no-store",
+      headers:body === undefined ? {} : {"Content-Type":"application/json"},
+      body:body === undefined ? undefined : JSON.stringify(body),
+      signal:AbortSignal.timeout(210000)
     });
   } catch {
     throw new Error(
-      "Нет соединения с сервером. Если выполнялась платная генерация, " +
-      "не повторяй её автоматически."
+      "Нет соединения с сервером. Для платного запроса сначала проверь результат."
     );
   }
 
   const raw = await response.text();
   let data;
-
   try {
     data = JSON.parse(raw);
   } catch {
@@ -1982,43 +1617,39 @@ async function api(path, body) {
     error.status = response.status;
     throw error;
   }
-
   return data;
 }
 
-/* Авторизация и тариф берутся только с сервера. */
+/* Аккаунт, тарифы и доступные модели. */
 
 async function refreshAccount() {
   const data = await api("me");
 
   account = data.user;
-  currentUser = account.username;
-  currentUserId = account.id;
   userTariff = account.plan;
-  tariffExpiry = account.until ? account.until * 1000 : null;
-
+  tariffExpiry = account.until ? account.until*1000 : null;
   serverPlans = data.plans;
   serverModels = data.models;
 
-  $("display-user-name").textContent = currentUser;
-  $("display-user-id").textContent = currentUserId;
+  $("display-user-name").textContent = account.username;
+  $("display-user-id").textContent = account.id;
 
   updateTariffBadge();
   updateAIIcons();
   updateAllModels();
   updatePricing();
+  updateSupportAccess();
 }
 
 function refreshAccountClick() {
   return run(async () => {
     await refreshAccount();
-    showToast("Тариф и остаток запросов обновлены.", "success");
+    showToast("Тариф и остаток запросов обновлены.","success");
   });
 }
 
 function updateTariffBadge() {
   const badge = $("tariff-badge");
-
   badge.textContent = userTariff === "free"
     ? "Бесплатный"
     : serverPlans[userTariff]?.name || userTariff;
@@ -2031,118 +1662,92 @@ function updateTariffBadge() {
     : "";
 
   const quota = account?.quota;
-
   $("account-quota").textContent = quota
-    ? (
-      "Осталось: текст " + quota.ai +
-      ", изображения " + quota.image +
-      "\nВидео " + quota.video +
-      ", ранжирование " + quota.rerank
-    )
+    ? "Осталось: текст " + quota.ai + ", изображения " + quota.image +
+      "\nВидео " + quota.video + ", ранжирование " + quota.rerank
     : "";
 }
 
 function updateAIIcons() {
   const locked = userTariff === "free";
-
   $("nav-ai-icon").src = locked ? "lock.png" : "openai.png";
 
   [
-    "btn-speech-notepad",
-    "btn-speech-calendar",
-    "btn-rerank-notepad",
-    "btn-rerank-calendar",
-    "btn-ai-notepad",
-    "btn-ai-calendar",
-    "tool-text",
-    "tool-image",
-    "tool-video",
-    "tool-rerank"
-  ].forEach(id => {
-    $(id).classList.toggle("premium-disabled", locked);
-  });
+    "btn-speech-notepad","btn-speech-calendar",
+    "btn-rerank-notepad","btn-rerank-calendar",
+    "btn-ai-notepad","btn-ai-calendar",
+    "tool-text","tool-image","tool-video","tool-rerank"
+  ].forEach(id => $(id).classList.toggle("premium-disabled",locked));
 }
 
 function updateAllModels() {
-  for (const [kind, selectId] of Object.entries(MODEL_SELECTS)) {
+  for (const [kind,selectId] of Object.entries(MODEL_SELECTS)) {
     const select = $(selectId);
     const previous = select.value;
     const values = serverModels[kind] || [];
-
     select.replaceChildren();
 
     if (!values.length) {
-      const option = el("option", "Нужен платный тариф");
+      const option = el("option","Нужен платный тариф");
       option.value = "";
       select.append(option);
       select.disabled = true;
     } else {
       for (const value of values) {
-        const option = el("option", MODEL_LABELS[value] || value);
+        const option = el("option",MODEL_LABELS[value] || value);
         option.value = value;
         select.append(option);
       }
-
       select.disabled = false;
-
-      if (values.includes(previous)) {
-        select.value = previous;
-      }
+      if (values.includes(previous)) select.value = previous;
     }
   }
 }
 
 function selectedModel(kind) {
   const model = $(MODEL_SELECTS[kind]).value;
-
   if (!model || !(serverModels[kind] || []).includes(model)) {
     throw new Error("Нет доступной модели для этого действия.");
   }
-
   return model;
 }
 
 function updatePricing() {
   $("free-plan-button").textContent = userTariff === "free"
-    ? "Текущий тариф"
-    : "Бесплатные функции доступны";
+    ? "Текущий тариф" : "Бесплатные функции доступны";
 
-  for (const name of ["flash", "home"]) {
+  for (const name of ["flash","home"]) {
     const plan = serverPlans[name];
     if (!plan) continue;
 
-    $(name + "-price").textContent = (plan.price / 100) + " ₽";
-
-    $(name + "-quota").textContent =
+    $(name+"-price").textContent = (plan.price/100) + " ₽";
+    $(name+"-quota").textContent =
       "Пакет: " + plan.text + " текстовых запросов, " +
-      plan.image + " изображений, " +
-      plan.video + " видео, " +
+      plan.image + " изображений, " + plan.video + " видео, " +
       plan.rerank + " ранжирований.";
 
-    $(name + "-pay-button").textContent =
+    $(name+"-pay-button").textContent =
       (userTariff === name ? "Продлить " : "Выбрать ") + plan.name;
   }
 }
 
 async function enterApp() {
   await refreshAccount();
-
   const saved = await api("state");
 
   notepads = saved.data.notes.map(note => ({
-    id: note.id,
-    title: note.title,
-    content: note.text,
-    checklist: note.checklist.map(item => ({
-      text: item.text,
-      checked: item.checked
+    id:note.id,
+    title:note.title,
+    content:note.text,
+    checklist:note.checklist.map(item => ({
+      text:item.text,
+      checked:item.checked
     }))
   }));
 
   calendarNotes = saved.data.calendar;
   stateVersion = saved.version;
   stateDirty = false;
-
   activeNotepad = null;
   selectedDate = null;
   aiChatHistory = [];
@@ -2150,7 +1755,6 @@ async function enterApp() {
   $("notepad-list-view").style.display = "block";
   $("notepad-editor-view").style.display = "none";
   $("day-detail-panel").style.display = "none";
-
   $("auth-screen").style.display = "none";
   $("app-screen").style.display = "flex";
 
@@ -2160,7 +1764,6 @@ async function enterApp() {
   selectTool("text");
 
   const orderId = new URL(location.href).searchParams.get("order");
-
   if (orderId) {
     await switchView("pricing");
     run(() => handlePaymentReturn(orderId));
@@ -2182,22 +1785,18 @@ function handleAuth(type) {
     }
 
     authBusy = true;
-
     const buttons = document.querySelectorAll(".auth-box button");
     buttons.forEach(button => button.disabled = true);
-
     message.textContent = "Подключение...";
     message.className = "auth-msg";
 
     try {
       await api(
         type === "register" ? "auth/register" : "auth/login",
-        { username: name, password }
+        {username:name,password}
       );
-
       $("auth-password").value = "";
       await enterApp();
-
       message.textContent = "";
     } catch (error) {
       message.textContent = error.message;
@@ -2213,9 +1812,15 @@ function logout() {
   return run(async () => {
     syncEditors();
 
-    if (aiBusy && !confirm("ИИ ещё выполняет запрос. Выйти?")) {
-      return;
+    if (supportCommandBusy) {
+      throw new Error("Дождись ответа на команду поддержки.");
     }
+
+    if (supportAttempt && !confirm(
+      "Результат команды поддержки не подтверждён. Проверил журнал и хочешь выйти?"
+    )) return;
+
+    if (aiBusy && !confirm("ИИ ещё выполняет запрос. Выйти?")) return;
 
     if (stateDirty) {
       if (confirm("Сохранить изменения перед выходом?")) {
@@ -2226,24 +1831,20 @@ function logout() {
     }
 
     if (speechRecognition) speechRecognition.stop();
-
-    await api("auth/logout", {});
-
+    await api("auth/logout",{});
     stateDirty = false;
+    supportAttempt = null;
     location.assign("/");
   });
 }
 
-/* Записи: исходный интерфейс, хранение в D1. */
+/* Сохранение заметок и календаря. */
 
-function markDirty() {
-  stateDirty = true;
-}
+function markDirty() { stateDirty = true; }
 
 function syncEditors() {
   if (activeNotepad) {
     const value = $("editor-text").value;
-
     if (activeNotepad.content !== value) {
       activeNotepad.content = value;
       markDirty();
@@ -2252,12 +1853,9 @@ function syncEditors() {
 
   if (selectedDate) {
     const value = $("day-note-text").value;
-    const previous = calendarNotes[selectedDate] || "";
-
-    if (value !== previous) {
+    if (value !== (calendarNotes[selectedDate] || "")) {
       if (value) calendarNotes[selectedDate] = value;
       else delete calendarNotes[selectedDate];
-
       markDirty();
     }
   }
@@ -2265,35 +1863,34 @@ function syncEditors() {
 
 function statePayload() {
   return {
-    notes: notepads.map(note => ({
-      id: note.id,
-      title: note.title,
-      text: note.content,
-      checklist: note.checklist.map(item => ({
-        text: item.text,
-        checked: item.checked === true
+    notes:notepads.map(note => ({
+      id:note.id,
+      title:note.title,
+      text:note.content,
+      checklist:note.checklist.map(item => ({
+        text:item.text,
+        checked:item.checked === true
       }))
     })),
-    calendar: { ...calendarNotes }
+    calendar:{...calendarNotes}
   };
 }
 
-function saveUserData(quiet = false) {
+function saveUserData(quiet=false) {
   syncEditors();
 
   const task = saveChain.catch(() => {}).then(async () => {
     syncEditors();
 
     if (!stateDirty) {
-      if (!quiet) showToast("Все изменения уже сохранены.", "success");
+      if (!quiet) showToast("Все изменения уже сохранены.","success");
       return;
     }
 
     const snapshot = JSON.stringify(statePayload());
-
-    const result = await api("state", {
-      version: stateVersion,
-      data: JSON.parse(snapshot)
+    const result = await api("state",{
+      version:stateVersion,
+      data:JSON.parse(snapshot)
     });
 
     stateVersion = result.version;
@@ -2301,9 +1898,7 @@ function saveUserData(quiet = false) {
 
     if (!quiet) {
       showToast(
-        stateDirty
-          ? "Сохранено. Есть новые изменения, сохрани их ещё раз."
-          : "Сохранено.",
+        stateDirty ? "Сохранено. Есть новые изменения, сохрани их ещё раз." : "Сохранено.",
         "success"
       );
     }
@@ -2313,47 +1908,41 @@ function saveUserData(quiet = false) {
   return task;
 }
 
-function switchView(viewName, button) {
+function switchView(viewName,button) {
   return run(async () => {
-    if (!["notepad", "calendar", "ai-chat", "pricing", "messages"]
-      .includes(viewName)) {
+    if (!["notepad","calendar","ai-chat","pricing","messages"].includes(viewName)) {
       return;
     }
 
     syncEditors();
-
     if (stateDirty) await saveUserData(true);
 
-    document.querySelectorAll(".view")
-      .forEach(view => view.classList.remove("active"));
+    document.querySelectorAll(".view").forEach(view => {
+      view.classList.remove("active");
+    });
+    document.querySelectorAll(".nav-btn").forEach(item => {
+      item.classList.remove("active");
+    });
 
-    document.querySelectorAll(".nav-btn")
-      .forEach(item => item.classList.remove("active"));
-
-    $("view-" + viewName).classList.add("active");
-
+    $("view-"+viewName).classList.add("active");
     const nav = button ||
-      document.querySelector('.nav-btn[data-view="' + viewName + '"]');
-
+      document.querySelector('.nav-btn[data-view="'+viewName+'"]');
     if (nav) nav.classList.add("active");
 
     if (viewName === "calendar") renderCalendar();
-
     if (viewName === "ai-chat") {
       renderAIChat();
       await loadVideoJobs();
     }
-
     if (viewName === "pricing") {
       await refreshAccount();
       await loadOrders();
     }
-
-    if (viewName === "messages") {
-      await loadMessages();
-    }
+    if (viewName === "messages") await loadMessages();
   });
 }
+
+/* Блокноты. */
 
 function createNotepad() {
   return run(async () => {
@@ -2363,16 +1952,15 @@ function createNotepad() {
 
     const title = prompt("Название блокнота:")?.trim();
     if (!title) return;
-
     if (title.length > 120) {
       throw new Error("Название должно быть не длиннее 120 символов.");
     }
 
     notepads.push({
-      id: crypto.randomUUID(),
+      id:crypto.randomUUID(),
       title,
-      content: "",
-      checklist: []
+      content:"",
+      checklist:[]
     });
 
     markDirty();
@@ -2386,51 +1974,49 @@ function renderNotepads() {
   container.replaceChildren();
 
   if (!notepads.length) {
-    container.append(el("p", "Пока нет блокнотов.", "small-muted"));
+    container.append(el("p","Пока нет блокнотов.","small-muted"));
     return;
   }
 
   for (const note of notepads) {
-    const card = el("div", null, "notepad-card");
+    const card = el("div",null,"notepad-card");
     card.tabIndex = 0;
-    card.setAttribute("role", "button");
-    card.setAttribute("aria-label", "Открыть " + note.title);
+    card.setAttribute("role","button");
+    card.setAttribute("aria-label","Открыть "+note.title);
 
-    card.addEventListener("click", () => openNotepad(note.id));
-
-    card.addEventListener("keydown", event => {
-      if (event.target === card && ["Enter", " "].includes(event.key)) {
+    card.addEventListener("click",() => openNotepad(note.id));
+    card.addEventListener("keydown",event => {
+      if (event.target === card && ["Enter"," "].includes(event.key)) {
         event.preventDefault();
         openNotepad(note.id);
       }
     });
 
-    const rename = el("button", null, "rename-btn");
+    const rename = el("button",null,"rename-btn");
     rename.type = "button";
     rename.title = "Переименовать";
-    rename.setAttribute("aria-label", "Переименовать " + note.title);
+    rename.setAttribute("aria-label","Переименовать "+note.title);
     rename.append(icon("save.png"));
-
-    rename.addEventListener("click", event => {
+    rename.addEventListener("click",event => {
       event.stopPropagation();
       openRenameModal(note.id);
     });
 
     const content = el("div");
-    const title = el("div", note.title);
+    const title = el("div",note.title);
     title.style.fontWeight = "bold";
     title.style.paddingRight = "10px";
 
     const preview = el(
       "div",
       note.content
-        ? note.content.slice(0, 50) + (note.content.length > 50 ? "..." : "")
+        ? note.content.slice(0,50)+(note.content.length > 50 ? "..." : "")
         : "Пусто",
       "small-muted"
     );
 
-    content.append(title, preview);
-    card.append(rename, icon("iconnote.png"), content);
+    content.append(title,preview);
+    card.append(rename,icon("iconnote.png"),content);
     container.append(card);
   }
 }
@@ -2438,7 +2024,6 @@ function renderNotepads() {
 function openNotepad(id) {
   return run(async () => {
     syncEditors();
-
     if (stateDirty) await saveUserData(true);
 
     const note = notepads.find(item => item.id === id);
@@ -2446,14 +2031,11 @@ function openNotepad(id) {
 
     const expanded = note.content.replace(
       /%\{([^}\n]+)\}|%([\p{L}\p{N}_-]+)/gu,
-      (match, longName, shortName) => {
+      (match,longName,shortName) => {
         const name = (longName || shortName).toLowerCase();
-
         const found = notepads.find(item =>
-          item.id !== note.id &&
-          item.title.toLowerCase() === name
+          item.id !== note.id && item.title.toLowerCase() === name
         );
-
         return found ? found.content : match;
       }
     );
@@ -2463,7 +2045,6 @@ function openNotepad(id) {
     }
 
     activeNotepad = note;
-
     if (expanded !== note.content) {
       note.content = expanded;
       markDirty();
@@ -2473,7 +2054,6 @@ function openNotepad(id) {
     $("editor-text").value = note.content;
     $("notepad-list-view").style.display = "none";
     $("notepad-editor-view").style.display = "flex";
-
     renderChecklist();
   });
 }
@@ -2481,57 +2061,43 @@ function openNotepad(id) {
 function closeNotepad() {
   return run(async () => {
     await saveUserData(true);
-
     activeNotepad = null;
     $("notepad-list-view").style.display = "block";
     $("notepad-editor-view").style.display = "none";
-
     renderNotepads();
   });
 }
 
-function saveNotepad() {
-  return run(() => saveUserData());
-}
+function saveNotepad() { return run(() => saveUserData()); }
 
 function downloadNotepad() {
   return run(() => {
     if (!activeNotepad) return;
-
     syncEditors();
 
     const checklist = activeNotepad.checklist
-      .map(item => (item.checked ? "[x] " : "[ ] ") + item.text)
+      .map(item => (item.checked ? "[x] " : "[ ] ")+item.text)
       .join("\n");
 
-    const content =
-      activeNotepad.content +
-      (checklist ? "\n\n" + checklist : "");
-
-    const blob = new Blob([content], {
-      type: "text/plain;charset=utf-8"
-    });
+    const blob = new Blob([
+      activeNotepad.content+(checklist ? "\n\n"+checklist : "")
+    ],{type:"text/plain;charset=utf-8"});
 
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement("a");
-
     anchor.href = url;
-    anchor.download =
-      activeNotepad.title.replace(/[<>:"/\\|?*]/g, "_") + ".txt";
+    anchor.download = activeNotepad.title.replace(/[<>:"/\\|?*]/g,"_")+".txt";
 
     document.body.append(anchor);
     anchor.click();
     anchor.remove();
-
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
-    showToast("Блокнот скачан.", "success");
+    setTimeout(() => URL.revokeObjectURL(url),1000);
   });
 }
 
 function openRenameModal(id) {
   const note = notepads.find(item => item.id === id);
   if (!note) return;
-
   renamingNotepadId = id;
   $("rename-input").value = note.title;
   openModal("modal-rename");
@@ -2541,7 +2107,6 @@ function openRenameModal(id) {
 function confirmRename() {
   return run(async () => {
     const title = $("rename-input").value.trim();
-
     if (!title || title.length > 120) {
       throw new Error("Название: от 1 до 120 символов.");
     }
@@ -2551,11 +2116,10 @@ function confirmRename() {
 
     note.title = title;
     markDirty();
-
     renderNotepads();
 
     if (activeNotepad?.id === note.id) {
-      $("editor-title").textContent = note.title;
+      $("editor-title").textContent = title;
     }
 
     await saveUserData();
@@ -2567,16 +2131,11 @@ function confirmRename() {
 function addChecklistItem() {
   return run(async () => {
     if (!activeNotepad) return;
-
     if (activeNotepad.checklist.length >= 100) {
       throw new Error("Можно добавить до 100 пунктов.");
     }
 
-    activeNotepad.checklist.push({
-      text: "Задача",
-      checked: false
-    });
-
+    activeNotepad.checklist.push({text:"Задача",checked:false});
     markDirty();
     renderChecklist();
     await saveUserData();
@@ -2586,17 +2145,16 @@ function addChecklistItem() {
 function renderChecklist() {
   const container = $("checklist-container");
   container.replaceChildren();
-
   if (!activeNotepad) return;
 
-  activeNotepad.checklist.forEach((item, index) => {
-    const row = el("div", null, "checklist-item");
+  activeNotepad.checklist.forEach((item,index) => {
+    const row = el("div",null,"checklist-item");
+    const checkbox = el("button",null,"square-placeholder");
 
-    const checkbox = el("button", null, "square-placeholder");
     checkbox.type = "button";
-    checkbox.setAttribute("role", "checkbox");
-    checkbox.setAttribute("aria-checked", String(item.checked));
-    checkbox.setAttribute("aria-label", "Выполнено: " + item.text);
+    checkbox.setAttribute("role","checkbox");
+    checkbox.setAttribute("aria-checked",String(item.checked));
+    checkbox.setAttribute("aria-label","Выполнено: "+item.text);
 
     if (item.checked) {
       const image = icon("tickicon.png");
@@ -2605,24 +2163,22 @@ function renderChecklist() {
       checkbox.append(image);
     }
 
-    checkbox.addEventListener("click", () => toggleCheck(index));
+    checkbox.addEventListener("click",() => toggleCheck(index));
 
     const input = document.createElement("input");
     input.type = "text";
     input.maxLength = 500;
     input.value = item.text;
-    input.setAttribute("aria-label", "Текст задачи");
+    input.setAttribute("aria-label","Текст задачи");
 
-    input.addEventListener("input", () => {
+    input.addEventListener("input",() => {
       item.text = input.value;
       markDirty();
     });
 
-    input.addEventListener("change", () => {
-      run(() => saveUserData(true));
-    });
+    input.addEventListener("change",() => run(() => saveUserData(true)));
 
-    row.append(checkbox, input);
+    row.append(checkbox,input);
     container.append(row);
   });
 }
@@ -2631,68 +2187,64 @@ function toggleCheck(index) {
   return run(async () => {
     const item = activeNotepad?.checklist[index];
     if (!item) return;
-
     item.checked = !item.checked;
     markDirty();
-
     renderChecklist();
     await saveUserData(true);
   });
 }
 
-/* Календарь использует даты YYYY-MM-DD, как серверная версия. */
+/* Календарь. */
 
 function renderCalendar() {
   const year = currentCalendarDate.getFullYear();
   const month = currentCalendarDate.getMonth();
 
   $("calendar-month-year").textContent =
-    currentCalendarDate.toLocaleDateString("ru-RU", {
-      month: "long",
-      year: "numeric"
+    currentCalendarDate.toLocaleDateString("ru-RU",{
+      month:"long",year:"numeric"
     });
 
   const grid = $("calendar-grid");
   grid.replaceChildren();
 
-  ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"].forEach(day => {
-    grid.append(el("div", day, "calendar-day-header"));
+  ["Пн","Вт","Ср","Чт","Пт","Сб","Вс"].forEach(day => {
+    grid.append(el("div",day,"calendar-day-header"));
   });
 
-  const offset = (new Date(year, month, 1).getDay() + 6) % 7;
-  const lastDay = new Date(year, month + 1, 0).getDate();
+  const offset = (new Date(year,month,1).getDay()+6)%7;
+  const lastDay = new Date(year,month+1,0).getDate();
   const today = dateKey(new Date());
 
-  for (let i = 0; i < offset; i++) {
-    grid.append(el("div", null, "calendar-day empty"));
+  for (let i=0;i<offset;i++) {
+    grid.append(el("div",null,"calendar-day empty"));
   }
 
-  for (let day = 1; day <= lastDay; day++) {
-    const key = dateKey(new Date(year, month, day));
-    const button = el("button", day, "calendar-day");
+  for (let day=1;day<=lastDay;day++) {
+    const key = dateKey(new Date(year,month,day));
+    const button = el("button",day,"calendar-day");
     button.type = "button";
-    button.setAttribute("aria-label", key);
+    button.setAttribute("aria-label",key);
 
     if (calendarNotes[key]) {
       button.classList.add("has-note");
-      button.append(el("span", null, "note-indicator"));
+      button.append(el("span",null,"note-indicator"));
     }
-
     if (key === today) button.classList.add("today");
     if (key === selectedDate) button.classList.add("selected");
 
-    button.addEventListener("click", () => selectDate(key));
+    button.addEventListener("click",() => selectDate(key));
     grid.append(button);
   }
 }
 
 function prevMonth() {
-  currentCalendarDate.setMonth(currentCalendarDate.getMonth() - 1);
+  currentCalendarDate.setMonth(currentCalendarDate.getMonth()-1);
   renderCalendar();
 }
 
 function nextMonth() {
-  currentCalendarDate.setMonth(currentCalendarDate.getMonth() + 1);
+  currentCalendarDate.setMonth(currentCalendarDate.getMonth()+1);
   renderCalendar();
 }
 
@@ -2701,42 +2253,35 @@ function selectDate(key) {
   selectedDate = key;
 
   $("selected-date-title").textContent =
-    "Заметка на " +
-    new Date(key + "T12:00:00").toLocaleDateString("ru-RU");
+    "Заметка на "+new Date(key+"T12:00:00").toLocaleDateString("ru-RU");
 
   $("day-note-text").value = calendarNotes[key] || "";
   $("day-detail-panel").style.display = "block";
-
   renderCalendar();
 }
 
 function saveDayNote() {
   return run(async () => {
-    if (!selectedDate) {
-      throw new Error("Сначала выбери день.");
-    }
-
+    if (!selectedDate) throw new Error("Сначала выбери день.");
     syncEditors();
     renderCalendar();
     await saveUserData();
   });
 }
 
-/* ИИ: все запросы идут на /api, ключа в браузере нет. */
+/* ИИ. Секреты остаются на сервере. */
 
 function selectTool(tool) {
-  if (!["text", "image", "video", "rerank"].includes(tool)) return;
-
+  if (!["text","image","video","rerank"].includes(tool)) return;
   currentTool = tool;
 
-  document.querySelectorAll(".ai-chat-tools img")
-    .forEach(image => image.classList.remove("active-tool"));
-
-  $("tool-" + tool).classList.add("active-tool");
+  document.querySelectorAll(".ai-chat-tools img").forEach(image => {
+    image.classList.remove("active-tool");
+  });
+  $("tool-"+tool).classList.add("active-tool");
 
   const kind = tool === "text" ? "ai" : tool;
-
-  for (const [key, selectId] of Object.entries(MODEL_SELECTS)) {
+  for (const [key,selectId] of Object.entries(MODEL_SELECTS)) {
     $(selectId).style.display = key === kind ? "block" : "none";
   }
 
@@ -2749,10 +2294,7 @@ function selectTool(tool) {
 
 function safeImageURL(value) {
   if (typeof value !== "string") return false;
-
-  if (/^data:image\/(png|jpeg|webp);base64,/.test(value)) {
-    return true;
-  }
+  if (/^data:image\/(png|jpeg|webp);base64,/.test(value)) return true;
 
   try {
     const url = new URL(value);
@@ -2763,10 +2305,8 @@ function safeImageURL(value) {
 }
 
 function safeVideoURL(value) {
-  return (
-    typeof value === "string" &&
-    /^\/api\/video-content\/[0-9a-f]{32}$/.test(value)
-  );
+  return typeof value === "string" &&
+    /^\/api\/video-content\/[0-9a-f]{32}$/.test(value);
 }
 
 function renderAIChat() {
@@ -2775,21 +2315,21 @@ function renderAIChat() {
 
   if (!aiChatHistory.length) {
     container.append(
-      el("p", "Напиши запрос или выбери инструмент.", "small-muted")
+      el("p","Напиши запрос или выбери инструмент.","small-muted")
     );
   }
 
   for (const message of aiChatHistory) {
     const item = el(
-      "div",
-      null,
-      "ai-message " + (message.role === "user" ? "user" : "ai")
+      "div",null,
+      "ai-message "+(message.role === "user" ? "user" : "ai")
     );
 
     if (message.type === "image") {
-      item.append(
-        el("strong", "Изображение: " + (MODEL_LABELS[message.model] || message.model))
-      );
+      item.append(el(
+        "strong",
+        "Изображение: "+(MODEL_LABELS[message.model] || message.model)
+      ));
 
       if (safeImageURL(message.url)) {
         const image = document.createElement("img");
@@ -2798,12 +2338,12 @@ function renderAIChat() {
         image.referrerPolicy = "no-referrer";
         item.append(image);
       }
+      item.append(el("p",message.prompt,"small-muted"));
 
-      item.append(el("p", message.prompt, "small-muted"));
     } else if (message.type === "video") {
       item.append(
-        el("strong", "Видео: " + (MODEL_LABELS[message.model] || message.model)),
-        el("p", VIDEO_STATUSES[message.status] || "Проверяется статус")
+        el("strong","Видео: "+(MODEL_LABELS[message.model] || message.model)),
+        el("p",VIDEO_STATUSES[message.status] || "Проверяется статус")
       );
 
       if (safeVideoURL(message.url)) {
@@ -2812,14 +2352,13 @@ function renderAIChat() {
         video.controls = true;
         video.preload = "metadata";
         item.append(video);
-      } else if (!["failed", "unknown"].includes(message.status)) {
+      } else if (!["failed","unknown"].includes(message.status)) {
         item.append(makeButton(
-          "Проверить готовность",
-          () => checkVideo(message.id)
+          "Проверить готовность",() => checkVideo(message.id)
         ));
       }
+      item.append(el("p","ID: "+message.id,"small-muted"));
 
-      item.append(el("p", "ID: " + message.id, "small-muted"));
     } else {
       item.textContent = message.content || "";
     }
@@ -2830,10 +2369,8 @@ function renderAIChat() {
   container.scrollTop = container.scrollHeight;
 }
 
-async function withAI(label, action) {
-  if (aiBusy) {
-    throw new Error("Дождись завершения текущего ИИ-запроса.");
-  }
+async function withAI(label,action) {
+  if (aiBusy) throw new Error("Дождись завершения текущего ИИ-запроса.");
 
   aiBusy = true;
   $("send-ai-button").disabled = true;
@@ -2843,29 +2380,28 @@ async function withAI(label, action) {
 
   try {
     await refreshAccount();
-
     if (userTariff === "free") {
       openModal("modal-premium-lock");
       return;
     }
 
-    toast = showToast(label, "loading");
+    toast = showToast(label,"loading");
     attempted = true;
-
     return await action();
+
   } finally {
     if (toast) toast.remove();
-
-    aiBusy = false;
-    $("send-ai-button").disabled = false;
 
     if (attempted) {
       try {
         await refreshAccount();
       } catch (error) {
-        showToast(error.message, "error");
+        showToast(error.message,"error");
       }
     }
+
+    aiBusy = false;
+    $("send-ai-button").disabled = false;
   }
 }
 
@@ -2873,111 +2409,80 @@ function sendAIChatMessage(mode) {
   return run(async () => {
     const actualMode = mode || currentTool;
     const promptText = $("ai-chat-input").value.trim();
-
-    if (!promptText) {
-      throw new Error("Введите сообщение.");
-    }
+    if (!promptText) throw new Error("Введите сообщение.");
 
     let rerankQuery = "";
-
     if (actualMode === "rerank") {
       rerankQuery = prompt("По какому вопросу ранжировать фрагменты?") || "";
       if (!rerankQuery.trim()) return;
     }
 
-    await withAI("ИИ выполняет запрос...", async () => {
+    await withAI("ИИ выполняет запрос...",async () => {
       const kind = actualMode === "text" ? "ai" : actualMode;
       const model = selectedModel(kind);
 
       aiChatHistory.push({
-        role: "user",
-        kind: actualMode,
-        content: promptText
+        role:"user",kind:actualMode,content:promptText
       });
-
       renderAIChat();
 
       if (kind === "ai") {
-        let history = aiChatHistory
+        const history = aiChatHistory
           .filter(message =>
             message.kind === "text" &&
-            ["user", "ai"].includes(message.role)
+            ["user","ai"].includes(message.role)
           )
           .slice(-12)
           .map(message => ({
-            role: message.role === "ai" ? "assistant" : "user",
-            content: message.content
+            role:message.role === "ai" ? "assistant" : "user",
+            content:message.content
           }));
 
         while (
           history.length > 1 &&
-          history.reduce((sum, message) => sum + message.content.length, 0) > 30000
-        ) {
-          history.shift();
-        }
+          history.reduce((sum,message) => sum+message.content.length,0) > 30000
+        ) history.shift();
 
-        const data = await api("ai", { model, messages: history });
-
+        const data = await api("ai",{model,messages:history});
         aiChatHistory.push({
-          role: "ai",
-          kind: "text",
-          content: data.content
+          role:"ai",kind:"text",content:data.content
         });
+
       } else if (kind === "image") {
-        const data = await api("image", {
-          model,
-          prompt: promptText
+        const data = await api("image",{model,prompt:promptText});
+        aiChatHistory.push({
+          role:"ai",type:"image",model,
+          prompt:promptText,url:data.image_url
         });
 
-        aiChatHistory.push({
-          role: "ai",
-          type: "image",
-          model,
-          prompt: promptText,
-          url: data.image_url
-        });
       } else if (kind === "video") {
-        const data = await api("video", {
-          model,
-          prompt: promptText
-        });
-
+        const data = await api("video",{model,prompt:promptText});
         aiChatHistory.push({
-          role: "ai",
-          type: "video",
-          model,
-          prompt: promptText,
-          id: data.id,
-          status: data.status,
-          url: data.url
+          role:"ai",type:"video",model,
+          prompt:promptText,id:data.id,status:data.status,url:data.url
         });
-
         await loadVideoJobs();
-      } else {
-        const documents = promptText
-          .split(/\n+/)
-          .map(value => value.trim())
-          .filter(Boolean);
 
-        const data = await api("rerank", {
-          model,
-          query: rerankQuery,
-          documents
+      } else if (kind === "rerank") {
+        const documents = promptText.split(/\n+/)
+          .map(value => value.trim()).filter(Boolean);
+
+        const data = await api("rerank",{
+          model,query:rerankQuery,documents
         });
 
         aiChatHistory.push({
-          role: "ai",
-          kind: "rerank",
-          content: data.results
-            .map((item, index) => `${index + 1}. ${item.text}`)
-            .join("\n\n")
+          role:"ai",
+          kind:"rerank",
+          content:data.results.map(
+            (item,index) => `${index+1}. ${item.text}`
+          ).join("\n\n")
         });
       }
 
       if ($("ai-chat-input").value.trim() === promptText) {
         $("ai-chat-input").value = "";
       }
-
       renderAIChat();
     });
   });
@@ -2985,145 +2490,112 @@ function sendAIChatMessage(mode) {
 
 function clearChatHistory() {
   return run(() => {
-    if (aiBusy) {
-      throw new Error("Дождись завершения ИИ-запроса.");
-    }
-
+    if (aiBusy) throw new Error("Дождись завершения ИИ-запроса.");
     if (!confirm("Очистить историю чата?")) return;
-
     aiChatHistory = [];
     renderAIChat();
   });
 }
 
 function generateAINotepad() {
-  return run(() => withAI("ИИ обрабатывает блокнот...", async () => {
+  return run(() => withAI("ИИ обрабатывает блокнот...",async () => {
     syncEditors();
-
     const note = activeNotepad;
-
     if (!note) throw new Error("Открой блокнот.");
 
     const original = note.content;
     if (!original.trim()) throw new Error("Блокнот пуст.");
 
-    const data = await api("ai", {
-      model: selectedModel("ai"),
-      messages: [{
-        role: "user",
-        content:
-          "Проанализируй текст и дай структурированный ответ " +
-          "на русском языке:\n\n" + original
+    const data = await api("ai",{
+      model:selectedModel("ai"),
+      messages:[{
+        role:"user",
+        content:"Проанализируй текст и дай структурированный ответ на русском языке:\n\n"+
+          original
       }]
     });
 
     syncEditors();
-
     if (note.content !== original) {
-      showResult(
-        "Ответ ИИ: исходный текст изменился во время запроса",
-        data.content
-      );
+      showResult("Ответ ИИ: исходный текст изменился",data.content);
       return;
     }
 
     note.content = data.content;
-
     if (activeNotepad?.id === note.id) {
       $("editor-text").value = data.content;
     }
 
     markDirty();
     await saveUserData();
-
-    showToast("Текст заменён ответом ИИ.", "success");
+    showToast("Текст заменён ответом ИИ.","success");
   }));
 }
 
 function generateAICalendar() {
-  return run(() => withAI("ИИ обрабатывает заметку...", async () => {
+  return run(() => withAI("ИИ обрабатывает заметку...",async () => {
     syncEditors();
-
     const key = selectedDate;
     if (!key) throw new Error("Выбери день.");
 
     const original = calendarNotes[key] || "";
     if (!original.trim()) throw new Error("Заметка пуста.");
 
-    const data = await api("ai", {
-      model: selectedModel("ai"),
-      messages: [{
-        role: "user",
-        content:
-          "Проанализируй заметку и дай структурированный ответ " +
-          "на русском языке:\n\n" + original
+    const data = await api("ai",{
+      model:selectedModel("ai"),
+      messages:[{
+        role:"user",
+        content:"Проанализируй заметку и дай структурированный ответ на русском языке:\n\n"+
+          original
       }]
     });
 
     syncEditors();
-
     if ((calendarNotes[key] || "") !== original) {
-      showResult(
-        "Ответ ИИ: исходная заметка изменилась во время запроса",
-        data.content
-      );
+      showResult("Ответ ИИ: исходная заметка изменилась",data.content);
       return;
     }
 
     calendarNotes[key] = data.content;
-
-    if (selectedDate === key) {
-      $("day-note-text").value = data.content;
-    }
+    if (selectedDate === key) $("day-note-text").value = data.content;
 
     markDirty();
     renderCalendar();
     await saveUserData();
-
-    showToast("Заметка заменена ответом ИИ.", "success");
+    showToast("Заметка заменена ответом ИИ.","success");
   }));
 }
 
 function rerankNotepad() {
-  return run(() => withAI("Ранжирование строк...", async () => {
+  return run(() => withAI("Ранжирование строк...",async () => {
     syncEditors();
-
     const note = activeNotepad;
     if (!note) throw new Error("Открой блокнот.");
 
     const original = note.content;
-    const documents = original
-      .split(/\n+/)
-      .map(value => value.trim())
-      .filter(Boolean);
+    const documents = original.split(/\n+/)
+      .map(value => value.trim()).filter(Boolean);
 
     if (documents.length < 2 || documents.length > 40) {
       throw new Error("Для ранжирования нужно от 2 до 40 строк.");
     }
 
-    const data = await api("rerank", {
-      model: selectedModel("rerank"),
-      query: "Основные мысли и самые важные действия",
+    const data = await api("rerank",{
+      model:selectedModel("rerank"),
+      query:"Основные мысли и самые важные действия",
       documents
     });
 
     const answer = data.results.map(item => item.text).join("\n");
-
     syncEditors();
 
     if (note.content !== original) {
-      showResult(
-        "Ранжирование: исходный текст изменился во время запроса",
-        answer
-      );
+      showResult("Ранжирование: исходный текст изменился",answer);
       return;
     }
 
     note.content = answer;
-
-    if (activeNotepad?.id === note.id) {
-      $("editor-text").value = answer;
-    }
+    if (activeNotepad?.id === note.id) $("editor-text").value = answer;
 
     markDirty();
     await saveUserData();
@@ -3131,32 +2603,31 @@ function rerankNotepad() {
 }
 
 function rerankCalendar() {
-  return run(() => withAI("Ранжирование заметок...", async () => {
+  return run(() => withAI("Ранжирование заметок...",async () => {
     syncEditors();
-
     const entries = Object.entries(calendarNotes)
-      .filter(([, value]) => value.trim());
+      .filter(([,value]) => value.trim());
 
     if (entries.length < 2 || entries.length > 40) {
-      throw new Error("Для этого действия нужно от 2 до 40 календарных заметок.");
+      throw new Error("Нужно от 2 до 40 календарных заметок.");
     }
 
-    const data = await api("rerank", {
-      model: selectedModel("rerank"),
-      query: "Самые важные заметки и действия",
-      documents: entries.map(([, value]) => value)
+    const data = await api("rerank",{
+      model:selectedModel("rerank"),
+      query:"Самые важные заметки и действия",
+      documents:entries.map(([,value]) => value)
     });
 
-    const result = data.results.map((item, index) => {
+    const result = data.results.map((item,index) => {
       const date = entries[item.index]?.[0] || "";
-      return `${index + 1}. ${date}\n${item.text}`;
+      return `${index+1}. ${date}\n${item.text}`;
     }).join("\n\n");
 
-    showResult("Заметки по важности", result);
+    showResult("Заметки по важности",result);
   }));
 }
 
-/* Видео: сервер проверяет принадлежность задания пользователю. */
+/* Видео. */
 
 async function loadVideoJobs() {
   const data = await api("jobs");
@@ -3164,52 +2635,37 @@ async function loadVideoJobs() {
   container.replaceChildren();
 
   if (!data.jobs.length) {
-    container.append(el("p", "Видеогенераций пока нет.", "small-muted"));
+    container.append(el("p","Видеогенераций пока нет.","small-muted"));
     return;
   }
 
   for (const job of data.jobs) {
-    const record = el("div", null, "record");
-
+    const record = el("div",null,"record");
     record.append(
-      el("strong", MODEL_LABELS[job.model] || job.model),
-      el("p", VIDEO_STATUSES[job.status] || job.status),
-      el(
-        "p",
-        formatTimestamp(job.created_at) + "\nID: " + job.id,
-        "small-muted"
-      ),
-      makeButton("Проверить / открыть", () => checkVideo(job.id))
+      el("strong",MODEL_LABELS[job.model] || job.model),
+      el("p",VIDEO_STATUSES[job.status] || job.status),
+      el("p",formatTimestamp(job.created_at)+"\nID: "+job.id,"small-muted"),
+      makeButton("Проверить / открыть",() => checkVideo(job.id))
     );
-
     container.append(record);
   }
 }
 
-function loadVideoJobsClick() {
-  return run(loadVideoJobs);
-}
+function loadVideoJobsClick() { return run(loadVideoJobs); }
 
 async function checkVideo(id) {
-  const data = await api("video-status/" + encodeURIComponent(id));
-
-  let message = aiChatHistory.find(item =>
-    item.type === "video" && item.id === id
-  );
+  const data = await api("video-status/"+encodeURIComponent(id));
+  let message = aiChatHistory.find(item => item.type === "video" && item.id === id);
 
   if (!message) {
     const jobs = await api("jobs");
     const job = jobs.jobs.find(item => item.id === id);
 
     message = {
-      role: "ai",
-      type: "video",
-      id,
-      model: job?.model || "Видео",
-      status: data.status,
-      url: data.url
+      role:"ai",type:"video",id,
+      model:job?.model || "Видео",
+      status:data.status,url:data.url
     };
-
     aiChatHistory.push(message);
   } else {
     message.status = data.status;
@@ -3217,18 +2673,14 @@ async function checkVideo(id) {
   }
 
   renderAIChat();
-
   showToast(
     VIDEO_STATUSES[data.status] || "Статус обновлён.",
-    data.status === "failed" || data.status === "unknown"
-      ? "error"
-      : "info"
+    ["failed","unknown"].includes(data.status) ? "error" : "info"
   );
-
   await loadVideoJobs();
 }
 
-/* Диктовка: те же PNG-кнопки, что в оригинале. */
+/* Диктовка. */
 
 function startSpeechToTextNotepad() {
   return startSpeechToText("notepad");
@@ -3246,15 +2698,12 @@ function startSpeechToText(target) {
     }
 
     await refreshAccount();
-
     if (userTariff === "free") {
       openModal("modal-premium-lock");
       return;
     }
 
-    const Recognition =
-      window.SpeechRecognition || window.webkitSpeechRecognition;
-
+    const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!Recognition) {
       throw new Error("Этот браузер не поддерживает распознавание речи.");
     }
@@ -3262,37 +2711,27 @@ function startSpeechToText(target) {
     const note = target === "notepad" ? activeNotepad : null;
     const key = target === "calendar" ? selectedDate : null;
 
-    if (target === "notepad" && !note) {
-      throw new Error("Открой блокнот.");
-    }
-
-    if (target === "calendar" && !key) {
-      throw new Error("Выбери день.");
-    }
+    if (target === "notepad" && !note) throw new Error("Открой блокнот.");
+    if (target === "calendar" && !key) throw new Error("Выбери день.");
 
     const recognition = new Recognition();
     speechRecognition = recognition;
-
     recognition.lang = "ru-RU";
     recognition.continuous = true;
     recognition.interimResults = false;
 
     const toast = showToast(
-      "Говори. Нажми на микрофон ещё раз для остановки.",
-      "loading"
+      "Говори. Нажми на микрофон ещё раз для остановки.","loading"
     );
 
     recognition.onresult = event => {
       let transcript = "";
-
-      for (let i = event.resultIndex; i < event.results.length; i++) {
+      for (let i=event.resultIndex;i<event.results.length;i++) {
         if (event.results[i].isFinal) {
-          transcript += event.results[i][0].transcript + " ";
+          transcript += event.results[i][0].transcript+" ";
         }
       }
-
       if (!transcript) return;
-
       syncEditors();
 
       if (note) {
@@ -3301,41 +2740,31 @@ function startSpeechToText(target) {
           const start = textarea.selectionStart;
           const end = textarea.selectionEnd;
 
-          textarea.value =
-            textarea.value.slice(0, start) +
-            transcript +
+          textarea.value = textarea.value.slice(0,start)+transcript+
             textarea.value.slice(end);
 
-          textarea.selectionStart =
-            textarea.selectionEnd = start + transcript.length;
+          textarea.selectionStart = textarea.selectionEnd =
+            start+transcript.length;
 
           note.content = textarea.value;
         } else {
           note.content += transcript;
         }
       } else {
-        calendarNotes[key] = (calendarNotes[key] || "") + transcript;
-
-        if (selectedDate === key) {
-          $("day-note-text").value = calendarNotes[key];
-        }
-
+        calendarNotes[key] = (calendarNotes[key] || "")+transcript;
+        if (selectedDate === key) $("day-note-text").value = calendarNotes[key];
         renderCalendar();
       }
-
       markDirty();
     };
 
     recognition.onerror = event => {
-      showToast("Ошибка распознавания: " + event.error, "error");
+      showToast("Ошибка распознавания: "+event.error,"error");
     };
 
     recognition.onend = () => {
       toast.remove();
-
-      if (speechRecognition === recognition) {
-        speechRecognition = null;
-      }
+      if (speechRecognition === recognition) speechRecognition = null;
     };
 
     try {
@@ -3348,7 +2777,7 @@ function startSpeechToText(target) {
   });
 }
 
-/* Настоящие сообщения через сервер. */
+/* Сообщения. */
 
 function openMessageModal() {
   openModal("modal-message");
@@ -3361,38 +2790,32 @@ async function loadMessages() {
   renderMessages();
 }
 
-function loadMessagesClick() {
-  return run(loadMessages);
-}
+function loadMessagesClick() { return run(loadMessages); }
 
 function renderMessages() {
   const container = $("message-container");
   container.replaceChildren();
 
   if (!messages.length) {
-    const empty = el("p", "Сообщений пока нет.", "small-muted");
+    const empty = el("p","Сообщений пока нет.","small-muted");
     empty.style.padding = "20px 0";
     container.append(empty);
     return;
   }
 
   for (const message of messages) {
-    const row = el("div", null, "message-item");
+    const row = el("div",null,"message-item");
     const content = el("div");
 
     content.append(
-      el(
-        "strong",
-        message.sender_name + " → " + message.recipient_name
-      ),
-      el("p", message.text)
+      el("strong",message.sender_name+" → "+message.recipient_name),
+      el("p",message.text)
     );
 
     row.append(
       content,
-      el("span", formatTimestamp(message.created_at), "small-muted")
+      el("span",formatTimestamp(message.created_at),"small-muted")
     );
-
     container.append(row);
   }
 }
@@ -3403,7 +2826,6 @@ function sendMessage() {
 
     const recipient = $("msg-recipient").value.trim();
     const text = $("msg-text").value.trim();
-
     if (!recipient || !text) {
       throw new Error("Укажи получателя и текст сообщения.");
     }
@@ -3412,15 +2834,12 @@ function sendMessage() {
     $("send-message-button").disabled = true;
 
     try {
-      await api("messages", { recipient, text });
-
+      await api("messages",{recipient,text});
       $("msg-recipient").value = "";
       $("msg-text").value = "";
-
       closeModal("modal-message");
       await loadMessages();
-
-      showToast("Сообщение отправлено.", "success");
+      showToast("Сообщение отправлено.","success");
     } finally {
       messageBusy = false;
       $("send-message-button").disabled = false;
@@ -3428,93 +2847,253 @@ function sendMessage() {
   });
 }
 
-/* Оплата: заказ создаёт сервер, тариф подтверждает вебхук. */
+/* Поддержка. Для кнопки достаточно id из существующего /api/me.
+   Настоящую авторизацию команды выполняет functions/api/support.js. */
+
+function supportAccount() {
+  return account?.id === SUPPORT_CONTACT_ID;
+}
+
+function updateSupportAccess() {
+  $("support-panel-button").style.display =
+    supportAccount() ? "flex" : "none";
+
+  if (!supportAccount()) closeModal("modal-support");
+}
+
+function contactSupport() {
+  $("msg-recipient").value = SUPPORT_CONTACT_ID;
+  openModal("modal-message");
+  $("msg-text").focus();
+}
+
+function openSupportPanel() {
+  return run(async () => {
+    await refreshAccount();
+
+    if (!supportAccount()) {
+      throw new Error("Панель доступна только аккаунту поддержки.");
+    }
+
+    // Проверяем разрешение на сервере до открытия панели.
+    await loadSupportHistory();
+    openModal("modal-support");
+    $("support-command").focus();
+  });
+}
+
+function openSupportMessages() {
+  closeModal("modal-support");
+  return switchView("messages");
+}
+
+async function loadSupportHistory() {
+  const data = await api("support");
+  const container = $("support-history");
+  container.replaceChildren();
+
+  if (!data.grants.length) {
+    container.append(el("p","Выдач пока нет.","small-muted"));
+    return;
+  }
+
+  for (const grant of data.grants) {
+    const row = el("div",null,"section-panel");
+    const planName = serverPlans[grant.plan]?.name || grant.plan;
+
+    row.append(
+      el("strong",grant.username+": "+planName),
+      el("p","ID пользователя: "+grant.user_id),
+      el(
+        "p",
+        "Добавлено месяцев: "+grant.months+
+        ". Срок тарифа после выдачи: "+formatTimestamp(grant.ends_at)
+      ),
+      el(
+        "p",
+        "Добавленные квоты: текст "+grant.text_quota+
+        ", изображения "+grant.image_quota+
+        ", видео "+grant.video_quota+
+        ", ранжирование "+grant.rerank_quota
+      ),
+      el("p","Выдано: "+formatTimestamp(grant.created_at),"small-muted"),
+      el("p","Операция: "+grant.request_id,"small-muted")
+    );
+
+    container.append(row);
+  }
+}
+
+async function submitSupportCommand() {
+  if (supportCommandBusy) return;
+
+  const input = $("support-command");
+  const button = $("support-command-button");
+  const output = $("support-command-result");
+
+  if (!supportAccount()) {
+    output.textContent = "Нет доступа к панели поддержки.";
+    return;
+  }
+
+  const command = input.value.trim();
+  if (!command) {
+    output.textContent = "Введи команду.";
+    return;
+  }
+
+  if (supportAttempt && supportAttempt.command !== command) {
+    input.value = supportAttempt.command;
+    input.readOnly = true;
+    output.textContent =
+      "Сначала уточни результат предыдущей операции. "+
+      "Нажми «Выполнить» ещё раз: будет отправлен тот же ID, "+
+      "без повторного начисления.";
+    return;
+  }
+
+  if (!supportAttempt) {
+    if (!window.confirm(
+      "Выполнить бесплатную выдачу тарифа?\n\n"+command+
+      "\n\nТариф будет продлён, квоты будут добавлены."
+    )) return;
+
+    supportAttempt = {
+      requestId:crypto.randomUUID().replaceAll("-",""),
+      command
+    };
+  }
+
+  const attempt = {...supportAttempt};
+  supportCommandBusy = true;
+  button.disabled = true;
+  input.readOnly = true;
+  output.textContent = "Выполняется операция "+attempt.requestId+"…";
+
+  try {
+    const result = await api("support",attempt);
+    const grant = result.grant;
+
+    supportAttempt = null;
+    input.value = "";
+
+    const planName = serverPlans[grant.plan]?.name || grant.plan;
+    output.textContent =
+      (result.duplicate
+        ? "Эта операция уже выполнена. Повторного начисления нет."
+        : "Тариф выдан.")+
+      "\nПользователь: "+grant.user_id+
+      "\nТариф: "+planName+
+      "\nДобавлено месяцев: "+grant.months+
+      "\nСрок тарифа после выдачи: "+formatTimestamp(grant.ends_at)+
+      "\nДобавлено текстовых запросов: "+grant.text_quota+
+      "\nИзображений: "+grant.image_quota+
+      "\nВидео: "+grant.video_quota+
+      "\nРанжирований: "+grant.rerank_quota+
+      "\nID операции: "+grant.request_id;
+
+    if (grant.user_id === account.id) {
+      await refreshAccount().catch(() => {
+        showToast(
+          "Тариф выдан. Для обновления счётчиков нажми «Обновить тариф».",
+          "info"
+        );
+      });
+    }
+
+    await loadSupportHistory().catch(() => {
+      showToast(
+        "Тариф выдан, но журнал не обновился. Нажми «Обновить журнал».",
+        "info"
+      );
+    });
+
+  } catch (error) {
+    const message = error.status
+      ? error.message
+      : "Не удалось получить подтверждение от сервера.";
+
+    if ([400,404,409,413,415].includes(error.status)) {
+      supportAttempt = null;
+      output.textContent = message;
+    } else {
+      output.textContent =
+        message+
+        "\nID операции: "+attempt.requestId+
+        "\nНажми «Выполнить» для повтора той же операции. "+
+        "Повторное начисление с этим ID исключено."+
+        "\nЕсли перезагрузишь страницу, сначала проверь журнал.";
+    }
+
+  } finally {
+    supportCommandBusy = false;
+    button.disabled = false;
+    input.readOnly = supportAttempt !== null;
+  }
+}
+
+/* Настоящая оплата через существующий сервер. */
 
 function showPaymentModal(planName) {
   return run(async () => {
     await refreshAccount();
-
     const plan = serverPlans[planName];
-
-    if (!plan) {
-      throw new Error("Неизвестный тариф.");
-    }
+    if (!plan) throw new Error("Неизвестный тариф.");
 
     selectedTariffForPayment = planName;
-
     const container = $("payment-modal-content");
     container.replaceChildren();
 
-    const heading = el("h3", "Оплата тарифа «" + plan.name + "»");
+    const heading = el("h3","Оплата тарифа «"+plan.name+"»");
     heading.style.textAlign = "center";
 
     const summary = el("div");
     summary.style.cssText =
-      "padding:16px;background:var(--c-beige);border-radius:8px;" +
+      "padding:16px;background:var(--c-beige);border-radius:8px;"+
       "margin-bottom:16px;text-align:center";
 
     summary.append(
-      el("strong", plan.name),
-      el("p", (plan.price / 100) + " ₽ за 30 дней")
+      el("strong",plan.name),
+      el("p",(plan.price/100)+" ₽ за 30 дней")
     );
 
-    const label = el("label", "Способ оплаты");
+    const label = el("label","Способ оплаты");
     label.htmlFor = "payment-method";
 
     const select = document.createElement("select");
     select.id = "payment-method";
     select.style.marginTop = "8px";
 
-    const cardOption = el("option", "Банковская карта");
-    cardOption.value = "AC";
-
-    const walletOption = el("option", "Кошелёк ЮMoney");
-    walletOption.value = "PC";
-
-    select.append(cardOption, walletOption);
+    const card = el("option","Банковская карта");
+    card.value = "AC";
+    const wallet = el("option","Кошелёк ЮMoney");
+    wallet.value = "PC";
+    select.append(card,wallet);
 
     const note = el(
       "p",
-      "Откроется форма ЮMoney. Это разовый платёж, " +
-      "не автоматическая подписка. Доступ включится после " +
-      "подтверждения оплаты сервером.",
+      "Откроется форма ЮMoney. Это разовый платёж, не автоматическая подписка. "+
+      "Доступ включится после подтверждения оплаты сервером.",
       "small-muted"
     );
 
     const payButton = makeButton(
-      "Оплатить " + (plan.price / 100) + " ₽",
-      processPayment,
-      "sber-btn"
+      "Оплатить "+(plan.price/100)+" ₽",processPayment,"sber-btn"
     );
-
     payButton.id = "payment-submit";
 
-    const actions = el("div", null, "modal-actions");
-    actions.append(
-      makeButton(
-        "Закрыть",
-        () => closeModal("modal-payment"),
-        "btn-cancel"
-      )
-    );
+    const actions = el("div",null,"modal-actions");
+    actions.append(makeButton(
+      "Закрыть",() => closeModal("modal-payment"),"btn-cancel"
+    ));
 
-    container.append(
-      heading,
-      summary,
-      label,
-      select,
-      note,
-      payButton,
-      actions
-    );
-
+    container.append(heading,summary,label,select,note,payButton,actions);
     openModal("modal-payment");
   });
 }
 
 async function processPayment() {
   if (paymentBusy) return;
-
   paymentBusy = true;
 
   const button = $("payment-submit");
@@ -3522,13 +3101,11 @@ async function processPayment() {
 
   try {
     syncEditors();
-
-    // Не теряем записи при переходе на ЮMoney.
     if (stateDirty) await saveUserData(true);
 
-    const data = await api("pay", {
-      plan: selectedTariffForPayment,
-      paymentType: $("payment-method").value
+    const data = await api("pay",{
+      plan:selectedTariffForPayment,
+      paymentType:$("payment-method").value
     });
 
     if (data.action !== "https://yoomoney.ru/quickpay/confirm") {
@@ -3540,7 +3117,7 @@ async function processPayment() {
     form.action = data.action;
     form.acceptCharset = "UTF-8";
 
-    for (const [name, value] of Object.entries(data.fields)) {
+    for (const [name,value] of Object.entries(data.fields)) {
       const input = document.createElement("input");
       input.type = "hidden";
       input.name = name;
@@ -3549,7 +3126,8 @@ async function processPayment() {
     }
 
     document.body.append(form);
-    form.submit();
+    HTMLFormElement.prototype.submit.call(form);
+
   } catch (error) {
     paymentBusy = false;
     if (button) button.disabled = false;
@@ -3563,35 +3141,30 @@ async function loadOrders() {
   container.replaceChildren();
 
   if (!data.orders.length) {
-    container.append(el("p", "Заказов пока нет.", "small-muted"));
+    container.append(el("p","Заказов пока нет.","small-muted"));
   }
 
   const statuses = {
-    pending: "Ожидается оплата или уведомление",
-    paid: "Оплачен",
-    review: "Нужна ручная проверка платежа"
+    pending:"Ожидается оплата или уведомление",
+    paid:"Оплачен",
+    review:"Нужна ручная проверка платежа"
   };
 
   for (const order of data.orders) {
-    const record = el("div", null, "record");
+    const record = el("div",null,"record");
 
     record.append(
       el(
         "strong",
-        (serverPlans[order.plan]?.name || order.plan) +
-        " · " + (order.amount_minor / 100) + " ₽"
+        (serverPlans[order.plan]?.name || order.plan)+
+        " · "+(order.amount_minor/100)+" ₽"
       ),
-      el("p", statuses[order.status] || order.status),
-      el(
-        "p",
-        formatTimestamp(order.created_at) + "\nID: " + order.id,
-        "small-muted"
-      )
+      el("p",statuses[order.status] || order.status),
+      el("p",formatTimestamp(order.created_at)+"\nID: "+order.id,"small-muted")
     );
 
     container.append(record);
   }
-
   return data.orders;
 }
 
@@ -3599,30 +3172,24 @@ function refreshPaymentsClick() {
   return run(async () => {
     await refreshAccount();
     await loadOrders();
-
-    showToast("Тариф и статусы заказов обновлены.", "success");
+    showToast("Тариф и статусы заказов обновлены.","success");
   });
 }
 
 async function handlePaymentReturn(orderId) {
-  if (
-    paymentPolling ||
-    !/^sc2_[0-9a-f]{32}$/.test(orderId)
-  ) {
-    return;
-  }
+  if (paymentPolling || !/^sc2_[0-9a-f]{32}$/.test(orderId)) return;
 
   paymentPolling = true;
-  const toast = showToast("Проверяю подтверждение оплаты...", "loading");
+  const toast = showToast("Проверяю подтверждение оплаты...","loading");
 
   try {
-    for (let attempt = 0; attempt < 24; attempt++) {
+    for (let attempt=0;attempt<24;attempt++) {
       const orders = await loadOrders();
       const order = orders.find(item => item.id === orderId);
 
       if (!order) {
         throw new Error(
-          "Заказ не найден в этом аккаунте. " +
+          "Заказ не найден в этом аккаунте. "+
           "Войди под логином, с которого оплачивал."
         );
       }
@@ -3632,36 +3199,28 @@ async function handlePaymentReturn(orderId) {
 
         const url = new URL(location.href);
         url.searchParams.delete("order");
+        history.replaceState({},"",url.pathname+url.search+url.hash);
 
-        history.replaceState(
-          {},
-          "",
-          url.pathname + url.search + url.hash
-        );
-
-        showToast(
-          "Оплата подтверждена сервером. Тариф активирован.",
-          "success"
-        );
-
+        showToast("Оплата подтверждена сервером. Тариф активирован.","success");
         return;
       }
 
       if (order.status === "review") {
         throw new Error(
-          "Платёж требует ручной проверки владельцем сайта. " +
-          "Повторно не оплачивай. ID заказа: " + order.id
+          "Платёж требует ручной проверки поддержки. "+
+          "Повторно не оплачивай. ID заказа: "+order.id
         );
       }
 
-      await new Promise(resolve => setTimeout(resolve, 5000));
+      await new Promise(resolve => setTimeout(resolve,5000));
     }
 
     showToast(
-      "Подтверждение пока не пришло. Нажми «Проверить оплату» позже. " +
+      "Подтверждение пока не пришло. Нажми «Проверить оплату» позже. "+
       "Если деньги списались, не оплачивай повторно.",
       "info"
     );
+
   } finally {
     toast.remove();
     paymentPolling = false;
@@ -3670,27 +3229,23 @@ async function handlePaymentReturn(orderId) {
 
 /* Инициализация. */
 
-$("editor-text").addEventListener("input", () => {
+$("editor-text").addEventListener("input",() => {
   if (!activeNotepad) return;
-
   activeNotepad.content = $("editor-text").value;
   markDirty();
 });
 
-$("day-note-text").addEventListener("input", () => {
+$("day-note-text").addEventListener("input",() => {
   if (!selectedDate) return;
-
   const value = $("day-note-text").value;
-
   if (value) calendarNotes[selectedDate] = value;
   else delete calendarNotes[selectedDate];
-
   markDirty();
   renderCalendar();
 });
 
-[$("auth-username"), $("auth-password")].forEach(input => {
-  input.addEventListener("keydown", event => {
+[$("auth-username"),$("auth-password")].forEach(input => {
+  input.addEventListener("keydown",event => {
     if (event.key === "Enter") {
       event.preventDefault();
       handleAuth("login");
@@ -3700,11 +3255,11 @@ $("day-note-text").addEventListener("input", () => {
 
 document.querySelectorAll("img[onclick]").forEach(image => {
   image.tabIndex = 0;
-  image.setAttribute("role", "button");
-  image.setAttribute("aria-label", image.alt || image.title);
+  image.setAttribute("role","button");
+  image.setAttribute("aria-label",image.alt || image.title);
 
-  image.addEventListener("keydown", event => {
-    if (["Enter", " "].includes(event.key)) {
+  image.addEventListener("keydown",event => {
+    if (["Enter"," "].includes(event.key)) {
       event.preventDefault();
       image.click();
     }
@@ -3712,12 +3267,12 @@ document.querySelectorAll("img[onclick]").forEach(image => {
 });
 
 document.querySelectorAll(".modal").forEach(modal => {
-  modal.addEventListener("click", event => {
+  modal.addEventListener("click",event => {
     if (event.target === modal) closeModal(modal.id);
   });
 });
 
-document.addEventListener("keydown", event => {
+document.addEventListener("keydown",event => {
   if (event.key === "Escape") {
     document.querySelectorAll(".modal").forEach(modal => {
       modal.style.display = "none";
@@ -3725,9 +3280,8 @@ document.addEventListener("keydown", event => {
   }
 });
 
-window.addEventListener("beforeunload", event => {
-  if (!stateDirty) return;
-
+window.addEventListener("beforeunload",event => {
+  if (!stateDirty && !supportAttempt) return;
   event.preventDefault();
   event.returnValue = "";
 });
