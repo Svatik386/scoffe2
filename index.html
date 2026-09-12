@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scoffe2</title>
+<style>
+:root {
+  --c-dark: #3E2723; --c-med: #6D4C41; --c-light: #8D6E63;
+  --c-cream: #D7CCC8; --c-beige: #EFEBE9; --c-milk: #FAF7F5;
+  --c-accent: #D4A574; --c-caramel: #A1887F;
+  --c-red: #C62828; --c-green: #2E7D32; --c-flash: #FF8F00; --c-home: #7B1FA2;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+body { background: linear-gradient(135deg, var(--c-beige), var(--c-cream)); color: var(--c-dark); height: 100vh; display: flex; }
+
+#toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
+.toast { padding: 14px 20px; border-radius: 8px; color: white; font-size: 14px; font-weight: 500; box-shadow: 0 4px 12px rgba(0,0,0,0.15); animation: slideIn 0.3s ease; max-width: 350px; display: flex; align-items: center; gap: 10px; }
+.toast.success { background: var(--c-green); }
+.toast.error { background: var(--c-red); }
+.toast.info { background: var(--c-accent); }
+.toast.loading { background: var(--c-med); cursor: wait; }
+@keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+#auth-screen { position: fixed; inset: 0; display: flex; justify-content: center; align-items: center; background: linear-gradient(135deg, var(--c-dark), var(--c-med)); z-index: 100; }
+.auth-box { background: white; padding: 40px; border-radius: 16px; width: 380px; box-shadow: 0 12px 40px rgba(62,39,35,0.4); border: 3px solid var(--c-accent); }
+.auth-box h2 { margin-bottom: 20px; color: var(--c-dark); font-size: 28px; text-align: center; }
+.auth-box input { width: 100%; padding: 12px; margin: 8px 0; border: 2px solid var(--c-cream); border-radius: 8px; font-size: 14px; background: var(--c-milk); }
+.auth-box input:focus { outline: none; border-color: var(--c-accent); }
+.auth-box button { width: 100%; padding: 12px; background: linear-gradient(135deg, var(--c-accent), var(--c-caramel)); color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; margin-top: 10px; font-weight: bold; transition: all 0.3s; }
+.auth-box button:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(212,165,116,0.4); }
+.auth-box button.secondary { background: linear-gradient(135deg, var(--c-light), var(--c-med)); }
+.auth-msg { font-size: 13px; margin-top: 8px; min-height: 18px; }
+.auth-msg.error { color: var(--c-red); }
+.auth-msg.success { color: var(--c-green); }
+
+#app-screen { display: none; width: 100%; height: 100vh; }
+.sidebar { width: 260px; background: linear-gradient(180deg, var(--c-dark), var(--c-med)); padding: 20px 0; display: flex; flex-direction: column; box-shadow: 4px 0 12px rgba(0,0,0,0.15); overflow-y: auto; }
+.logo-area { text-align: center; padding: 0 20px 20px; border-bottom: 2px solid var(--c-accent); margin-bottom: 15px; }
+.logo-area img { width: 64px; height: 64px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); }
+.logo-area span { display: block; margin-top: 8px; font-weight: bold; font-size: 22px; color: var(--c-cream); }
+.user-info { text-align: center; padding: 10px 20px; color: var(--c-cream); font-size: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+.user-info .uname { font-weight: bold; color: white; font-size: 14px; display: block; margin-bottom: 4px; }
+.tariff-badge { display: inline-block; padding: 3px 10px; border-radius: 10px; font-size: 11px; font-weight: bold; margin-top: 4px; background: var(--c-light); color: white; }
+.tariff-flash { background: var(--c-flash); }
+.tariff-home { background: var(--c-home); }
+
+.nav-btn { display: flex; align-items: center; padding: 14px 20px; cursor: pointer; border: none; background: none; width: 100%; text-align: left; font-size: 15px; color: var(--c-cream); border-left: 4px solid transparent; transition: all 0.2s; }
+.nav-btn:hover { background: rgba(255,255,255,0.1); border-left-color: var(--c-accent); }
+.nav-btn.active { background: rgba(212,165,116,0.25); border-left-color: var(--c-accent); color: white; }
+.nav-btn img { width: 18px; height: 18px; margin-right: 12px; }
+
+.main { flex: 1; padding: 30px; overflow-y: auto; }
+.view { display: none; }
+.view.active { display: block; animation: fadeIn 0.3s; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+.top-actions { display: flex; justify-content: flex-end; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+.action-btn { display: flex; align-items: center; gap: 8px; padding: 10px 18px; background: linear-gradient(135deg, var(--c-accent), var(--c-caramel)); color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: bold; transition: all 0.3s; box-shadow: 0 2px 8px rgba(212,165,116,0.3); }
+.action-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(212,165,116,0.4); }
+.action-btn img { width: 16px; height: 16px; filter: brightness(0) invert(1); }
+
+.notepad-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px; }
+.notepad-card { background: white; padding: 18px; border-radius: 10px; border: 2px solid var(--c-cream); cursor: pointer; display: flex; align-items: center; gap: 12px; transition: all 0.3s; box-shadow: 0 2px 8px rgba(62,39,35,0.08); position: relative; }
+.notepad-card:hover { transform: translateY(-3px); box-shadow: 0 6px 16px rgba(62,39,35,0.15); border-color: var(--c-accent); }
+.notepad-card img { width: 20px; height: 20px; }
+.notepad-card .rename-btn { position: absolute; top: 5px; right: 5px; width: 24px; height: 24px; background: var(--c-beige); border-radius: 50%; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s; }
+.notepad-card:hover .rename-btn { opacity: 1; }
+.notepad-card .rename-btn img { width: 14px; height: 14px; }
+
+.notepad-editor, .ai-chat-container { background: white; border-radius: 12px; padding: 25px; height: calc(100vh - 100px); display: flex; flex-direction: column; box-shadow: 0 4px 16px rgba(62,39,35,0.1); border: 2px solid var(--c-cream); }
+.editor-toolbar, .calendar-toolbar { display: flex; gap: 10px; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid var(--c-cream); flex-wrap: wrap; }
+.editor-toolbar img, .calendar-toolbar img { width: 36px; height: 36px; cursor: pointer; padding: 6px; border-radius: 8px; transition: all 0.3s; background: var(--c-beige); }
+.editor-toolbar img:hover:not(.premium-disabled), .calendar-toolbar img:hover:not(.premium-disabled) { background: var(--c-accent); transform: scale(1.1); }
+.editor-toolbar img.premium-disabled, .calendar-toolbar img.premium-disabled { opacity: 0.4; cursor: not-allowed; }
+.editor-content { flex: 1; display: flex; flex-direction: column; gap: 12px; overflow-y: auto; }
+.editor-content textarea { flex: 1; width: 100%; padding: 14px; border: 2px solid var(--c-cream); border-radius: 8px; resize: none; font-size: 16px; background: var(--c-milk); font-family: 'Georgia', serif; }
+.editor-content textarea:focus { outline: none; border-color: var(--c-accent); background: white; }
+.checklist-item { display: flex; align-items: center; gap: 10px; padding: 10px; background: var(--c-beige); border-radius: 6px; border: 1px solid var(--c-cream); }
+.square-placeholder { width: 24px; height: 24px; border: 2px solid var(--c-light); cursor: pointer; display: flex; align-items: center; justify-content: center; border-radius: 4px; background: white; }
+
+.ai-chat-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid var(--c-cream); }
+.ai-chat-header h3 { color: var(--c-dark); }
+.ai-chat-messages { flex: 1; overflow-y: auto; padding: 15px; background: var(--c-beige); border-radius: 8px; margin-bottom: 15px; display: flex; flex-direction: column; gap: 12px; }
+.ai-message { padding: 12px 16px; border-radius: 12px; max-width: 80%; word-wrap: break-word; }
+.ai-message.user { background: var(--c-accent); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
+.ai-message.ai { background: white; border: 1px solid var(--c-cream); align-self: flex-start; border-bottom-left-radius: 4px; }
+.ai-message.ai img, .ai-message.ai video { max-width: 100%; border-radius: 8px; margin-top: 8px; }
+.ai-chat-input-area { display: flex; gap: 10px; flex-direction: column; }
+.ai-chat-input-area textarea { width: 100%; padding: 12px; border: 2px solid var(--c-cream); border-radius: 8px; resize: none; font-size: 14px; background: var(--c-milk); min-height: 60px; }
+.ai-chat-input-area textarea:focus { outline: none; border-color: var(--c-accent); }
+.ai-chat-controls { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.ai-chat-controls select { padding: 10px; border: 2px solid var(--c-cream); border-radius: 8px; background: var(--c-milk); font-size: 14px; flex: 1; }
+.ai-chat-controls button { padding: 12px 20px; background: var(--c-accent); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+.ai-chat-controls button:hover { background: var(--c-caramel); }
+.ai-chat-tools { display: flex; gap: 8px; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--c-cream); }
+.ai-chat-tools img { width: 36px; height: 36px; cursor: pointer; padding: 6px; border-radius: 8px; background: var(--c-beige); transition: all 0.3s; }
+.ai-chat-tools img:hover:not(.premium-disabled) { background: var(--c-accent); transform: scale(1.1); }
+.ai-chat-tools img.premium-disabled { opacity: 0.4; cursor: not-allowed; }
+.ai-chat-tools img.active-tool { background: var(--c-accent); box-shadow: 0 0 0 2px var(--c-dark); }
+
+.calendar-container { background: white; border-radius: 12px; padding: 25px; border: 2px solid var(--c-cream); box-shadow: 0 4px 16px rgba(62,39,35,0.1); margin-bottom: 20px; }
+.calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.calendar-header h3 { color: var(--c-dark); font-size: 22px; }
+.calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+.calendar-day-header { text-align: center; font-weight: bold; padding: 12px; background: linear-gradient(135deg, var(--c-med), var(--c-light)); color: white; border-radius: 6px; font-size: 13px; }
+.calendar-day { aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 2px solid var(--c-cream); border-radius: 8px; cursor: pointer; transition: all 0.3s; background: var(--c-milk); font-weight: 500; }
+.calendar-day:hover { background: var(--c-cream); transform: scale(1.05); }
+.calendar-day.has-note { background: linear-gradient(135deg, var(--c-accent), var(--c-caramel)); color: white; border-color: var(--c-accent); }
+.calendar-day.today { border: 3px solid var(--c-dark); font-weight: bold; }
+.calendar-day .note-indicator { width: 8px; height: 8px; background: var(--c-dark); border-radius: 50%; margin-top: 4px; }
+.calendar-day.has-note .note-indicator { background: white; }
+.calendar-day.empty { cursor: default; background: transparent; border: none; }
+.day-detail-panel { background: white; border-radius: 10px; padding: 20px; border: 2px solid var(--c-cream); }
+.day-detail-panel h4 { color: var(--c-dark); margin-bottom: 12px; }
+.day-detail-panel textarea { width: 100%; padding: 12px; border: 2px solid var(--c-cream); border-radius: 6px; resize: vertical; min-height: 100px; margin-bottom: 15px; background: var(--c-milk); }
+
+.pricing-cards { display: flex; gap: 20px; justify-content: center; margin-top: 40px; flex-wrap: wrap; }
+.pricing-card { background: white; padding: 30px; border-radius: 12px; border: 2px solid var(--c-cream); width: 300px; text-align: center; transition: transform 0.3s; }
+.pricing-card:hover { transform: translateY(-5px); border-color: var(--c-accent); }
+.pricing-card h3 { margin-bottom: 15px; font-size: 24px; color: var(--c-dark); }
+.pricing-card .price { font-size: 36px; font-weight: bold; margin-bottom: 20px; }
+.pricing-card .price span { font-size: 16px; color: var(--c-light); font-weight: normal; }
+.pricing-card.free .price { color: var(--c-light); }
+.pricing-card.flash .price { color: var(--c-flash); }
+.pricing-card.home .price { color: var(--c-home); }
+.pricing-card ul { list-style: none; margin: 20px 0; text-align: left; }
+.pricing-card ul li { padding: 8px 0; border-bottom: 1px solid var(--c-beige); }
+.pricing-card ul li::before { content: '✓'; margin-right: 8px; color: var(--c-green); font-weight: bold; }
+.sber-btn { background: linear-gradient(135deg, var(--c-accent), var(--c-caramel)); color: white; padding: 12px 20px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; width: 100%; margin-top: 15px; font-weight: bold; transition: all 0.3s; }
+.sber-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(212,165,116,0.4); }
+
+.message-list { background: white; border-radius: 10px; border: 2px solid var(--c-cream); }
+.message-item { padding: 15px; border-bottom: 1px solid var(--c-beige); display: flex; justify-content: space-between; }
+.compose-btn { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; background: linear-gradient(135deg, var(--c-accent), var(--c-caramel)); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(212,165,116,0.4); cursor: pointer; }
+.compose-btn img { width: 32px; height: 32px; filter: brightness(0) invert(1); }
+
+.modal { display: none; position: fixed; inset: 0; background: rgba(62,39,35,0.7); justify-content: center; align-items: center; z-index: 1000; backdrop-filter: blur(4px); }
+.modal-content { background: white; padding: 30px; border-radius: 12px; width: 450px; max-height: 90vh; overflow-y: auto; border: 3px solid var(--c-accent); box-shadow: 0 12px 40px rgba(62,39,35,0.3); }
+.modal-content h3 { margin-bottom: 15px; color: var(--c-dark); }
+.modal-content input, .modal-content textarea { width: 100%; padding: 12px; margin-bottom: 12px; border: 2px solid var(--c-cream); border-radius: 8px; font-size: 14px; background: var(--c-milk); }
+.modal-content input:focus, .modal-content textarea:focus { outline: none; border-color: var(--c-accent); }
+.modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 15px; }
+.modal-actions button { padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+.btn-cancel { background: var(--c-light); color: white; }
+.btn-confirm { background: var(--c-accent); color: white; }
+
+.premium-lock-modal { text-align: center; padding: 20px; }
+.premium-lock-modal .lock-icon-large { font-size: 64px; margin-bottom: 20px; display: block; }
+
+.site-footer {
+  position: fixed;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(62, 39, 35, 0.85);
+  backdrop-filter: blur(6px);
+  padding: 8px 16px;
+  border-radius: 20px;
+  z-index: 900;
+  border: 1px solid var(--c-accent);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+}
+.site-footer:hover {
+  background: rgba(62, 39, 35, 0.95);
+  transform: translateX(-50%) translateY(-2px);
+}
+.neocities-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: var(--c-cream);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+.neocities-link:hover { color: var(--c-accent); }
+.neocities-link img {
+  width: 20px;
+  height: 20px;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3));
+}
+</style>
+</head>
+<body>
+
+<div id="toast-container"></div>
+
+<div id="auth-screen">
+  <div class="auth-box">
+    <h2>☕ Scoffe2</h2>
+    <input type="text" id="auth-username" placeholder="Имя пользователя">
+    <input type="password" id="auth-password" placeholder="Пароль (мин. 8 символов)">
+    <div class="auth-msg" id="auth-message"></div>
+    <button onclick="handleAuth('login')">Войти</button>
+    <button class="secondary" onclick="handleAuth('register')">Создать аккаунт</button>
+  </div>
+</div>
+
+<div id="app-screen">
+  <div class="sidebar">
+    <div class="logo-area">
+      <img src="iconScoffe2.png" alt="Scoffe2" width="64" height="64">
+      <span>Scoffe2</span>
+    </div>
+    <div class="user-info">
+      <span class="uname" id="display-user-name"></span>
+      <span>ID: <strong id="display-user-id"></strong></span>
+      <div><span class="tariff-badge" id="tariff-badge">Бесплатный</span></div>
+    </div>
+    
+    <button class="nav-btn active" onclick="switchView('notepad', this)"><img src="iconnote.png" width="16" height="16"> Блокнот</button>
+    <button class="nav-btn" onclick="switchView('calendar', this)"><img src="calendar.png" width="16" height="16"> Календарь</button>
+    <button class="nav-btn" onclick="switchView('ai-chat', this)"><img src="openai.png" width="16" height="16" id="nav-ai-icon"> ИИ Чат</button>
+    <button class="nav-btn" onclick="switchView('pricing', this)"><img src="tickicon.png" width="16" height="16"> Тарифы</button>
+    <button class="nav-btn" onclick="switchView('messages', this)"><img src="chat.png" width="16" height="16"> Сообщения</button>
+    <button class="nav-btn" onclick="logout()" style="margin-top: auto; color: #FFCDD2;"><img src="crossicon.png" width="16" height="16"> Выйти</button>
+  </div>
+
+  <div class="main">
+    <div id="view-notepad" class="view active">
+      <div id="notepad-list-view">
+        <div class="top-actions">
+          <button class="action-btn" onclick="createNotepad()"><img src="iconnote.png" width="16" height="16"> Создать блокнот</button>
+        </div>
+        <h3 style="margin-bottom: 15px; color: var(--c-dark);">Мои блокноты</h3>
+        <div class="notepad-list" id="notepad-container"></div>
+      </div>
+      <div id="notepad-editor-view" class="notepad-editor" style="display: none;">
+        <div class="editor-toolbar">
+          <img src="crossicon.png" title="Выйти" onclick="closeNotepad()">
+          <img src="save.png" title="Сохранить" onclick="saveNotepad()">
+          <img src="square.png" title="Добавить задачу" onclick="addChecklistItem()">
+          <img src="microphone.png" title="Речь в текст" onclick="startSpeechToText('notepad')" id="btn-speech-notepad">
+          <img src="rerank.png" title="Реранк содержимого" onclick="rerankNotepad()" id="btn-rerank-notepad">
+          <img src="openai.png" title="ИИ: превратить текст в ответ" onclick="generateAINotepad()" id="btn-ai-notepad">
+          <img src="save.png" title="Скачать .txt" onclick="downloadNotepad()" style="border: 2px solid var(--c-green);">
+        </div>
+        <div class="editor-content">
+          <h4 id="editor-title" style="color: var(--c-dark);">Блокнот</h4>
+          <textarea id="editor-text" placeholder="Введите текст... Используйте %название для вставки содержимого другого блокнота"></textarea>
+          <div id="checklist-container"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="view-calendar" class="view">
+      <h2 style="margin-bottom: 20px; color: var(--c-dark);">Календарь</h2>
+      <div class="calendar-container">
+        <div class="calendar-header">
+          <button onclick="prevMonth()" style="padding: 8px 16px; background: var(--c-accent); color: white; border: none; border-radius: 6px; cursor: pointer;">←</button>
+          <h3 id="calendar-month-year"></h3>
+          <button onclick="nextMonth()" style="padding: 8px 16px; background: var(--c-accent); color: white; border: none; border-radius: 6px; cursor: pointer;">→</button>
+        </div>
+        <div class="calendar-grid" id="calendar-grid"></div>
+      </div>
+      <div id="day-detail-panel" class="day-detail-panel" style="display: none;">
+        <h4 id="selected-date-title"></h4>
+        <div class="calendar-toolbar">
+          <img src="save.png" title="Сохранить" onclick="saveDayNote()">
+          <img src="microphone.png" title="Речь в текст" onclick="startSpeechToText('calendar')" id="btn-speech-calendar">
+          <img src="rerank.png" title="Реранк заметок" onclick="rerankCalendar()" id="btn-rerank-calendar">
+          <img src="openai.png" title="ИИ: превратить заметку в ответ" onclick="generateAICalendar()" id="btn-ai-calendar">
+        </div>
+        <textarea id="day-note-text" placeholder="Заметка..."></textarea>
+      </div>
+    </div>
+
+    <div id="view-ai-chat" class="view">
+      <div class="ai-chat-container">
+        <div class="ai-chat-header">
+          <h3>💬 ИИ Чат</h3>
+          <button class="action-btn" onclick="clearChatHistory()" style="background: var(--c-light);"><img src="crossicon.png" width="16" height="16"> Очистить</button>
+        </div>
+        <div class="ai-chat-messages" id="ai-chat-messages"></div>
+        <div class="ai-chat-input-area">
+          <textarea id="ai-chat-input" placeholder="Напишите сообщение ИИ..."></textarea>
+          <div class="ai-chat-controls">
+            <select id="ai-model"></select>
+            <select id="image-model-select" style="display: none;"></select>
+            <select id="video-model-select" style="display: none;"></select>
+            <button onclick="sendAIChatMessage(currentTool)">Отправить</button>
+          </div>
+          <div class="ai-chat-tools">
+            <img src="openai.png" title="Текстовый ответ (ИИ)" onclick="selectTool('text')" id="tool-text" class="active-tool">
+            <img src="square.png" title="Сгенерировать изображение" onclick="selectTool('image')" id="tool-image">
+            <img src="camera.png" title="Сгенерировать видео" onclick="selectTool('video')" id="tool-video">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="view-pricing" class="view">
+      <h2 style="text-align: center; margin-bottom: 10px; color: var(--c-dark);">Выберите тариф</h2>
+      <div class="pricing-cards">
+        <div class="pricing-card free">
+          <h3>Бесплатный</h3>
+          <div class="price">0 ₽ <span>/ навсегда</span></div>
+          <ul>
+            <li>Неограниченные блокноты</li>
+            <li>Календарь с заметками</li>
+            <li style="color: #95a5a6; text-decoration: line-through;">ИИ-ассистент</li>
+            <li style="color: #95a5a6; text-decoration: line-through;">Генерация изображений и видео</li>
+            <li style="color: #95a5a6; text-decoration: line-through;">Реранк</li>
+          </ul>
+          <button class="sber-btn" style="background: var(--c-light);" disabled>Текущий тариф</button>
+        </div>
+        <div class="pricing-card flash">
+          <h3>Флэш</h3>
+          <div class="price">59 ₽ <span>/ месяц</span></div>
+          <ul>
+            <li>Всё из бесплатного</li>
+            <li><strong>ИИ-ассистент</strong> (базовые модели)</li>
+            <li><strong>Генерация изображений</strong> (GPT Image 1 Mini, Mai Image 2.6)</li>
+            <li><strong>Генерация видео</strong> (Seedance 1.5 Pro, Grok Imagine, Seedance 2.0 Fast)</li>
+            <li><strong>Реранк</strong> (Rerank V3.5)</li>
+            <li><strong>Речь в текст</strong></li>
+          </ul>
+          <button class="sber-btn" onclick="showPaymentModal('flash')">Выбрать Флэш</button>
+        </div>
+        <div class="pricing-card home">
+          <h3>Домашний</h3>
+          <div class="price">99 ₽ <span>/ месяц</span></div>
+          <ul>
+            <li>Всё из Флэш</li>
+            <li><strong>Премиум ИИ-модели</strong> (GPT-4o Mini, GigaChat 2, Sonar)</li>
+            <li><strong>Премиум изображения</strong> (Recraft V4.1 Pro, Gemini 3 Pro Image, GPT Image 1)</li>
+            <li><strong>Премиум видео</strong> (Hailuo 2.3, Veo 3.1 Lite, Aleph 2)</li>
+            <li><strong>Премиум реранк</strong> (Rerank 4 Pro, Qwen3 Reranker 8b)</li>
+            <li>Неограниченные запросы</li>
+          </ul>
+          <button class="sber-btn" onclick="showPaymentModal('home')">Выбрать Домашний</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="view-messages" class="view">
+      <h2 style="margin-bottom: 20px; color: var(--c-dark);">Сообщения</h2>
+      <div class="message-list" id="message-container"></div>
+      <div class="compose-btn" onclick="document.getElementById('modal-message').style.display='flex'"><img src="chat.png" width="32" height="32"></div>
+    </div>
+  </div>
+</div>
+
+<div id="modal-message" class="modal">
+  <div class="modal-content">
+    <h3>Новое сообщение</h3>
+    <input type="text" id="msg-recipient" placeholder="ID получателя">
+    <textarea id="msg-text" rows="4" placeholder="Текст..."></textarea>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('modal-message')">Отмена</button>
+      <button class="btn-confirm" onclick="sendMessage(); closeModal('modal-message')">Отправить</button>
+    </div>
+  </div>
+</div>
+
+<div id="modal-payment" class="modal">
+  <div class="modal-content" id="payment-modal-content"></div>
+</div>
+
+<div id="modal-premium-lock" class="modal">
+  <div class="modal-content">
+    <div class="premium-lock-modal">
+      <span class="lock-icon-large">🔒</span>
+      <h3 id="premium-lock-title">Функция недоступна</h3>
+      <p id="premium-lock-text">Требуется платный тариф</p>
+      <button class="sber-btn" onclick="closeModal('modal-premium-lock'); switchView('pricing', document.querySelector('[onclick*=pricing]'))">Перейти к тарифам</button>
+      <button class="btn-cancel" style="margin-top: 10px;" onclick="closeModal('modal-premium-lock')">Закрыть</button>
+    </div>
+  </div>
+</div>
+
+<div id="modal-rename" class="modal">
+  <div class="modal-content">
+    <h3>Переименовать блокнот</h3>
+    <input type="text" id="rename-input" placeholder="Новое название">
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('modal-rename')">Отмена</button>
+      <button class="btn-confirm" onclick="confirmRename()">Сохранить</button>
+    </div>
+  </div>
+</div>
+
+<!-- Нижняя ссылка на Neocities -->
+<footer class="site-footer">
+  <a href="https://neocities.org" target="_blank" rel="noopener noreferrer" class="neocities-link">
+    <img src="iconScoffe2.png" alt="Scoffe2 Logo">
+    <span>Neocities</span>
+  </a>
+</footer>
+
+<script>
+const WORKER_URL = 'https://foxfish12.chesru.workers.dev';
+
+const AI_MODELS = {
+  flash: [{ value: 'gpt-oss-120b', label: 'GPT OSS 120B' }, { value: 'mistral-nemo', label: 'Mistral Nemo' }, { value: 'gpt-oss-20b', label: 'GPT OSS 20B' }, { value: 'mimo-v2.5', label: 'Mimo v2.5' }],
+  home: [{ value: 'gpt-4o-mini', label: 'GPT-4o Mini' }, { value: 'minimax-m2', label: 'MiniMax M2' }, { value: 'gemini-3.1-flash-lite', label: 'Gemini 3.1 Flash Lite' }, { value: 'gigachat-2', label: 'GigaChat 2' }, { value: 'sonar', label: 'Sonar' }]
+};
+
+const IMAGE_MODELS = {
+  flash: [{ value: 'gpt-image-1-mini', label: 'GPT Image 1 Mini' }, { value: 'mai-image-2.6', label: 'Mai Image 2.6' }],
+  home: [{ value: 'recraft-v4.1-pro', label: 'Recraft V4.1 Pro' }, { value: 'gemini-3-pro-image', label: 'Gemini 3 Pro Image' }, { value: 'gpt-image-1', label: 'GPT Image 1' }]
+};
+
+const VIDEO_MODELS = {
+  flash: [{ value: 'seedance-1.5-pro', label: 'Seedance 1.5 Pro' }, { value: 'grok-imagine-video', label: 'Grok Imagine Video' }, { value: 'seedance-2.0-fast', label: 'Seedance 2.0 Fast' }],
+  home: [{ value: 'hailuo-2.3', label: 'Hailuo 2.3' }, { value: 'veo-3.1-lite', label: 'Veo 3.1 Lite' }, { value: 'aleph-2', label: 'Aleph 2' }]
+};
+
+const RERANK_MODELS = {
+  flash: [{ value: 'rerank-v3.5', label: 'Rerank V3.5' }],
+  home: [{ value: 'rerank-4-pro', label: 'Rerank 4 Pro' }, { value: 'qwen3-reranker-8b', label: 'Qwen3 Reranker 8b' }]
+};
+
+let currentUser = null, currentUserId = null, userTariff = 'free', tariffExpiry = null;
+let notepads = [], activeNotepad = null, calendarNotes = {}, messages = [], aiChatHistory = [];
+let currentCalendarDate = new Date(), selectedDate = null, renamingNotepadId = null;
+let currentTool = 'text';
+
+function generateId() { return Math.random().toString(36).substring(2, 8).toUpperCase() + Math.random().toString(36).substring(2, 6).toUpperCase(); }
+async function hashPassword(password) {
+  const encoder = new TextEncoder();
+  const hashBuffer = await crypto.subtle.digest('SHA-256', encoder.encode(password + '_scoffe2_salt_2026'));
+  return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+function showToast(message, type = 'info') {
+  const container = document.getElementById('toast-container');
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+  let icon = 'ℹ️';
+  if (type === 'success') icon = '✅';
+  if (type === 'error') icon = '❌';
+  if (type === 'loading') icon = '⏳';
+  toast.innerHTML = `<span>${icon}</span> <span>${message}</span>`;
+  container.appendChild(toast);
+  if (type !== 'loading') {
+    setTimeout(() => {
+      toast.style.opacity = '0';
+      toast.style.transform = 'translateX(100%)';
+      setTimeout(() => toast.remove(), 300);
+    }, 4000);
+  }
+  return toast;
+}
+function removeLoadingToast(toast) { if (toast) toast.remove(); }
+
+function getUsers() { return JSON.parse(localStorage.getItem('scoffe2_users') || '{}'); }
+function saveUsers(users) { localStorage.setItem('scoffe2_users', JSON.stringify(users)); }
+function getCurrentSession() { return JSON.parse(localStorage.getItem('scoffe2_session') || 'null'); }
+function saveSession(username, userId, tariff) { localStorage.setItem('scoffe2_session', JSON.stringify({ username, userId, tariff })); }
+function clearSession() { localStorage.removeItem('scoffe2_session'); }
+function getUserDataKey(username) { return 'scoffe2_data_' + username.toLowerCase(); }
+
+function loadUserData(username) {
+  const raw = localStorage.getItem(getUserDataKey(username));
+  if (!raw) return { notepads: [], calendarNotes: {}, messages: [{ from: 'Система', text: 'Добро пожаловать!', time: new Date().toISOString() }], aiChatHistory: [] };
+  try { return JSON.parse(raw); } catch (e) { return { notepads: [], calendarNotes: {}, messages: [], aiChatHistory: [] }; }
+}
+
+function saveUserData() {
+  if (!currentUser) return;
+  try {
+    localStorage.setItem(getUserDataKey(currentUser), JSON.stringify({ notepads, calendarNotes, messages, tariff: userTariff, tariffExpiry, aiChatHistory }));
+    showToast('Сохранено', 'success');
+  } catch (e) { showToast('Ошибка сохранения', 'error'); }
+}
+
+function applyTariff(plan, expiry) {
+  userTariff = plan; tariffExpiry = expiry;
+  const users = getUsers();
+  if (users[currentUser.toLowerCase()]) { 
+    users[currentUser.toLowerCase()].tariff = plan; 
+    users[currentUser.toLowerCase()].tariffExpiry = expiry;
+    saveUsers(users); 
+  }
+  saveSession(currentUser, currentUserId, plan);
+  saveUserData(); updateTariffBadge(); updateAIIcons(); updateAllModels();
+}
+
+function checkTariffExpiry() {
+  if (tariffExpiry && Date.now() > tariffExpiry) {
+    userTariff = 'free'; tariffExpiry = null;
+    saveUserData(); updateTariffBadge(); updateAIIcons(); updateAllModels();
+  }
+}
+
+function getAvailableModels(category) {
+  if (userTariff === 'free') return [];
+  let models = [];
+  if (userTariff === 'flash' || userTariff === 'home') {
+    models = [...(category === 'ai' ? AI_MODELS.flash : category === 'image' ? IMAGE_MODELS.flash : category === 'video' ? VIDEO_MODELS.flash : RERANK_MODELS.flash)];
+  }
+  if (userTariff === 'home') {
+    const premium = category === 'ai' ? AI_MODELS.home : category === 'image' ? IMAGE_MODELS.home : category === 'video' ? VIDEO_MODELS.home : RERANK_MODELS.home;
+    models = [...models, ...premium];
+  }
+  return models;
+}
+
+function selectTool(tool) {
+  currentTool = tool;
+  document.querySelectorAll('.ai-chat-tools img').forEach(img => img.classList.remove('active-tool'));
+  document.getElementById(`tool-${tool}`).classList.add('active-tool');
+  document.getElementById('ai-model').style.display = tool === 'text' ? 'block' : 'none';
+  document.getElementById('image-model-select').style.display = tool === 'image' ? 'block' : 'none';
+  document.getElementById('video-model-select').style.display = tool === 'video' ? 'block' : 'none';
+}
+
+function updateAIIcons() {
+  const isFree = userTariff === 'free';
+  const navIcon = document.getElementById('nav-ai-icon');
+  navIcon.src = isFree ? 'lock.png' : 'openai.png';
+  ['btn-speech-notepad', 'btn-speech-calendar', 'btn-rerank-notepad', 'btn-rerank-calendar', 'btn-ai-notepad', 'btn-ai-calendar', 'tool-image', 'tool-video', 'tool-text'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.toggle('premium-disabled', isFree);
+  });
+}
+
+function updateAllModels() {
+  updateAIModels();
+  updateImageModels();
+  updateVideoModels();
+}
+
+function updateAIModels() {
+  const select = document.getElementById('ai-model');
+  const models = getAvailableModels('ai');
+  if (models.length === 0) {
+    select.innerHTML = '<option value="">Недоступно</option>';
+    select.disabled = true;
+  } else {
+    select.innerHTML = models.map(m => `<option value="${m.value}">${m.label}</option>`).join('');
+    select.disabled = false;
+  }
+}
+
+function updateImageModels() {
+  const select = document.getElementById('image-model-select');
+  const models = getAvailableModels('image');
+  if (models.length === 0) {
+    select.innerHTML = '<option value="">Недоступно</option>';
+    select.disabled = true;
+  } else {
+    select.innerHTML = models.map(m => `<option value="${m.value}">${m.label}</option>`).join('');
+    select.disabled = false;
+  }
+}
+
+function updateVideoModels() {
+  const select = document.getElementById('video-model-select');
+  const models = getAvailableModels('video');
+  if (models.length === 0) {
+    select.innerHTML = '<option value="">Недоступно</option>';
+    select.disabled = true;
+  } else {
+    select.innerHTML = models.map(m => `<option value="${m.value}">${m.label}</option>`).join('');
+    select.disabled = false;
+  }
+}
+
+async function callWorker(endpoint, payload) {
+  const res = await fetch(`${WORKER_URL}/${endpoint}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  });
+  if (!res.ok) throw new Error('Ошибка API: ' + res.status);
+  return await res.json();
+}
+
+function renderAIChat() {
+  const container = document.getElementById('ai-chat-messages');
+  container.innerHTML = aiChatHistory.map(msg => {
+    if (msg.type === 'image') {
+      return `<div class="ai-message ai"><strong>🎨 Изображение (${msg.model}):</strong><br><img src="${msg.url}" alt="Generated"><p style="font-size: 12px; color: var(--c-light); margin-top: 5px;">${msg.prompt}</p></div>`;
+    } else if (msg.type === 'video') {
+      return `<div class="ai-message ai"><strong>🎥 Видео (${msg.model}):</strong><br><video src="${msg.url}" controls style="max-width: 100%;"></video><p style="font-size: 12px; color: var(--c-light); margin-top: 5px;">${msg.prompt}</p></div>`;
+    } else {
+      return `<div class="ai-message ${msg.role}">${msg.content}</div>`;
+    }
+  }).join('');
+  container.scrollTop = container.scrollHeight;
+}
+
+async function sendAIChatMessage(mode) {
+  if (userTariff === 'free') {
+    document.getElementById('premium-lock-title').textContent = 'ИИ чат недоступен';
+    document.getElementById('premium-lock-text').textContent = 'Выберите тариф «Флэш» (59 ₽) или «Домашний» (99 ₽)';
+    document.getElementById('modal-premium-lock').style.display = 'flex';
+    return;
+  }
+  
+  const input = document.getElementById('ai-chat-input');
+  const message = input.value.trim();
+  if (!message) { showToast('Введите сообщение', 'error'); return; }
+  
+  const actualMode = mode || currentTool;
+  
+  if (actualMode === 'image') {
+    const model = document.getElementById('image-model-select').value;
+    if (!model) { showToast('Нет доступных моделей', 'error'); return; }
+    aiChatHistory.push({ role: 'user', content: `🎨 Сгенерировать изображение: ${message}` });
+    renderAIChat();
+    input.value = '';
+    const toast = showToast('Генерация изображения...', 'loading');
+    try {
+      const data = await callWorker('image', { model: model, prompt: message });
+      removeLoadingToast(toast);
+      if (data.image_url) {
+        aiChatHistory.push({ type: 'image', url: data.image_url, model: model, prompt: message });
+        renderAIChat();
+        saveUserData();
+      } else {
+        showToast('Изображение не получено', 'error');
+      }
+    } catch (err) {
+      removeLoadingToast(toast);
+      showToast('Ошибка: ' + err.message, 'error');
+    }
+  } else if (actualMode === 'video') {
+    const model = document.getElementById('video-model-select').value;
+    if (!model) { showToast('Нет доступных моделей', 'error'); return; }
+    aiChatHistory.push({ role: 'user', content: `🎥 Сгенерировать видео: ${message}` });
+    renderAIChat();
+    input.value = '';
+    const toast = showToast('Генерация видео...', 'loading');
+    try {
+      const data = await callWorker('video', { model: model, prompt: message });
+      removeLoadingToast(toast);
+      if (data.video_url) {
+        aiChatHistory.push({ type: 'video', url: data.video_url, model: model, prompt: message });
+        renderAIChat();
+        saveUserData();
+      } else {
+        showToast('Видео не получено', 'error');
+      }
+    } catch (err) {
+      removeLoadingToast(toast);
+      showToast('Ошибка: ' + err.message, 'error');
+    }
+  } else {
+    const model = document.getElementById('ai-model').value;
+    if (!model) { showToast('Нет доступных моделей', 'error'); return; }
+    aiChatHistory.push({ role: 'user', content: message });
+    renderAIChat();
+    input.value = '';
+    const toast = showToast('ИИ печатает...', 'loading');
+    try {
+      const systemMsg = { role: 'system', content: 'Ты полезный ассистент в приложении Scoffe2. Отвечай кратко и по делу.' };
+      const messages = [systemMsg, ...aiChatHistory.filter(m => m.role).slice(-10)];
+      const data = await callWorker('ai', {
+        model: model,
+        messages: messages,
+        temperature: 0.7,
+        max_tokens: 1500
+      });
+      removeLoadingToast(toast);
+      aiChatHistory.push({ role: 'ai', content: data.choices[0].message.content });
+      renderAIChat();
+      saveUserData();
+    } catch (err) {
+      removeLoadingToast(toast);
+      showToast('Ошибка ИИ: ' + err.message, 'error');
+    }
+  }
+}
+
+function clearChatHistory() {
+  aiChatHistory = [];
+  renderAIChat();
+  saveUserData();
+  showToast('История чата очищена', 'success');
+}
+
+async function generateAINotepad() {
+  if (userTariff === 'free') {
+    document.getElementById('premium-lock-title').textContent = 'ИИ недоступен';
+    document.getElementById('premium-lock-text').textContent = 'Выберите тариф «Флэш» (59 ₽) или «Домашний» (99 ₽)';
+    document.getElementById('modal-premium-lock').style.display = 'flex';
+    return;
+  }
+  if (!activeNotepad) { showToast('Откройте блокнот', 'error'); return; }
+  const content = document.getElementById('editor-text').value;
+  if (!content.trim()) { showToast('Блокнот пуст', 'error'); return; }
+  const toast = showToast('ИИ обрабатывает текст...', 'loading');
+  try {
+    const data = await callWorker('ai', {
+      model: document.getElementById('ai-model').value,
+      messages: [
+        { role: 'system', content: 'Ты полезный ассистент. Проанализируй текст пользователя и дай развёрнутый, структурированный ответ по его содержанию. Отвечай на русском языке.' },
+        { role: 'user', content: content }
+      ],
+      temperature: 0.7,
+      max_tokens: 1500
+    });
+    removeLoadingToast(toast);
+    const answer = data.choices[0].message.content;
+    document.getElementById('editor-text').value = answer;
+    activeNotepad.content = answer;
+    saveUserData();
+    showToast('Текст превращён в ответ ИИ', 'success');
+  } catch (err) {
+    removeLoadingToast(toast);
+    showToast('Ошибка: ' + err.message, 'error');
+  }
+}
+
+async function generateAICalendar() {
+  if (userTariff === 'free') {
+    document.getElementById('premium-lock-title').textContent = 'ИИ недоступен';
+    document.getElementById('premium-lock-text').textContent = 'Выберите тариф «Флэш» (59 ₽) или «Домашний» (99 ₽)';
+    document.getElementById('modal-premium-lock').style.display = 'flex';
+    return;
+  }
+  const note = document.getElementById('day-note-text').value;
+  if (!note.trim()) { showToast('Заметка пуста', 'error'); return; }
+  const toast = showToast('ИИ обрабатывает заметку...', 'loading');
+  try {
+    const data = await callWorker('ai', {
+      model: document.getElementById('ai-model').value,
+      messages: [
+        { role: 'system', content: 'Ты полезный ассистент. Проанализируй заметку пользователя и дай развёрнутый, структурированный ответ. Отвечай на русском языке.' },
+        { role: 'user', content: note }
+      ],
+      temperature: 0.7,
+      max_tokens: 1500
+    });
+    removeLoadingToast(toast);
+    const answer = data.choices[0].message.content;
+    document.getElementById('day-note-text').value = answer;
+    if (selectedDate) calendarNotes[selectedDate] = answer;
+    saveUserData();
+    showToast('Заметка превращена в ответ ИИ', 'success');
+  } catch (err) {
+    removeLoadingToast(toast);
+    showToast('Ошибка: ' + err.message, 'error');
+  }
+}
+
+async function rerankNotepad() {
+  if (userTariff === 'free') {
+    document.getElementById('premium-lock-title').textContent = 'Реранк недоступен';
+    document.getElementById('premium-lock-text').textContent = 'Выберите тариф «Флэш» (59 ₽) или «Домашний» (99 ₽)';
+    document.getElementById('modal-premium-lock').style.display = 'flex';
+    return;
+  }
+  if (!activeNotepad) { showToast('Откройте блокнот', 'error'); return; }
+  const content = document.getElementById('editor-text').value;
+  if (!content.trim()) { showToast('Блокнот пуст', 'error'); return; }
+  const lines = content.split('\n').filter(l => l.trim());
+  if (lines.length < 2) { showToast('Нужно минимум 2 строки для реранка', 'error'); return; }
+  const models = getAvailableModels('rerank');
+  if (models.length === 0) { showToast('Нет доступных моделей реранка', 'error'); return; }
+  const toast = showToast('Реранк содержимого...', 'loading');
+  try {
+    const data = await callWorker('rerank', {
+      model: models[0].value,
+      query: 'основная тема текста',
+      documents: lines
+    });
+    removeLoadingToast(toast);
+    if (data.results && Array.isArray(data.results)) {
+      const reranked = data.results.map(r => r.text || lines[r.index]).filter(Boolean);
+      document.getElementById('editor-text').value = reranked.join('\n');
+      activeNotepad.content = document.getElementById('editor-text').value;
+      saveUserData();
+      showToast('Содержимое отранжировано', 'success');
+    } else {
+      showToast('Реранк не удался', 'error');
+    }
+  } catch (err) {
+    removeLoadingToast(toast);
+    showToast('Ошибка: ' + err.message, 'error');
+  }
+}
+
+async function rerankCalendar() {
+  if (userTariff === 'free') {
+    document.getElementById('premium-lock-title').textContent = 'Реранк недоступен';
+    document.getElementById('premium-lock-text').textContent = 'Выберите тариф «Флэш» (59 ₽) или «Домашний» (99 ₽)';
+    document.getElementById('modal-premium-lock').style.display = 'flex';
+    return;
+  }
+  const notes = Object.entries(calendarNotes).filter(([_, v]) => v.trim());
+  if (notes.length < 2) { showToast('Нужно минимум 2 заметки для реранка', 'error'); return; }
+  const models = getAvailableModels('rerank');
+  if (models.length === 0) { showToast('Нет доступных моделей реранка', 'error'); return; }
+  const toast = showToast('Реранк заметок...', 'loading');
+  try {
+    const data = await callWorker('rerank', {
+      model: models[0].value,
+      query: 'самые важные заметки',
+      documents: notes.map(([_, v]) => v)
+    });
+    removeLoadingToast(toast);
+    if (data.results && Array.isArray(data.results)) {
+      showToast(`Заметки отранжированы: ${data.results.length} шт.`, 'success');
+    } else {
+      showToast('Реранк не удался', 'error');
+    }
+  } catch (err) {
+    removeLoadingToast(toast);
+    showToast('Ошибка: ' + err.message, 'error');
+  }
+}
+
+let speechRecognition = null;
+let isListening = false;
+let speechTarget = null;
+
+function startSpeechToText(target) {
+  if (userTariff === 'free') {
+    document.getElementById('premium-lock-title').textContent = 'Речь в текст недоступна';
+    document.getElementById('premium-lock-text').textContent = 'Функция доступна только на тарифах «Флэш» и «Домашний»';
+    document.getElementById('modal-premium-lock').style.display = 'flex';
+    return;
+  }
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) { showToast('Браузер не поддерживает распознавание речи', 'error'); return; }
+  if (isListening) {
+    speechRecognition.stop();
+    isListening = false;
+    showToast('Распознавание остановлено', 'info');
+    return;
+  }
+  speechTarget = target;
+  speechRecognition = new SpeechRecognition();
+  speechRecognition.lang = 'ru-RU';
+  speechRecognition.continuous = true;
+  speechRecognition.interimResults = true;
+  const toast = showToast('🎤 Говорите... (нажмите ещё раз для остановки)', 'loading');
+  isListening = true;
+  speechRecognition.onresult = (event) => {
+    let finalTranscript = '';
+    for (let i = event.resultIndex; i < event.results.length; i++) {
+      const transcript = event.results[i][0].transcript;
+      if (event.results[i].isFinal) finalTranscript += transcript + ' ';
+    }
+    if (finalTranscript) {
+      if (speechTarget === 'notepad' && activeNotepad) {
+        const textarea = document.getElementById('editor-text');
+        const start = textarea.selectionStart;
+        const end = textarea.selectionEnd;
+        const text = textarea.value;
+        textarea.value = text.substring(0, start) + finalTranscript + text.substring(end);
+        activeNotepad.content = textarea.value;
+        textarea.selectionStart = textarea.selectionEnd = start + finalTranscript.length;
+      } else if (speechTarget === 'calendar') {
+        const textarea = document.getElementById('day-note-text');
+        textarea.value += finalTranscript;
+      }
+    }
+  };
+  speechRecognition.onerror = (event) => {
+    isListening = false;
+    removeLoadingToast(toast);
+    showToast('Ошибка: ' + event.error, 'error');
+  };
+  speechRecognition.onend = () => {
+    isListening = false;
+    removeLoadingToast(toast);
+  };
+  speechRecognition.start();
+}
+
+async function handleAuth(type) {
+  const username = document.getElementById('auth-username').value.trim();
+  const password = document.getElementById('auth-password').value;
+  const msgEl = document.getElementById('auth-message');
+  if (!username || username.length < 3) { msgEl.textContent = 'Имя мин. 3 символа'; msgEl.className = 'auth-msg error'; return; }
+  if (password.length < 8) { msgEl.textContent = 'Пароль мин. 8 символов'; msgEl.className = 'auth-msg error'; return; }
+  const users = getUsers();
+  if (type === 'register') {
+    if (users[username.toLowerCase()]) { msgEl.textContent = 'Пользователь существует'; msgEl.className = 'auth-msg error'; return; }
+    users[username.toLowerCase()] = { username, passwordHash: await hashPassword(password), userId: generateId(), tariff: 'free', createdAt: new Date().toISOString() };
+    saveUsers(users);
+    msgEl.textContent = '✓ Создан! Войдите.'; msgEl.className = 'auth-msg success';
+    setTimeout(() => { msgEl.textContent = ''; }, 2000);
+    return;
+  }
+  if (type === 'login') {
+    const user = users[username.toLowerCase()];
+    if (!user || (await hashPassword(password)) !== user.passwordHash) { msgEl.textContent = 'Неверные данные'; msgEl.className = 'auth-msg error'; return; }
+    currentUser = username; currentUserId = user.userId; userTariff = user.tariff || 'free'; tariffExpiry = user.tariffExpiry || null;
+    saveSession(currentUser, currentUserId, userTariff);
+    enterApp();
+  }
+}
+
+function enterApp() {
+  document.getElementById('auth-screen').style.display = 'none';
+  document.getElementById('app-screen').style.display = 'flex';
+  document.getElementById('display-user-name').textContent = currentUser;
+  document.getElementById('display-user-id').textContent = currentUserId;
+  const data = loadUserData(currentUser);
+  notepads = data.notepads || []; calendarNotes = data.calendarNotes || {}; 
+  messages = data.messages || [{ from: 'Система', text: 'Добро пожаловать!', time: new Date().toISOString() }];
+  aiChatHistory = data.aiChatHistory || [];
+  if (data.tariff) userTariff = data.tariff;
+  if (data.tariffExpiry) tariffExpiry = data.tariffExpiry;
+  checkTariffExpiry(); updateTariffBadge(); updateAIIcons(); updateAllModels();
+  renderNotepads(); renderCalendar(); renderMessages(); renderAIChat(); handlePaymentReturn();
+  selectTool('text');
+}
+
+function updateTariffBadge() {
+  const badge = document.getElementById('tariff-badge');
+  if (tariffExpiry && Date.now() > tariffExpiry) { userTariff = 'free'; tariffExpiry = null; }
+  badge.textContent = userTariff === 'home' ? 'Домашний' : (userTariff === 'flash' ? 'Флэш' : 'Бесплатный');
+  badge.className = 'tariff-badge tariff-' + (userTariff === 'free' ? '' : userTariff);
+  if (tariffExpiry) {
+    const m = Math.floor((tariffExpiry - Date.now()) / 60000);
+    const s = Math.floor(((tariffExpiry - Date.now()) % 60000) / 1000);
+    if (m >= 0) badge.textContent += ` (${m}м ${s}с)`;
+  }
+}
+
+function logout() { clearSession(); location.reload(); }
+
+window.addEventListener('DOMContentLoaded', () => {
+  const session = getCurrentSession();
+  if (session) {
+    const user = getUsers()[session.username.toLowerCase()];
+    if (user) { currentUser = user.username; currentUserId = user.userId; userTariff = user.tariff || 'free'; tariffExpiry = user.tariffExpiry || null; enterApp(); }
+    else clearSession();
+  }
+});
+
+function switchView(viewName, btn) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('view-' + viewName).classList.add('active');
+  if (btn) btn.classList.add('active');
+  if (viewName === 'calendar') renderCalendar();
+  if (viewName === 'ai-chat') renderAIChat();
+}
+
+function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+window.onclick = function(event) { if (event.target.classList.contains('modal')) event.target.style.display = 'none'; }
+
+function createNotepad() {
+  const title = prompt('Название блокнота:');
+  if (!title) return;
+  notepads.push({ id: generateId(), title: title, content: '', checklist: [], createdAt: Date.now() });
+  renderNotepads(); saveUserData();
+}
+
+function renderNotepads() {
+  document.getElementById('notepad-container').innerHTML = notepads.map(np => `
+    <div class="notepad-card" onclick="openNotepad('${np.id}')">
+      <div class="rename-btn" onclick="event.stopPropagation(); openRenameModal('${np.id}')">
+        <img src="save.png" alt="Rename">
+      </div>
+      <img src="iconnote.png" width="16" height="16">
+      <div><div style="font-weight: bold;">${np.title}</div><div style="font-size: 12px; color: var(--c-light);">${np.content ? np.content.substring(0, 50) + '...' : 'Пусто'}</div></div>
+    </div>
+  `).join('');
+}
+
+function openNotepad(id) {
+  activeNotepad = notepads.find(n => n.id === id);
+  document.getElementById('notepad-list-view').style.display = 'none';
+  document.getElementById('notepad-editor-view').style.display = 'flex';
+  document.getElementById('editor-title').innerText = activeNotepad.title;
+  let content = activeNotepad.content;
+  content = content.replace(/%(\w+)/g, (match, notepadName) => {
+    const found = notepads.find(n => n.title.toLowerCase() === notepadName.toLowerCase());
+    return found ? found.content : match;
+  });
+  document.getElementById('editor-text').value = content;
+  renderChecklist();
+}
+
+function closeNotepad() {
+  if (activeNotepad) { activeNotepad.content = document.getElementById('editor-text').value; activeNotepad.updatedAt = Date.now(); saveUserData(); }
+  activeNotepad = null;
+  document.getElementById('notepad-list-view').style.display = 'block';
+  document.getElementById('notepad-editor-view').style.display = 'none';
+}
+
+function saveNotepad() {
+  if (activeNotepad) { activeNotepad.content = document.getElementById('editor-text').value; activeNotepad.updatedAt = Date.now(); saveUserData(); }
+}
+
+function downloadNotepad() {
+  if (!activeNotepad) return;
+  const content = activeNotepad.content;
+  const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${activeNotepad.title}.txt`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('Блокнот скачан', 'success');
+}
+
+function openRenameModal(id) {
+  renamingNotepadId = id;
+  const notepad = notepads.find(n => n.id === id);
+  document.getElementById('rename-input').value = notepad.title;
+  document.getElementById('modal-rename').style.display = 'flex';
+}
+
+function confirmRename() {
+  const newName = document.getElementById('rename-input').value.trim();
+  if (!newName) { showToast('Название не может быть пустым', 'error'); return; }
+  const notepad = notepads.find(n => n.id === renamingNotepadId);
+  if (notepad) {
+    notepad.title = newName;
+    renderNotepads();
+    saveUserData();
+    showToast('Блокнот переименован', 'success');
+  }
+  closeModal('modal-rename');
+  renamingNotepadId = null;
+}
+
+function addChecklistItem() {
+  if (activeNotepad) { activeNotepad.checklist.push({ text: 'Задача', checked: false }); renderChecklist(); saveUserData(); }
+}
+
+function renderChecklist() {
+  document.getElementById('checklist-container').innerHTML = activeNotepad.checklist.map((item, idx) => `
+    <div class="checklist-item">
+      <div class="square-placeholder" onclick="toggleCheck(${idx})">${item.checked ? '<img src="tickicon.png" style="width:20px;height:20px;">' : ''}</div>
+      <input type="text" value="${item.text}" onchange="updateCheckText(${idx}, this.value)" style="border:none; background:transparent; flex:1;">
+    </div>
+  `).join('');
+}
+
+function toggleCheck(idx) { activeNotepad.checklist[idx].checked = !activeNotepad.checklist[idx].checked; renderChecklist(); saveUserData(); }
+function updateCheckText(idx, val) { activeNotepad.checklist[idx].text = val; saveUserData(); }
+
+function renderCalendar() {
+  const year = currentCalendarDate.getFullYear(), month = currentCalendarDate.getMonth();
+  const monthNames = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
+  document.getElementById('calendar-month-year').innerText = `${monthNames[month]} ${year}`;
+  const firstDay = new Date(year, month, 1), lastDay = new Date(year, month + 1, 0);
+  const startingDay = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1;
+  const grid = document.getElementById('calendar-grid');
+  grid.innerHTML = '';
+  ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'].forEach(day => {
+    const h = document.createElement('div'); h.className = 'calendar-day-header'; h.innerText = day; grid.appendChild(h);
+  });
+  for (let i = 0; i < startingDay; i++) { const e = document.createElement('div'); e.className = 'calendar-day empty'; grid.appendChild(e); }
+  const today = new Date();
+  for (let day = 1; day <= lastDay.getDate(); day++) {
+    const dayEl = document.createElement('div'); dayEl.className = 'calendar-day'; dayEl.innerText = day;
+    const dateKey = `${year}-${month + 1}-${day}`;
+    if (calendarNotes[dateKey]) { dayEl.classList.add('has-note'); const ind = document.createElement('div'); ind.className = 'note-indicator'; dayEl.appendChild(ind); }
+    if (today.getDate() === day && today.getMonth() === month && today.getFullYear() === year) dayEl.classList.add('today');
+    dayEl.onclick = () => selectDate(year, month, day);
+    grid.appendChild(dayEl);
+  }
+}
+function prevMonth() { currentCalendarDate.setMonth(currentCalendarDate.getMonth() - 1); renderCalendar(); }
+function nextMonth() { currentCalendarDate.setMonth(currentCalendarDate.getMonth() + 1); renderCalendar(); }
+function selectDate(year, month, day) {
+  selectedDate = `${year}-${month + 1}-${day}`;
+  document.getElementById('selected-date-title').innerText = `Заметка на ${day}.${month + 1}.${year}`;
+  document.getElementById('day-note-text').value = calendarNotes[selectedDate] || '';
+  document.getElementById('day-detail-panel').style.display = 'block';
+}
+function saveDayNote() {
+  if (selectedDate) {
+    const note = document.getElementById('day-note-text').value;
+    if (note.trim()) calendarNotes[selectedDate] = note; else delete calendarNotes[selectedDate];
+    renderCalendar(); saveUserData();
+  }
+}
+
+function renderMessages() {
+  document.getElementById('message-container').innerHTML = messages.map(m => `
+    <div class="message-item"><div><strong>${m.from}</strong><p style="font-size: 14px; color: var(--c-light);">${m.text}</p></div><span style="font-size: 12px; color: var(--c-light);">${new Date(m.time).toLocaleDateString('ru-RU')}</span></div>
+  `).join('');
+}
+function sendMessage() {
+  const recipient = document.getElementById('msg-recipient').value;
+  const text = document.getElementById('msg-text').value;
+  if (recipient && text) {
+    messages.unshift({ from: `Вы → ${recipient}`, text, time: new Date().toISOString() });
+    renderMessages(); saveUserData();
+    document.getElementById('msg-recipient').value = ''; document.getElementById('msg-text').value = '';
+    closeModal('modal-message');
+  }
+}
+
+let selectedTariffForPayment = 'flash';
+function showPaymentModal(tariff) {
+  selectedTariffForPayment = tariff;
+  const price = tariff === 'flash' ? 59 : 99;
+  const name = tariff === 'flash' ? 'Флэш' : 'Домашний';
+  document.getElementById('payment-modal-content').innerHTML = `
+    <div style="padding: 20px;">
+      <h3 style="margin-bottom: 20px; text-align: center; color: var(--c-dark);">☕ Оплата тарифа «${name}»</h3>
+      <div style="background: var(--c-beige); padding: 15px; border-radius: 8px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--c-cream);">
+        <div><div style="font-weight: bold;">Тариф «${name}»</div><div style="font-size: 13px; color: var(--c-light);">Ежемесячно</div></div>
+        <div style="font-size: 28px; font-weight: bold; color: var(--c-accent);">${price} ₽</div>
+      </div>
+      <p style="font-size: 13px; color: var(--c-light); margin-bottom: 15px; text-align: center;">Перенаправление на ЮMoney</p>
+      <button class="sber-btn" onclick="processPayment()">Оплатить ${price} ₽</button>
+      <div style="font-size: 11px; color: var(--c-light); text-align: center; margin-top: 12px;">🔒 PCI DSS</div>
+    </div>
+  `;
+  document.getElementById('modal-payment').style.display = 'flex';
+}
+
+async function processPayment() {
+  const tariff = selectedTariffForPayment;
+  const amount = tariff === 'flash' ? 59 : 99;
+  try {
+    const response = await fetch(`${WORKER_URL}/pay`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ amount, tariff, userId: currentUserId })
+    });
+    if (!response.ok) throw new Error('Ошибка сервера');
+    const data = await response.json();
+    if (data.paymentUrl) {
+      sessionStorage.setItem('pending_tariff', tariff);
+      sessionStorage.setItem('pending_label', data.label);
+      window.location.href = data.paymentUrl;
+    } else { throw new Error('Нет URL'); }
+  } catch (err) {
+    showToast('Ошибка: ' + err.message, 'error');
+  }
+}
+
+function handlePaymentReturn() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('payment') === 'success' && params.get('tariff') && params.get('label')) {
+    if (params.get('label').startsWith(`scoffe2_${currentUserId}_`)) {
+      applyTariff(params.get('tariff'), Date.now() + 30 * 24 * 60 * 60 * 1000);
+      showToast(`✅ Оплата успешна! Тариф активирован на 30 дней.`, 'success');
+    }
+  }
+  if (params.has('payment')) window.history.replaceState({}, '', window.location.pathname);
+}
+</script>
+</body>
+</html>
