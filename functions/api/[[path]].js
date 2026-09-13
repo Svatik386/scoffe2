@@ -895,7 +895,7 @@ async function upstream(env, path, payload, extraHeaders = {}) {
         payload === undefined
           ? undefined
           : JSON.stringify(payload),
-      redirect: "error",
+      redirect: "manual",,
       signal: AbortSignal.timeout(180000)
     });
   } catch {
