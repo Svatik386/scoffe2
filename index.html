@@ -3300,5 +3300,196 @@ window.addEventListener("beforeunload",event => {
   }
 })();
 </script>
+  <script>
+(() => {
+  // Защита от случайного подключения блока дважды.
+  if (window.__scoffe2Online) return;
+  window.__scoffe2Online = true;
+
+  const SUPPORT_ID = "1019a3fd516d4ce1b67df99e3133c46a";
+
+  const box = document.createElement("div");
+
+  box.className = "section-panel";
+  box.style.cssText =
+    "display:none;" +
+    "margin:8px 0;" +
+    "padding:10px;" +
+    "font-size:14px;";
+
+  box.setAttribute("role", "status");
+  box.setAttribute("aria-live", "polite");
+
+  box.innerHTML = `
+    <div>
+      Сейчас онлайн: <strong>…</strong>
+    </div>
+
+    <small class="small-muted">
+      Активные браузеры за 90 секунд
+    </small>
+  `;
+
+  const anchor =
+    document.getElementById("support-panel-button") ||
+    document.getElementById("support-panel-title");
+
+  if (anchor) {
+    anchor.after(box);
+  }
+
+  const value = box.querySelector("strong");
+  const note = box.querySelector("small");
+
+  let timer;
+  let busy = false;
+
+  function supportVisible() {
+    const allowed =
+      typeof account !== "undefined" &&
+      account?.id === SUPPORT_ID;
+
+    box.style.display = allowed ? "block" : "none";
+
+    return allowed;
+  }
+
+  async function request(method) {
+    const controller = new AbortController();
+
+    const timeout = setTimeout(() => {
+      controller.abort();
+    }, 10000);
+
+    try {
+      const response = await fetch("/api/online", {
+        method,
+        credentials: "same-origin",
+        cache: "no-store",
+        signal: controller.signal
+      });
+
+      const data = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(
+          data.error ||
+          "Ошибка " + response.status + " /api/online"
+        );
+      }
+
+      return data;
+    } finally {
+      clearTimeout(timeout);
+    }
+  }
+
+  async function heartbeat() {
+    const send = async () => {
+      // Первый запрос при необходимости устанавливает cookie,
+      // второй подтверждает посещение.
+      for (let attempt = 0; attempt < 2; attempt++) {
+        const data = await request("POST");
+
+        if (data.ok !== true) {
+          throw new Error("Неверный ответ /api/online.");
+        }
+
+        if (!data.needsHeartbeat) {
+          return;
+        }
+      }
+
+      throw new Error("Разреши cookie для этого сайта.");
+    };
+
+    // Согласуем первый запрос между вкладками,
+    // если браузер поддерживает Web Locks.
+    if (navigator.locks?.request) {
+      await navigator.locks.request(
+        "scoffe2-online-heartbeat",
+        send
+      );
+    } else {
+      await send();
+    }
+  }
+
+  async function pulse() {
+    clearTimeout(timer);
+
+    supportVisible();
+
+    // Скрытые вкладки не продлевают присутствие.
+    if (
+      busy ||
+      document.visibilityState !== "visible"
+    ) {
+      return;
+    }
+
+    busy = true;
+
+    try {
+      // Этот запрос отправляется и гостями, и пользователями.
+      await heartbeat();
+
+      // Гости и обычные пользователи число не запрашивают.
+      if (!supportVisible()) return;
+
+      const data = await request("GET");
+
+      // За время запроса аккаунт мог измениться.
+      if (!supportVisible()) return;
+
+      if (
+        !Number.isInteger(data.online) ||
+        data.online < 0
+      ) {
+        throw new Error("Неверный ответ /api/online.");
+      }
+
+      value.textContent = String(data.online);
+
+      note.textContent =
+        "Активные браузеры за 90 секунд. Обновлено: " +
+        new Date(
+          data.checkedAt * 1000
+        ).toLocaleTimeString("ru-RU");
+    } catch (error) {
+      if (supportVisible()) {
+        // Не показываем ложный ноль при ошибке сети.
+        value.textContent = "недоступно";
+
+        note.textContent =
+          error.name === "AbortError"
+            ? "Сервер не ответил. Повтор через 30 секунд."
+            : error.message;
+      }
+    } finally {
+      busy = false;
+
+      if (document.visibilityState === "visible") {
+        timer = setTimeout(pulse, 30000);
+      }
+    }
+  }
+
+  document.addEventListener("visibilitychange", pulse);
+  window.addEventListener("online", pulse);
+
+  // Обновляем доступ к счётчику после входа в аккаунт.
+  const app = document.getElementById("app-screen");
+
+  if (app) {
+    new MutationObserver(pulse).observe(app, {
+      attributes: true,
+      attributeFilter: ["style", "hidden"]
+    });
+  }
+
+  pulse();
+})();
+</script>
 </body>
 </html>
